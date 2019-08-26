@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ -e description ] ; then
+	cat description
+else 
+	echo "It looks like a normal room"
+fi
+
