@@ -1,9 +1,11 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-PATH=$PATH:$DIR/bin/
-
 for com in $DIR/bin/*; do
-	alias $(basename $com)=$com
+	alias $(basename $com)="source $com"
+done
+
+for ali in $DIR/aliases/*; do
+	alias $(basename $ali)="source $DIR/bin/$(cat $ali)"
 done
 

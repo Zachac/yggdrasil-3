@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+if [ "$1" -eq "$1" ] && [ "$1" -eq "$1" ] && [ "$1" -eq "$1" ]; then
+	X=$(($1/1))
+	Y=$(($2/1))
+	Z=$(($3/1))
+	echo "$DIR/../data/rooms/$X/$Y/$Z"
+else
+	echo "invalid coordinates"
+	exit 1
+fi 2>/dev/null
+
