@@ -12,6 +12,7 @@ KEY_FILE="$DIR/$SSL_KEY"
 CERT_FILE="$DIR/$SSL_CERT"
 CLIENTS=()
 PID=$$
+PGID=$(ps -o pgid= $PID | grep -o [0-9]*)
 
 # Cleanup existing runtime directory
 rm -r "$RUNTIME" 2>/dev/null
@@ -29,7 +30,7 @@ exec 5<>$FILTER
 
 ( # Start server
 	echo "Starting server at $DIR on port $SERVER_PORT"
-	cat <&3 | openssl s_server -accept $SERVER_PORT -key $KEY_FILE -cert $CERT_FILE -naccept 1 -verify_quiet >&4
+	cat <&3 | openssl s_server -accept $SERVER_PORT -key $KEY_FILE -cert $CERT_FILE -verify_quiet >&4
 	echo "Server finished"
 ) &
 
@@ -46,7 +47,8 @@ while read line <&4; do
 		echo "Accepting ${line:1}"
 		echo "${line:1}" >&5
 	elif [ "$line" = "CONNECTION CLOSED" ]; then
-		break
+		echo "Client disconnected"
 	fi
 done
 
+kill -- -$PGID

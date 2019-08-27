@@ -9,6 +9,7 @@ STDERR="$RUNTIME/err"
 source "$DIR/data/settings/client"
 
 PID=$$
+PGID=$(ps -o pgid= $PID | grep -o [0-9]*)
 
 # Cleanup existing runtime directory
 rm -r "$RUNTIME" 2>/dev/null
@@ -28,7 +29,7 @@ exec 5<>$STDERR
 	echo "Starting client to $SERVER_HOST:$SERVER_PORT"
 	cat <&3 | openssl s_client -connect "$SERVER_HOST:$SERVER_PORT" -quiet -verify_quiet >&4 2>&5
 	echo "Disconnected"
-	kill $PID
+	kill -- -$PGID
 ) &
 
 
@@ -46,7 +47,7 @@ exec 5<>$STDERR
 	while read line <&5; do
 		if grep -q '^[a-zA-Z][a-zA-Z]*:errno=[0-9][0-9]*$' <<<$line; then
 			echo "Disconnected"
-			kill $PID
+			kill -- -$PGID
 		fi
 	done
 ) &
