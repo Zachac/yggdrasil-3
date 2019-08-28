@@ -16,8 +16,10 @@ fi
 # Start server
 echo "Starting server at $DIR on port $SERVER_PORT"
 
-function handleInput() {
-
+function inputHandler() {
+	
+	# read the input from the socket
+	# output only the properly encoded lines
 	while read line; do
 		# only accept lines starting with >
 		if [ ${line:0:1} = '>' ]; then
@@ -29,8 +31,10 @@ function handleInput() {
 
 }
 
-function encodeOutput() {
-	
+function outputHandler() {
+
+	# read the desired output from stdin
+	# output the encoded output to stdout	
 	while read rawLine; do
 		echo ">$rawLine"
 	done
@@ -42,8 +46,8 @@ openssl s_server \
 	-key $KEY_FILE \
 	-cert $CERT_FILE \
 	-verify_quiet $NACCEPT \
-	> >(handleInput) \
-	< <(encodeOutput) 
+	> >(inputHandler) \
+	< <(outputHandler) 
 
 echo "Server finished"
 
