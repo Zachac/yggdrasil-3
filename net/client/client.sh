@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "$DIR/data/settings/client"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && pwd )"
+source "$DIR/data/settings/client" || exit -1
 SERVER_PORT=${2:-$SERVER_PORT}
 SERVER_HOST=${1:-$SERVER_HOST}
 SERVER="$SERVER_HOST:$SERVER_PORT"
