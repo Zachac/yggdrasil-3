@@ -14,7 +14,7 @@ fi
 
 
 # Start server
-echo "Starting server at $DIR on port $SERVER_PORT"
+echo "Starting server at $DIR on port $SERVER_PORT" >&2
 
 function inputHandler() {
 	
@@ -25,7 +25,7 @@ function inputHandler() {
 		if [ ${line:0:1} = '>' ]; then
 			echo "${line:1}"
 		elif [ "$line" = "CONNECTION CLOSED" ]; then
-			echo "Client disconnected"
+			echo "Client disconnected" >&2
 		fi
 	done
 
