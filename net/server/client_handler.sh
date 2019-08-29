@@ -18,13 +18,17 @@ function readLine() {
 }
 
 function isValidUsername() {
-	if ! grep -q '[a-zA-Z0-9]*' <<< "$@"; then
+
+	if ! grep -q '^[a-zA-Z0-9]*$' <<< "$@"; then
 		echo "Username contains invalid charachters"
-		exit 1
-	elif [ ${#@} -lt 1 ] || [ ${#@} -gt 16 ]; then
+		return 1
+	elif [ ${#1} -lt 1 ] || [ ${#1} -gt 16 ]; then
 		echo "Username must be between 1-16 charachters in length"
-		exit 2
+		return 2
+	else
+		return 0
 	fi
+
 }
 
 function handleInput() {
