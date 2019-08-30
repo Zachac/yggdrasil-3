@@ -4,6 +4,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && pwd )" ||
 RUNTIME="$DIR/data/runtime/server/$1"
 CLIENT_OUT="$RUNTIME/client_out"
 LOCK="$RUNTIME/lock"
+USERS="$DIR/data/users"
+PGID=$(ps -o pgid= $$ | grep -o '[0-9]*')
 
 if ! [ $# -eq 1 ] || ! [ "$1" -eq "$1" ]; then
 	echo "Usage: client_handler.sh [port]"
@@ -31,9 +33,27 @@ function isValidUsername() {
 
 }
 
-function handleInput() {
+function hashPassword() {
+	openssl dgst -sha256 -binary <<< "$@" | base64 -w0
+}
+
+function getPassword() {
+	echo "Please enter a new password:"
+	PASSWORD=$(hashPassword $USERNAME $(readLine))
+
+	echo "Please enter the password again:"
+	[ "$(hashPassword $USERNAME $(readLine))" = "$PASSWORD" ]
+}
+
+function validateUser() {
+	echo "Please enter your password:"
+        PASSWORD=$(hashPassword $USERNAME $(readLine))
+	[ "$(cat "$USERS/$USERNAME/password")" = "$PASSWORD" ]
+}
+
+function login() {
 	
-	echo "Please enter a username:"
+	echo "Please enter your username:"
 	USERNAME=$(readLine)
 
 	until isValidUsername "$USERNAME"; do
@@ -41,11 +61,27 @@ function handleInput() {
 		USERNAME=$(readLine)
 	done
 
-	if [ ! -f "$DIR/data/users/$USERNAME/password" ]; then
-		echo "User not found! Creating new user."
+
+	if [ ! -f "$USERS/$USERNAME/password" ]; then
+		echo "User $USERS/$USERNAME/password not found! Creating new user."
+
+		until getPassword; do echo "Passwords do not match!"; done
+
+		mkdir -p "$USERS/$USERNAME"
+
+		echo "$PASSWORD" > "$USERS/$USERNAME/password"
+
+		echo "New user created!"
 	fi
 
-	echo "Your username is $USERNAME"
+	until validateUser; do echo "Invalid password"; done
+
+	echo "Successfully logged in as $USERNAME"
+}
+
+
+function handleInput() {
+	login
 }
 
 
@@ -54,9 +90,12 @@ function handleInput() {
 	exec 3<>$CLIENT_OUT
 
 
-	$DIR/net/server/ssl_socket.sh $1 >$CLIENT_OUT < <(handleInput)
+	$DIR/net/server/ssl_socket.sh $1 1 >$CLIENT_OUT < <(handleInput)
 
 
 ); rm $RUNTIME ) 9>$LOCK
 
+echo "Server finished"
+
+kill -- -$PGID
 
