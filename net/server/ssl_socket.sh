@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && pwd )"
-source "$DIR/data/settings/server" || exit -1
+source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit $?
+source "$SETTINGS/server" || exit $?
 
 SERVER_PORT=${1:-$SERVER_PORT}
 KEY_FILE="$DIR/$SSL_KEY"

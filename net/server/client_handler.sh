@@ -1,18 +1,16 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && pwd )" || exit -1
-RUNTIME="$DIR/data/runtime/server/$1"
-CLIENT_OUT="$RUNTIME/client_out"
-LOCK="$RUNTIME/lock"
-USERS="$DIR/data/users"
-PGID=$(ps -o pgid= $$ | grep -o '[0-9]*')
+source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit $? 
+SERVER_RUNTIME="$RUNTIME/server/$1"
+CLIENT_OUT="$SERVER_RUNTIME/client_out"
+LOCK="$SERVER_RUNTIME/lock"
 
 if ! [ $# -eq 1 ] || ! [ "$1" -eq "$1" ]; then
 	echo "Usage: client_handler.sh [port]"
 	exit 1
 fi	
 
-mkdir -p "$RUNTIME"
+mkdir -p "$SERVER_RUNTIME"
 
 
 function readLine() {
@@ -93,12 +91,12 @@ function validArgs() {
 	fi
 }
 
-function runPrompt() {
+function runPrompt() {	
 
 	read -ra arguments <<< "$(readLine)"
 
 	if validArgs "${arguments[@]}"; then
-		source $DIR/bin/"${arguments[0]}" "${arguments[@]:1}"
+		source "$BIN/${arguments[0]}" "${arguments[@]:1}"
 	fi
 
 }
@@ -118,7 +116,7 @@ function handleInput() {
 	$DIR/net/server/ssl_socket.sh $1 1 >$CLIENT_OUT < <(handleInput)
 
 
-); rm $RUNTIME ) 9>$LOCK
+); rm $SERVER_RUNTIME ) 9>$LOCK
 
 echo "Server finished"
 

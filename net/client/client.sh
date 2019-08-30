@@ -1,23 +1,19 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." >/dev/null 2>&1 && pwd )"
-source "$DIR/data/settings/client" || exit -1
+source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit $?
+source "$SETTINGS/client" || exit $?
 SERVER_PORT=${2:-$SERVER_PORT}
 SERVER_HOST=${1:-$SERVER_HOST}
 SERVER="$SERVER_HOST:$SERVER_PORT"
-RUNTIME="$DIR/data/runtime/client"
-STDOUT="$RUNTIME/stdout"
-STDIN="$RUNTIME/stdin"
-STDERR="$RUNTIME/err"
+CLIENT_RUNTIME="$DIR/data/runtime/client"
+STDOUT="$CLIENT_RUNTIME/stdout"
+STDIN="$CLIENT_RUNTIME/stdin"
+STDERR="$CLIENT_RUNTIME/err"
 
-source "$DIR/data/settings/client"
-
-PID=$$
-PGID=$(ps -o pgid= $PID | grep -o '[0-9]*')
 
 # Cleanup existing runtime directory
-rm -r "$RUNTIME" 2>/dev/null
-mkdir -p "$RUNTIME"
+rm -r "$CLIENT_RUNTIME" 2>/dev/null
+mkdir -p "$CLIENT_RUNTIME"
 
 # Init file descriptors
 mkfifo $STDIN
