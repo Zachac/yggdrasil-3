@@ -79,9 +79,34 @@ function login() {
 	echo "Successfully logged in as $USERNAME"
 }
 
+function validArgs() {
+	if [ $# -lt 1 ] || [ ${#1} -lt 1 ]; then
+		return 1
+	elif ! grep -q '^[a-zA-Z0-9]*$' <<< "$1"; then
+		echo "Invalid charachters in command!"
+		return 2
+	elif ! [ -f $DIR/bin/"$1" ]; then
+		echo "Command not found"
+		return 3
+	else
+		return 0
+	fi
+}
+
+function runPrompt() {
+
+	read -ra arguments <<< "$(readLine)"
+
+	if validArgs "${arguments[@]}"; then
+		source $DIR/bin/"${arguments[0]}" "${arguments[@]:1}"
+	fi
+
+}
 
 function handleInput() {
 	login
+
+	while true; do runPrompt; done
 }
 
 
