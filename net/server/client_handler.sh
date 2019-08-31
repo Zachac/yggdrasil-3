@@ -103,7 +103,7 @@ function runPrompt() {
 
 function initUser() {
 	echo "Initializing..."
-	source "$BIN/jump"	
+	source "$BIN/jumpf"
 }
  
 function handleInput() {

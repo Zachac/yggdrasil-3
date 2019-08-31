@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ "$1" -eq "$1" ] && [ "$2" -eq "$2" ] && [ "$3" -eq "$3" ]; then
-	echo "$ROOMS/$1/$2/$3"
-else
-	echo "invalid coordinates"
-	false
-fi 2>/dev/null
-

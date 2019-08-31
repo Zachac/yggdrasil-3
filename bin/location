@@ -1,13 +1,8 @@
 #!/bin/bash
 
-IFS="/" read -ra arr <<< "$(pwd)"
+location="$(pwd)"
+location="${location#"$ROOMS/"}"
 
-arr=("${arr[@]: -3:3}")
-
-for v in "${arr[@]}"; do
-	if ! [ "$v" -eq "$v" ]; then
-		echo "Unkown location $(pwd)"
-		break -1
-	fi
-done 2>/dev/null && echo "${arr[@]}"
+# hehe echo location
+echo $location 
 

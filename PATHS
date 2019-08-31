@@ -14,52 +14,65 @@ PGID=$(ps -o pgid= $$ | grep -o '[0-9]*') || exit
 
 
 function save() {
-	if [ ! "$#" -eq 3 ]; then
-		echo "ERROR: Save expects arguments length 3"
+	if [ ! "$#" -eq 2 ]; then
+		echo "ERROR: Save expects arguments length 2"
 		return 1
+	elif [ -z "$2" ] || [ -z "${!2}" ]; then
+		echo "ERROR: Reference to save not found $2: ${!2}"
+		return 2
 	fi
 
 
 	if [ "${1,,}" = "user" ]; then
-		basePath="$USERS/$2"
+		if [ -z "$USERNAME" ]; then
+			echo "ERROR: \$USERNAME not set"
+			return 5
+		fi
+
+		basePath="$USERS/$USERNAME"
 	else
-		echo "ERROR: Unkown variable owner type $2"
-		return 2
+		echo "ERROR: Unkown variable owner type $1"
+		return 3
 	fi
 
 
 	if [ ! -d "$basePath" ]; then
 		echo "ERROR: Base directory does not exist $basePath"
-		return 3
+		return 4
 	fi
 
-
-	declare -p $3 > "$basePath/$3"
+	declare -p "$2" | sed 's/declare --/declare -g/' > "$basePath/$2"
 }
 
 
 function load() {
 
-	if [ ! "$#" -eq 3 ]; then 
-		echo "ERROR: Load expects arguments length 3"
+	if [ ! "$#" -eq 2 ]; then 
+		echo "ERROR: Load expects arguments length 2"
 		return 1
+	elif [ -z "$2" ]; then 
+		echo "ERROR: Reference to load not given: $2"
+		return 2
 	fi
 
 	if [ "${1,,}" = "user" ]; then
-		 path="$USERS/$2/$3"
+		if [ -z $USERNAME ]; then
+			echo "ERROR: \$USERNAME not set"
+			return 5
+		fi
+
+		path="$USERS/$USERNAME/$2"
 	else
-		echo "ERROR: Unkown variable owner type $2"
-		return 2
+		echo "ERROR: Unkown variable owner type $1"
+		return 3
 	fi
 
 	if [ ! -f "$path" ]; then
 		echo "ERROR: value does not exist $path"
-		return 3
+		return 4
 	fi
 
-
 	source "$path"
-
 }
 
 
