@@ -1,11 +1,21 @@
 #!/bin/bash
 
-COORDINATES_RESULT=$($BIN/coordinates "$@")
+if [ "$#" = 0 ]; then
+	if load user $USERNAME location; then
+		COORDINATES_RESULT=$($BIN/coordinates "${location[@]}")
+	else
+		COORDINATES_RESULT=$($BIN/coordinates 1 0 1)
+	fi
+else
+	COORDINATES_RESULT=$($BIN/coordinates "$@")
+fi
 
 if [ ! $? -eq 0 ]; then
 	echo "$COORDINATES_RESULT"
 elif [ -e "$COORDINATES_RESULT" ]; then
 	cd "$COORDINATES_RESULT"
+	read -ra location <<< "$($BIN/location)"
+	save user $USERNAME location
 else
 	echo "Location does not exist"
 	false

@@ -101,9 +101,14 @@ function runPrompt() {
 
 }
 
+function initUser() {
+	echo "Initializing..."
+	source "$BIN/jump"	
+}
+ 
 function handleInput() {
 	login
-
+	initUser
 	while true; do runPrompt; done
 }
 
