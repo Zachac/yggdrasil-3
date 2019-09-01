@@ -60,6 +60,10 @@ function getUsername() {
 		USERNAME=$(readLine)
 	done
 
+	if [ ! -d "$USERS/$USERNAME" ]; then
+		mkdir -p "$USERS/$USERNAME"
+	fi
+
 	exec 8<> "$USERS/$USERNAME/lock"
 
 	if ! flock -n 8 ; then
@@ -75,7 +79,7 @@ function login() {
 	
 
 	if [ ! -f "$USERS/$USERNAME/password" ]; then
-		echo "User $USERS/$USERNAME/password not found! Creating new user."
+		echo "Could not find a password for $USERNAME, let's create a new one."
 
 		until getPassword; do echo "Passwords do not match!"; done
 
