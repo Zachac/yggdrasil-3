@@ -1,20 +1,9 @@
 #!/bin/bash
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit $? 
-SERVER_RUNTIME="$RUNTIME/server/$1"
-CLIENT_OUT="$SERVER_RUNTIME/client_out"
-LOCK="$SERVER_RUNTIME/lock"
-
-if ! [ $# -eq 1 ] || ! [ "$1" -eq "$1" ]; then
-	echo "Usage: client_handler.sh [port]"
-	exit 1
-fi	
-
-mkdir -p "$SERVER_RUNTIME"
-
 
 function readLine() {
-	read line <$CLIENT_OUT && echo "$line"
+	read line && echo "$line"
 }
 
 function isValidUsername() {
@@ -139,17 +128,7 @@ function handleInput() {
 	while true; do runPrompt; done
 }
 
-
-( flock -n 9 || exit -2; (
-	mkfifo $CLIENT_OUT 2>/dev/null
-	exec 3<>$CLIENT_OUT
-
-	$DIR/net/server/ssl_socket.sh $1 1 >$CLIENT_OUT < <(handleInput)
-
-
-); rm $SERVER_RUNTIME ) 9>$LOCK
-
-echo "Server finished"
+handleInput
 
 kill -- -$PGID
 
