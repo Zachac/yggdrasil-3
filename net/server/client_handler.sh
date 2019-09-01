@@ -49,7 +49,8 @@ function validateUser() {
 	[ "$(cat "$USERS/$USERNAME/password")" = "$PASSWORD" ]
 }
 
-function login() {
+
+function getUsername() {
 	
 	echo "Please enter your username:"
 	USERNAME=$(readLine)
@@ -59,6 +60,19 @@ function login() {
 		USERNAME=$(readLine)
 	done
 
+	exec 8<> "$USERS/$USERNAME/lock"
+
+	if ! flock -n 8 ; then
+		8<&-
+		echo "User is already logged in"
+		return 1
+	fi
+}
+
+function login() {
+	
+	until getUsername; do :; done
+	
 
 	if [ ! -f "$USERS/$USERNAME/password" ]; then
 		echo "User $USERS/$USERNAME/password not found! Creating new user."
@@ -75,6 +89,7 @@ function login() {
 	until validateUser; do echo "Invalid password"; done
 
 	echo "Successfully logged in as $USERNAME"
+
 }
 
 function validArgs() {
@@ -111,6 +126,7 @@ function runPrompt() {
 function initUser() {
 	echo "Initializing..."
 	source "$BIN/jumpf"
+	echo $BASHPID > $USERS/$USERNAME/proc
 }
  
 function handleInput() {
@@ -123,7 +139,6 @@ function handleInput() {
 ( flock -n 9 || exit -2; (
 	mkfifo $CLIENT_OUT 2>/dev/null
 	exec 3<>$CLIENT_OUT
-
 
 	$DIR/net/server/ssl_socket.sh $1 1 >$CLIENT_OUT < <(handleInput)
 
