@@ -83,8 +83,8 @@ function validArgs() {
 	elif ! grep -q '^[a-zA-Z0-9]*$' <<< "$1"; then
 		echo "Invalid charachters in command!"
 		return 2
-	elif ! [ -f $DIR/bin/"$1" ]; then
-		echo "Command not found"
+	elif grep -q '[.*]' <<< "$*"; then
+		echo "Invalid charachters in commands!"
 		return 3
 	else
 		return 0
@@ -96,7 +96,14 @@ function runPrompt() {
 	read -ra arguments <<< "$(readLine)"
 
 	if validArgs "${arguments[@]}"; then
-		source "$BIN/${arguments[0]}" "${arguments[@]:1}"
+		if [ -f "$BIN/${arguments[0]}" ]; then
+			source "$BIN/${arguments[0]}" "${arguments[@]:1}"
+		elif [ -L "$OBVIOUS_EXITS/${arguments[*]}" ]; then
+			source "$BIN/jump" "$($BIN/location "$(realpath "$OBVIOUS_EXITS/${arguments[*]}")")"
+		else
+			echo "Command not found"
+		fi
+		
 	fi
 
 }

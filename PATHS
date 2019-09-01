@@ -10,7 +10,7 @@ SETTINGS="$DATA/settings"
 RUNTIME="$DATA/runtime"
 ROOMS="$DATA/rooms"
 PGID=$(ps -o pgid= $$ | grep -o '[0-9]*') || exit
-
+OBVIOUS_EXITS="./obvious_exits"
 
 
 function save() {

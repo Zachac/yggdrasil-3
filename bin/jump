@@ -7,7 +7,7 @@ elif [ grep -q '[.*]' <<< $* ]; then
 	echo "Illegal charachters in jump command: $*"
 	$(exit 2)	
 elif ! [ -f "$ROOMS/$*/description" ]; then
-	echo "Room not found"
+	echo "Room not found: $*"
 	$(exit 3)
 else
 	cd "$ROOMS/$*"
