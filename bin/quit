@@ -1,4 +1,10 @@
 #!/bin/bash
+
+if [ -e "$PLAYERS/$USERNAME" ]; then
+	rm "$PLAYERS/$USERNAME"
+fi
+
 echo "Goodbye!"
+
 exit 0
 
