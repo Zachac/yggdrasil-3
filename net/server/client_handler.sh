@@ -1,6 +1,13 @@
 #!/bin/bash
 
-source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit $? 
+source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit
+SERVER_RUNTIME="$RUNTIME/server"
+CONNECTED_PLAYERS="$SERVER_RUNTIME/players"
+
+# create runtime folders
+mkdir -p "$CONNECTED_PLAYERS" || exit
+
+# define functions
 
 function readLine() {
 	read line && echo "$line"
@@ -118,8 +125,13 @@ function runPrompt() {
 
 function initUser() {
 	echo "Initializing..."
+	echo "$BASHPID" > "$USERS/$USERNAME/proc"
+	
+	if [ ! -e "$CONNECTED_PLAYERS/$USERNAME" ]; then
+		ln -s "$USERS/$USERNAME" "$CONNECTED_PLAYERS/$USERNAME"
+	fi
+
 	source "$BIN/jumpf"
-	echo $BASHPID > $USERS/$USERNAME/proc
 }
  
 function handleInput() {
