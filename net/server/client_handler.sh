@@ -10,7 +10,7 @@ mkdir -p "$CONNECTED_PLAYERS" || exit
 # define functions
 
 function readLine() {
-	read line && echo "$line"
+	read line || exit 1
 }
 
 function isValidUsername() {
@@ -28,20 +28,23 @@ function isValidUsername() {
 }
 
 function hashPassword() {
-	openssl dgst -sha256 -binary <<< "$@" | base64 -w0
+	openssl dgst -sha256 -binary <<< "$*" | base64 -w0
 }
 
 function getPassword() {
 	echo "Please enter a new password:"
-	PASSWORD=$(hashPassword $USERNAME $(readLine))
+	readLine
+	PASSWORD=$(hashPassword $USERNAME $line)
 
 	echo "Please enter the password again:"
-	[ "$(hashPassword $USERNAME $(readLine))" = "$PASSWORD" ]
+	readLine
+	[ "$(hashPassword $USERNAME $line)" = "$PASSWORD" ]
 }
 
 function validateUser() {
 	echo "Please enter your password:"
-        PASSWORD=$(hashPassword $USERNAME $(readLine))
+	readLine
+        PASSWORD=$(hashPassword $USERNAME $line)
 	[ "$(cat "$USERS/$USERNAME/password")" = "$PASSWORD" ]
 }
 
@@ -49,11 +52,13 @@ function validateUser() {
 function getUsername() {
 	
 	echo "Please enter your username:"
-	USERNAME=$(readLine)
+	readLine
+	USERNAME=$line
 
 	until isValidUsername "$USERNAME"; do
 		echo "Please enter a valid username"
-		USERNAME=$(readLine)
+		readLine
+		USERNAME=$line
 	done
 
 	if [ ! -d "$USERS/$USERNAME" ]; then
@@ -107,8 +112,9 @@ function validArgs() {
 }
 
 function runPrompt() {	
-
-	read -ra arguments <<< "$(readLine)"
+	
+	readLine
+	read -ra arguments <<< "$line"
 
 	if validArgs "${arguments[@]}"; then
 		if [ -f "$BIN/${arguments[0]}" ]; then
@@ -140,7 +146,7 @@ function handleInput() {
 	while true; do runPrompt; done
 }
 
-handleInput
+handleInput 31> >(cat)
 
 kill -- -$PGID
 
