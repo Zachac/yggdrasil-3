@@ -12,3 +12,6 @@
 * Make repository public
 * Conquer the world
 
+# BUGS
+* Connected players that close their terminal with Ctrl+C leaves the player logged in
+
