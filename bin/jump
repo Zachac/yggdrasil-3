@@ -10,8 +10,17 @@ elif ! [ -f "$ROOMS/$*/description" ]; then
 	echo "Room not found: $*"
 	$(exit 3)
 else
-	cd "$ROOMS/$*"
-	location=$($BIN/location)
-	save user location
+	prev_location=$(pwd)
+
+	if cd "$ROOMS/$*"; then
+		location=$($BIN/location)
+		if [ ! -d "players" ]; then
+			mkdir -p "players"
+		fi
+
+		ln -sr "$USERS/$USERNAME" "players/$USERNAME"
+		rm "$prev_location/players/$USERNAME"
+		save user location
+	fi
 fi 2>/dev/null
 

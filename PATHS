@@ -41,38 +41,37 @@ function save() {
 		return 4
 	fi
 
-	declare -p "$2" | sed 's/declare --/declare -g/' > "$basePath/$2"
+	echo -n "${!2}" > "$basePath/$2"
 }
 
 
 function load() {
 
 	if [ ! "$#" -eq 2 ]; then 
-		echo "ERROR: Load expects arguments length 2"
-		return 1
+		echo "ERROR: Load expects arguments length 2" >&2
+		exit 1
 	elif [ -z "$2" ]; then 
-		echo "ERROR: Reference to load not given: $2"
-		return 2
+		echo "ERROR: Reference to load not given: $2" >&2
+		exit 2
 	fi
 
 	if [ "${1,,}" = "user" ]; then
 		if [ -z $USERNAME ]; then
 			echo "ERROR: \$USERNAME not set"
-			return 5
+			exit 5
 		fi
 
 		path="$USERS/$USERNAME/$2"
 	else
 		echo "ERROR: Unkown variable owner type $1"
-		return 3
+		exit 3
 	fi
 
 	if [ ! -f "$path" ]; then
-		echo "ERROR: value does not exist $path"
 		return 4
 	fi
 
-	source "$path"
+	cat "$path"
 }
 
 

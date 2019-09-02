@@ -4,12 +4,11 @@ source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit
 
 
 function cleanup() {
-
-	
-
+	USERNAME=$1
+	rm "$ROOMS/$(load user location)/players/$1"
 	rm "$USERS/$1/proc"
 	rm $p
-	
+
 }
 
 for p in $RUNTIME/server/players/* ; do
