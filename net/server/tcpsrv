@@ -4,12 +4,12 @@
 # Uncle Billy https://unix.stackexchange.com/users/325065/uncle-billy
 
 use strict;
-use IO::Socket::INET6;
+use IO::Socket;
 
 die "usage: $0 host:port { shell_cmd | cmd args ... }\n" unless @ARGV >= 2;
 
 my $h = shift;
-my $s=new IO::Socket::INET6(ReusePort=>1, Listen=>6, LocalAddr=>$h)
+my $s=new IO::Socket::INET(ReusePort=>1, Listen=>6, LocalAddr=>$h)
         or die "IO::Socket::INET($h): $!";
 
 warn "listening on ", $s->sockhost, "/", $s->sockport, "\n";

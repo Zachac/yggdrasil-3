@@ -12,5 +12,4 @@ Within a mud, data is all text based, so storing we assert that storing it in da
 ## Dependencies
 * Bash
 * Perl
-	* libio-socket-inet6-perl
 
