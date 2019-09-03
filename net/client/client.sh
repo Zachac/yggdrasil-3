@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$( dirname "${BASH_SOURCE[0]}" )/../../PATHS" || exit $?
+source "$( dirname "${BASH_SOURCE[0]}" )/../../env" || exit $?
 source "$SETTINGS/client" || exit $?
 SERVER_PORT=${2:-$SERVER_PORT}
 SERVER_HOST=${1:-$SERVER_HOST}

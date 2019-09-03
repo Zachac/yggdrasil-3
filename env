@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# set -a (auto export all functions & values to enviornment)
+set -a
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" || exit
+DATA="$DIR/data"
+BIN="$DIR/bin"
+USERS="$DATA/users"
+SETTINGS="$DATA/settings"
+RUNTIME="$DATA/runtime"
+ROOMS="$DATA/rooms"
+PGID=$(ps -o pgid= $$ | grep -o '[0-9]*') || exit
+CONSTANTS="$DIR/constants"
+
+OBVIOUS_EXITS="./obvious_exits"
+PLAYERS="./players"
+
+for f in $CONSTANTS/*; do
+	source "$f"
+done
+
+set +a
