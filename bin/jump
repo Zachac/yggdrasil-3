@@ -1,26 +1,54 @@
 #!/bin/bash
 
-if [ "$#" -lt 1 ] || [ -z "$*"]; then
-	echo "No location given"
-	$(exit 1)
-elif [ grep -q '[.*]' <<< $* ]; then
-	echo "Illegal charachters in jump command: $*"
-	$(exit 2)	
-elif ! [ -f "$ROOMS/$*/description" ]; then
-	echo "Room not found: $*"
-	$(exit 3)
+RC=0
+
+
+if [ -z "$*" ]; then
+	location=$(load user location)
+	path="${location:-root/spawn}"
 else
-	prev_location=$(pwd)
+	path="$*"
+fi
 
-	if cd "$ROOMS/$*"; then
-		location=$($BIN/location)
-		if [ ! -d "players" ]; then
-			mkdir -p "players"
-		fi
 
-		ln -sr "$USERS/$USERNAME" "players/$USERNAME"
-		rm "$prev_location/players/$USERNAME"
-		save user location
+if [ -z "$path" ]; then
+	echo "No location given"
+	RC=1
+elif grep -q '[.*]' <<< "$path"; then
+	echo "Illegal charachters in jump command: $*"
+	RC=2
+elif ! [ -f "$ROOMS/$path/description" ]; then
+	echo "Room not found: $path"
+
+		
+	if [ "$(basename "${BASH_SOURCE[0]}")" = "jumpf" ]; then
+		echo "Force creating room $path"
+		mkdir -p "$ROOMS/$path"
+		echo "It looks like a normal room." > "$ROOMS/$path/description"
+	else
+		RC=3
 	fi
-fi 2>/dev/null
+fi
+
+
+prev_location=$(pwd)
+
+if [ "$RC" = 0 ] && cd "$ROOMS/$path"; then
+	location=$($BIN/location)
+	if [ ! -d "players" ]; then
+		mkdir -p "players"
+	fi
+
+	if [ -e "$prev_location/players/$USERNAME" ]; then
+		rm "$prev_location/players/$USERNAME"
+	fi
+
+	ln -sr "$USERS/$USERNAME" "players/$USERNAME"
+	
+	save user location
+
+	source "$BIN/look"
+fi
+
+$(exit "$RC")
 
