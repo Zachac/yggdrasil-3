@@ -1,72 +1,25 @@
 #!/bin/bash
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../../env" || exit
-SERVER_RUNTIME="$RUNTIME/server"
-CONNECTED_PLAYERS="$SERVER_RUNTIME/players"
 
 # create runtime folders
 mkdir -p "$CONNECTED_PLAYERS" || exit
 
-# define functions
-
-function readLine() {
-	read line || exit 1
-}
-
-function isValidUsername() {
-
-	if ! grep -q '^[a-zA-Z0-9]*$' <<< "$@"; then
-		echo "Username contains invalid charachters"
-		return 1
-	elif [ ${#1} -lt 1 ] || [ ${#1} -gt 16 ]; then
-		echo "Username must be between 1-16 charachters in length"
-		return 2
-	else
-		return 0
-	fi
-
-}
-
-function hashPassword() {
-	openssl dgst -sha256 -binary <<< "$*" | base64 -w0
-}
-
-function getPassword() {
-	echo "Please enter a new password:"
-	readLine
-	PASSWORD=$(hashPassword $USERNAME $line)
-
-	echo "Please enter the password again:"
-	readLine
-	[ "$(hashPassword $USERNAME $line)" = "$PASSWORD" ]
-}
-
-function validateUser() {
-	echo "Please enter your password:"
-	readLine
-        PASSWORD=$(hashPassword $USERNAME $line)
-	[ "$(cat "$USERS/$USERNAME/password")" = "$PASSWORD" ]
-}
-
 
 function getUsername() {
 	
-	echo "Please enter your username:"
-	readLine
-	USERNAME=$line
-
-	until isValidUsername "$USERNAME"; do
-		echo "Please enter a valid username"
-		readLine
-		USERNAME=$line
+	prompt "Please enter your username:"
+	until isValidUsername "$line"; do
+		prompt "Please enter a valid username:"
 	done
+
+	USERNAME=$line
 
 	if [ ! -d "$USERS/$USERNAME" ]; then
 		mkdir -p "$USERS/$USERNAME"
 	fi
 
 	exec 8<> "$USERS/$USERNAME/lock"
-
 	if ! flock -n 8 ; then
 		8<&-
 		echo "User is already logged in"
@@ -74,11 +27,18 @@ function getUsername() {
 	fi
 }
 
+function getPassword() {
+	prompt "Please enter a new password:"
+	PASSWORD=$(hashPassword $USERNAME $line)
+
+	prompt "Please enter the password again:"
+	[ "$(hashPassword $USERNAME $line)" = "$PASSWORD" ]
+}
+
 function login() {
 	
 	until getUsername; do :; done
 	
-
 	if [ ! -f "$USERS/$USERNAME/password" ]; then
 		echo "Could not find a password for $USERNAME, let's create a new one."
 
@@ -97,26 +57,11 @@ function login() {
 
 }
 
-function validArgs() {
-	if [ $# -lt 1 ] || [ ${#1} -lt 1 ]; then
-		return 1
-	elif ! grep -q '^[a-zA-Z0-9]*$' <<< "$1"; then
-		echo "Invalid charachters in command!"
-		return 2
-	elif grep -q '[.*]' <<< "$*"; then
-		echo "Invalid charachters in commands!"
-		return 3
-	else
-		return 0
-	fi
-}
-
 function runPrompt() {	
 	
-	readLine
-	read -ra arguments <<< "$line"
-
+	readArgs
 	if validArgs "${arguments[@]}"; then
+	
 		if [ -f "$BIN/${arguments[0]}" ]; then
 			source "$BIN/${arguments[0]}" "${arguments[@]:1}"
 		elif [ -L "$OBVIOUS_EXITS/${arguments[*]}" ]; then
