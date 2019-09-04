@@ -16,7 +16,7 @@ CONSTANTS="$DIR/constants"
 OBVIOUS_EXITS="./obvious_exits"
 PLAYERS="./players"
 
-for f in $CONSTANTS/*; do
+for f in $( find "$CONSTANTS/"  -type f ) ; do
 	source "$f"
 done
 

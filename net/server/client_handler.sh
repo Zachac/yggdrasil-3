@@ -2,7 +2,7 @@
 
 source "$( dirname "${BASH_SOURCE[0]}" )/../../env" || exit
 
-# create runtime folders
+# create runtime folders if not already existing
 mkdir -p "$CONNECTED_PLAYERS" || exit
 
 
