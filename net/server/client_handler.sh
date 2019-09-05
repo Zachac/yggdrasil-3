@@ -79,7 +79,7 @@ function initUser() {
 	echo "$BASHPID" > "$USERS/$USERNAME/proc"
 	
 	if [ ! -e "$CONNECTED_PLAYERS/$USERNAME" ]; then
-		ln -s "$USERS/$USERNAME" "$CONNECTED_PLAYERS/$USERNAME"
+		touch "$CONNECTED_PLAYERS/$USERNAME"
 	fi
 
 	source "$BIN/jumpf"

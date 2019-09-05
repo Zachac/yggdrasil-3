@@ -5,7 +5,7 @@ for p in "$CONNECTED_PLAYERS/"* ; do
 		user="$(basename $p)"
 
 		if ! userProcAlive "$user"; then
-			cleanup "$user"
+			cleanUser "$user"
 		fi
 	fi
 done
