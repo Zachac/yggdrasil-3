@@ -7,7 +7,7 @@ else
 fi
 
 read -ra obvExits <<< "$(find $OBVIOUS_EXITS -maxdepth 1 -type l -printf "%f " 2>/dev/null )"
-read -ra players <<< "$(find $PLAYERS -maxdepth 1 -type l -printf "%f " 2>/dev/null )"
+read -ra players <<< "$(find $PLAYERS -maxdepth 1 -type f -printf "%f " 2>/dev/null )"
 
 if [ "${#obvExits[@]}" -eq 0 ]; then
 	obvExits=( "none" )

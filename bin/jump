@@ -43,7 +43,7 @@ if [ "$RC" = 0 ] && cd "$ROOMS/$path"; then
 		rm "$prev_location/players/$USERNAME"
 	fi
 
-	ln -sr "$USERS/$USERNAME" "players/$USERNAME"
+	touch "players/$USERNAME"
 	
 	save user location
 
