@@ -1,5 +1,11 @@
 #!/bin/bash
 
 source "$( dirname "${BASH_SOURCE[0]}" )/env" || exit
-"$DIR/net/server/server.pl"
 
+COMMAND="$DIR/net/server/server.pl"
+
+if [ $# -gt 0 ]; then
+    COMMAND="$*"
+fi
+
+$COMMAND
