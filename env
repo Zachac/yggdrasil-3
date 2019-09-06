@@ -3,6 +3,7 @@
 # set -a (auto export all functions & values to enviornment)
 set -a
 
+# paths
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" || exit
 DATA="$DIR/data"
 BIN="$DIR/bin"
@@ -10,12 +11,17 @@ USERS="$DATA/users"
 SETTINGS="$DATA/settings"
 RUNTIME="$DATA/runtime"
 ROOMS="$DATA/rooms"
-PGID=$(ps -o pgid= $$ | grep -o '[0-9]*') || exit
 CONSTANTS="$DIR/constants"
+SERVER="$DIR/net/server"
 
+# paths relative to user room
 OBVIOUS_EXITS="./obvious_exits"
 PLAYERS="./players"
 
+# server process group id, kill -- -this to shutdown server
+PGID=$(ps -o pgid= $$ | grep -o '[0-9]*') || exit
+
+# execute all the constants
 for f in $( find "$CONSTANTS/"  -type f ) ; do
 	source "$f"
 done

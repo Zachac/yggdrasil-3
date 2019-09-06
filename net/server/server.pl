@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 
-require "$ENV{DIR}/net/server/tcpsrv.pl";
-require "$ENV{DIR}/net/server/tick.pl";
+require "$ENV{TCPSRV}";
+require "$ENV{TICK}";
 
 my $port=3329;
 
@@ -26,4 +26,4 @@ unless (fork) {
  }
 
 
-tcpsrv("localhost:$port", "$ENV{DIR}/net/server/client_handler.sh")
+tcpsrv("localhost:$port", "$ENV{CLIENT_HANDLER}")
