@@ -2,7 +2,7 @@
 
 SERVER_PORT=3329
 SERVER_HOST=localhost
-
+DEFAULT_LOCATION='root/spawn'
 
 # not currently implemented...
 MAX_CLIENTS=20

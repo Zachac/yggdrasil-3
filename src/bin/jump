@@ -5,11 +5,12 @@ RC=0
 
 if [ -z "$*" ]; then
 	location=$(load user location)
-	path="${location:-root/spawn}"
+	path="${location:-$DEFAULT_LOCATION}"
 else
 	path="$*"
 fi
 
+path = "$(roomPath "$path")"
 
 if [ -z "$path" ]; then
 	echo "No location given"
@@ -17,14 +18,13 @@ if [ -z "$path" ]; then
 elif grep -q '[.*]' <<< "$path"; then
 	echo "Illegal charachters in jump command: $*"
 	RC=2
-elif ! [ -f "$ROOMS/$path/description" ]; then
+elif ! roomExists "$path"; then
 	echo "Room not found: $path"
 
 		
 	if [ "$(basename "${BASH_SOURCE[0]}")" = "jumpf" ]; then
 		echo "Force creating room $path"
-		mkdir -p "$ROOMS/$path"
-		echo "It looks like a normal room." > "$ROOMS/$path/description"
+		roomCreate "$path"
 	else
 		RC=3
 	fi
@@ -33,8 +33,8 @@ fi
 
 prev_location=$(pwd)
 
-if [ "$RC" = 0 ] && cd "$ROOMS/$path"; then
-	location=$($BIN/location)
+if [ "$RC" = 0 ] && cd "$path"; then
+	location=$($LOCATION)
 	if [ ! -d "players" ]; then
 		mkdir -p "players"
 	fi
