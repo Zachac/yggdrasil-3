@@ -5,12 +5,16 @@ use warnings;
 require "$ENV{TCPSRV}";
 require "$ENV{TICK}";
 
-my $port=3329;
+my $port=$ENV{SERVER_PORT};
+my $host=$ENV{SERVER_HOST};
 
 if (@ARGV >= 1) {
 	$port = $ARGV[0];
 }
 
+if (@ARGV >= 2) {
+	$host = $ARGV[1];
+}
 
 # unless we are the parent, do process ticks
 unless (fork) { 
@@ -26,4 +30,4 @@ unless (fork) {
  }
 
 
-tcpsrv("localhost:$port", "$ENV{CLIENT_HANDLER}")
+tcpsrv("$host:$port", "$ENV{CLIENT_HANDLER}")

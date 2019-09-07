@@ -8,11 +8,12 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" || exit
 DATA="$DIR/data"
 BIN="$DIR/bin"
 USERS="$DATA/users"
-SETTINGS="$DATA/settings"
 RUNTIME="$DATA/runtime"
 ROOMS="$DATA/rooms"
 CONSTANTS="$DIR/constants"
 SERVER="$DIR/net/server"
+SERVER_RUNTIME="$RUNTIME/server"
+CONNECTED_PLAYERS="$SERVER_RUNTIME/players"
 
 # paths relative to user room
 OBVIOUS_EXITS="./obvious_exits"
