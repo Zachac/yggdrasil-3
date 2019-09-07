@@ -12,3 +12,7 @@ function prompt() {
 function readArgs() {
     read -ra arguments || exit 1
 }
+
+function hashPassword() {
+	openssl dgst -sha256 -binary <<< "$*" | base64 -w0
+}

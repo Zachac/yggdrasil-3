@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# set -a (auto export all functions & values to enviornment)
+set -a
+
+# base directory we will resolve all paths from
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )" || exit
+
+# server process group id, kill -- -this to shutdown server
+PGID=$(ps -o pgid= $$ | grep -o '[0-9]*') || exit
+
+# execute all the constants
+source "$DIR/src/constants/shell/paths.sh" || exit 1
+for f in $( find "$SHELL_CONSTANTS/"  -type f ) ; do
+	source "$f"
+done
+
+set +a

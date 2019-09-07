@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source "$(dirname "${BASH_SOURCE[0]}")/env" || exit
+
+COMMAND="$SERVER"
+
+if [ $# -gt 0 ]; then
+    COMMAND="$*"
+fi
+
+$COMMAND

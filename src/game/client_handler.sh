@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source "$( dirname "${BASH_SOURCE[0]}" )/../../env" || exit
-
 # create runtime folders if not already existing
 mkdir -p "$CONNECTED_PLAYERS" || exit
 
@@ -92,6 +90,3 @@ function handleInput() {
 }
 
 handleInput 31> >(cat)
-
-kill -- -$PGID
-
