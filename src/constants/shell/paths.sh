@@ -2,7 +2,7 @@
 
 # paths
 DATA="$DIR/data"
-BIN="$DIR/bin"
+BIN="$DIR/src/bin"
 USERS="$DATA/users"
 RUNTIME="$DATA/runtime"
 ROOMS="$DATA/rooms"
