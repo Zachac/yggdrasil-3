@@ -11,23 +11,26 @@ sub tcpsrv {
 
         die "usage: $0 host:port { shell_cmd | cmd args ... }\n" unless @_ >= 2;
 
-        my $h = shift;
-        my $s=new IO::Socket::INET(ReusePort=>1, Listen=>6, LocalAddr=>$h)
-                or die "IO::Socket::INET($h): $!";
+        my $host = shift;
+        my $socket=new IO::Socket::INET(ReusePort=>1, Listen=>6, LocalAddr=>$host)
+                or die "IO::Socket::INET($host): $!";
 
-        warn "listening on ", $s->sockhost, "/", $s->sockport, "\n";
+        warn "listening on ", $socket->sockhost, "/", $socket->sockport, "\n";
         $SIG{CHLD} = sub { use POSIX qw(WNOHANG); 1 while waitpid(-1, WNOHANG) > 0 };
 
         while(1){
-                my $a = $s->accept or do { die "accept: $!" unless $!{EINTR}; next };
+                my $acepted_socket = $socket->accept or do { die "accept: $!" unless $!{EINTR}; next };
+                warn "connection from ", $acepted_socket->peerhost, "/", $acepted_socket->peerport, "\n";
                 
-                warn "connection from ", $a->peerhost, "/", $a->peerport, "\n";
-                die unless defined(my $p = fork);
-                close($a), next if $p;
+                die unless defined(my $parent = fork);
+                if ($parent) {
+                        close($acepted_socket);
+                        next;
+                }
                 
-                open STDIN, "<&", $a and open STDOUT, ">&", $a or die "dup: $!";
-                
-                close $s and close $a or die "close: $!";
+                open(STDIN, "<&", $acepted_socket) or die "dup: $!";
+                open(STDOUT, ">&", $acepted_socket) or die "dup: $!";
+                close($socket) and close($acepted_socket) or die "close: $!";
                 
                 exec(@_); die "exec @_: $!";
         }

@@ -20,7 +20,7 @@ sub getUsername;
 sub createUser;
 
 STDOUT->autoflush;
-
+open(STDERR, ">&STDOUT");
 
 
 sub login {
@@ -78,18 +78,21 @@ sub createUser {
     user::create(@_, $password1);
 }
 
-my ($username, $lock) = login();
+sub commandPrompt {
+    while (1) {
+        my @prog = stdio::readArgs();
 
-while (1) {
-    my @prog = stdio::readArgs();
-
-    if (! length scalar(@prog)) {
-    } elsif (commands::isValid(@prog)) {
-        commands::run(@prog);
-    }  else {
-        print("Invalid command!");
+        if ("@prog" =~ /^\s*$/) {
+        } elsif (commands::isValid(@prog)) {
+            commands::run(@prog);
+        }  else {
+            print("Invalid command!");
+        }
     }
+
 }
 
+my ($username, $lock) = login();
+commandPrompt();
 
 print "Goodbye!\n"
