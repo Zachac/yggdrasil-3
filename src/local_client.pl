@@ -80,6 +80,8 @@ sub createUser {
 }
 
 sub commandPrompt {
+    commands::run("jump", "-f");
+
     while (1) {
         my @prog = stdio::readArgs();
 

@@ -7,6 +7,8 @@ use warnings;
 use Fcntl qw(:DEFAULT :flock);
 
 use lib::io::file;
+use lib::model::player_list;
+use lib::model::room;
 
 sub isValidUsername {
     "@_" =~ m/^[a-zA-Z0-9]{3,}$/
@@ -37,6 +39,7 @@ sub stdout {
 
     open(my $stdout, $open_mode, $stdout_path) or die "Could not open $stdout_path!";
 
+
     return $stdout;
 }
 
@@ -52,15 +55,50 @@ sub login {
     die "Passwords do not match!" unless ($realPass eq $password);
 
     $ENV{'USERNAME'}=$username;
+    file::print("$ENV{DIR}/data/users/$username/proc", $$);
+    player_list::add($username);
 
     return $lock;
+}
+
+sub clean {
+    die "No user given" unless @_ == 1;
+    my $username = shift;
+
+    player_list::remove($username);
+    room::removeUser(room::resolve(getLocation($username)), $username);
+    file::remove("$ENV{DIR}/data/users/$username/proc");
 }
 
 sub create {
     my $username = shift;
     my $password = shift;
 
-    file::print("$ENV{DIR}/data/users/$username/password", $password)
+    file::print("$ENV{DIR}/data/users/$username/password", $password);
+    setLocation($username, "root/spawn");
+}
+
+sub getLocation {
+    my $username = "@_";
+    file::slurp("$ENV{DIR}/data/users/$username/location");
+}
+
+sub setLocation {
+    my $username = shift;
+    my $location = shift;
+
+    file::print("$ENV{DIR}/data/users/$username/location", $location);
+}
+
+sub processAlive {
+    my $username = shift;
+    my $proc_file = "$ENV{DIR}/data/users/$username/proc";
+
+    if (-e $proc_file) {
+        return kill(0, file::slurp($proc_file));
+    } else {
+        return 0;
+    }
 }
 
 1;

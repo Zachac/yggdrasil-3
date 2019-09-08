@@ -4,8 +4,7 @@ use strict;
 use warnings;
 
 use lib::model::user;
+use lib::model::player_list;
 
 
-user::clean($ENV{'USERNAME'});
-
-kill -9, $$;
+print "$_\n" for player_list::get();

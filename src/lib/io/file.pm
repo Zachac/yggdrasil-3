@@ -40,4 +40,23 @@ sub slurp {
     return <$fh>;
 }
 
+sub touch {
+    my $filename = shift;
+	my $directory = dirname($filename);
+    
+    unless ( -d $directory ) {
+        make_path($directory) or die "Could not create $directory: $!";
+    }
+
+    open(my $fh, ">>", $filename) or die "Can't touch '$filename'\n";
+    print $fh "";
+    close $fh;
+}
+
+sub remove {
+    die "Not enough arguments!" unless @_ >= 1;
+    my $filename = "@_";
+    unlink $filename if ( -e $filename );
+}
+
 1;

@@ -6,6 +6,7 @@ use warnings;
 use Cwd;
 
 require lib::model::room;
+require lib::model::commands;
 
 my $forced_jump;
 
@@ -14,9 +15,10 @@ my $forced_jump;
 
 my $path = "@ARGV";
 
+$path = user::getLocation($ENV{'USERNAME'}) if ($path =~ /^\s*$/);
 
 if (room::isValidRoomPath($path)) {
-    my $abs_path = room::resolve(@ARGV);
+    my $abs_path = room::resolve($path);
 
     if ($forced_jump && ! room::exists($abs_path)) {
         print "Creating room!\n";
@@ -24,7 +26,11 @@ if (room::isValidRoomPath($path)) {
     }
 
     if (room::exists($abs_path)) {
+        room::removeUser(Cwd::cwd(), $ENV{'USERNAME'});
         chdir($abs_path) or die "Could not enter room!";
+        user::setLocation($ENV{'USERNAME'}, $path);
+        room::addUser($abs_path, $ENV{'USERNAME'});
+        commands::run("look");
     } else {
         print "This room does not exist! ", $path, "\n";
     }
