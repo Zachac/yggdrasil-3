@@ -28,6 +28,7 @@ sub login {
     my $username = getUsername();
     my $password = hash::password($username, stdio::prompt("Please enter the password:"));
     my $lock;
+    my $stdout;
 
     until ($lock = eval {user::login($username, $password)}) {
         print "$@";
@@ -37,7 +38,7 @@ sub login {
 
     print "Logged in!\n";
 
-    return ($username, $lock);
+    return ($username, $lock, $stdout);
 }
 
 sub getUsername {
@@ -92,7 +93,22 @@ sub commandPrompt {
 
 }
 
+sub readStdout {
+    die unless defined(my $child_pid = fork);
+    return if ($child_pid);
+
+    my $username = shift;
+    my $stdout = user::stdout($username, "<");
+
+    while (1) {
+        print($_, "\n") while (<$stdout>);
+    }
+
+    exit 0;
+}
+
 my ($username, $lock) = login();
+readStdout($username);
 commandPrompt();
 
 print "Goodbye!\n"
