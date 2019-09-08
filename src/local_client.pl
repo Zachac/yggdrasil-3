@@ -2,12 +2,14 @@
 use strict;
 use warnings;
 
+use Cwd;
 use File::Basename;
 
-use lib dirname("$0");
+use lib dirname(Cwd::realpath($0));
 
 use lib::io::stdio;
 use lib::model::user;
+use lib::model::commands;
 use lib::crypto::hash;
 use constants::perl::env;
 
@@ -78,6 +80,16 @@ sub createUser {
 
 my ($username, $lock) = login();
 
-stdio::prompt("press any key to exit...");
+while (1) {
+    my @prog = stdio::readArgs();
+
+    if (! length scalar(@prog)) {
+    } elsif (commands::isValid(@prog)) {
+        commands::run(@prog);
+    }  else {
+        print("Invalid command!");
+    }
+}
+
 
 print "Goodbye!\n"

@@ -6,7 +6,7 @@ use File::Basename;
 
 use lib dirname("$0");
 
-use net::server::tcpsrv;
+use lib::net::tcpsrv;
 
 # require "$ENV{TCPSRV}";
 # require "$ENV{TICK}";

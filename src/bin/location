@@ -1,8 +1,0 @@
-#!/bin/bash
-
-location="${1:-$(pwd)}"
-location="${location#"$ROOMS/"}"
-
-# hehe echo location
-echo $location 
-

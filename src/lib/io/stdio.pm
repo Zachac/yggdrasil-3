@@ -10,6 +10,10 @@ sub readLine {
     return $line;
 }
 
+sub readArgs {
+    return split(/\s+/, readLine());
+}
+
 sub prompt {
     print "@_\n";
     return readLine;
