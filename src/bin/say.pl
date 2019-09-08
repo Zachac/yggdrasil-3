@@ -4,7 +4,10 @@ use strict;
 use warnings;
 
 use lib::model::user;
-use lib::model::player_list;
+use lib::model::room;
 
+my $message = "@ARGV";
 
-print "$_\n" for player_list::get();
+unless ($message =~ /^\s*$/) {
+    user::tellFrom($_, $ENV{'USERNAME'}, $message) for room::getUsers(".");
+}

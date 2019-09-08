@@ -13,6 +13,9 @@ use lib::model::commands;
 use lib::crypto::hash;
 use constants::env;
 
+# set the process group to be different from the server.
+# that way, we don't kill the entire server when we shutdown
+# the client.
 setpgrp();
 
 sub login;
