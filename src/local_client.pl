@@ -13,7 +13,7 @@ use lib::model::commands;
 use lib::crypto::hash;
 use constants::env;
 
-
+setpgrp();
 
 sub login;
 sub getUsername;
@@ -110,7 +110,10 @@ sub readStdout {
 }
 
 my ($username, $lock) = login();
-readStdout($username);
-commandPrompt();
 
-print "Goodbye!\n"
+eval {
+    readStdout($username);
+    commandPrompt();
+};
+
+commands::run("quit");
