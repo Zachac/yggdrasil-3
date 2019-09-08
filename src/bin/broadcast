@@ -1,7 +1,0 @@
-#!/bin/bash
-
-for p in $PLAYERS/*; do
-	source "$MESSAGE" "$(basename $p)" "$*"
-done
-
-

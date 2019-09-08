@@ -7,7 +7,7 @@ use Cwd;
 
 use lib dirname(Cwd::realpath($0));
 
-use constants::perl::env;
+use constants::env;
 use lib::net::tcpsrv;
 use lib::ticks::tick;
 
