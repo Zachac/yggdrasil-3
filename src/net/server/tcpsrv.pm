@@ -2,6 +2,7 @@
 
 # source https://unix.stackexchange.com/a/513691
 # Uncle Billy https://unix.stackexchange.com/users/325065/uncle-billy
+package tcpsrv;
 
 use strict;
 use IO::Socket;
