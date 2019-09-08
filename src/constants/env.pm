@@ -9,7 +9,7 @@ use Cwd;
 
 my $dir = dirname(Cwd::realpath($0));
 
-if ($dir =~ /(.*\/shell-mud)/) {
+if ($dir =~ /(.*\/yggdrasil-3)/) {
     $ENV{"DIR"} = $1;
 } else {
     die "Could not find base directory.";
