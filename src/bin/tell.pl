@@ -6,7 +6,8 @@ use warnings;
 use lib::model::user;
 
 if (@ARGV < 2) {
-    print "usage: tell user message";
+    print "ERROR: usage: tell user message\n";
+    return 0;
 }
 
 my $user = shift;

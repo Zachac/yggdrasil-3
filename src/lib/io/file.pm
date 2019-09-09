@@ -43,7 +43,7 @@ sub slurp {
 sub touch {
     my $filename = shift;
 	my $directory = dirname($filename);
-    
+
     unless ( -d $directory ) {
         make_path($directory) or die "Could not create $directory: $!";
     }
@@ -51,6 +51,20 @@ sub touch {
     open(my $fh, ">>", $filename) or die "Can't touch '$filename'\n";
     print $fh "";
     close $fh;
+}
+
+sub symlink {
+    my $old_file = shift;
+    my $new_file = shift;
+	my $directory = dirname($new_file);
+    
+    unless ( -d $directory ) {
+        make_path($directory) or die "Could not create $directory: $!";
+    }
+
+    my $relative_path = File::Spec->abs2rel($old_file, $directory);
+
+    symlink($relative_path, $new_file);
 }
 
 sub remove {

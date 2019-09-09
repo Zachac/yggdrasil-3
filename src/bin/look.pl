@@ -11,6 +11,15 @@ if (room::exists(".")) {
     my @players = room::getUsers(".");
 
     print "There is: @players\n";
+
+    my @exits = room::getExits(".");
+
+    if (scalar(@exits) > 0) {
+        print "Obvious exits: @exits\n";
+    } else {
+        print "Obvious exits: none\n";
+    }
+
 } else {
     print "You don't see anything in particular.\n";
 }
