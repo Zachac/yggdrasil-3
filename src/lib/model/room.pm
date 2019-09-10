@@ -22,8 +22,14 @@ sub create {
     file::print("@_/description", "It looks like a normal room.")
 }
 
+# resolve the relative path from absolute
 sub resolve {
     return File::Spec->rel2abs("@_", "$ENV{DIR}/data/rooms/");
+}
+
+# resolve the relative path from absolute path
+sub resolveRelative {
+    return File::Spec->abs2rel("@_", "$ENV{DIR}/data/rooms/");
 }
 
 sub isValidRoomPath {
@@ -76,10 +82,8 @@ sub getExitRelative {
     my $exit_name = shift;
 
     my $exit = abs_path("$room/exits/$exit_name");
-    # my $exit = "$room/exits/$exit_name";
 
-    return $1 if ($exit =~ m/(?<=data\/rooms\/)(.*)/);
-    return $exit;
+    return resolveRelative $exit;
 }
 
 1;

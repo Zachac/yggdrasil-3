@@ -5,4 +5,6 @@ use warnings;
 
 use Cwd;
 
-print Cwd::cwd(), "\n";
+require lib::model::room;
+
+print room::resolveRelative(Cwd::cwd()), "\n";
