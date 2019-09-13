@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-require lib::model::room;
+use lib::model::room;
 
 if (room::exists(".")) {
     print room::description("."), "\n";

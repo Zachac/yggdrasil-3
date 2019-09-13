@@ -11,7 +11,7 @@ use lib::io::stdio;
 use lib::model::user;
 use lib::model::commands;
 use lib::crypto::hash;
-use constants::env;
+use environment::env;
 
 # set the process group to be different from the server.
 # that way, we don't kill the entire server when we shutdown
@@ -79,7 +79,9 @@ sub createUser {
         $password2 = hash::password(@_, stdio::prompt("Please re-enter the password:"));
     }
     
-    user::create(@_, $password1);
+    unless (user::create(@_, $password1)) {
+        print "Failed to create user, does this user already exist?\n";
+    }
 }
 
 sub commandPrompt {

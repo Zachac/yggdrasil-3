@@ -5,8 +5,8 @@ use warnings;
 
 use Cwd;
 
-require lib::model::room;
-require lib::model::commands;
+use lib::model::room;
+use lib::model::commands;
 
 my $forced_jump;
 

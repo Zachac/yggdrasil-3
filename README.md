@@ -10,6 +10,9 @@ To give form to my ideals.
 ## requirements
 * Linux/Mac or Windows with WSL (Tested with Ubuntu 18.04.2)
 * Perl (Tested with v5.26)
+    * DBI
+    * DBD::SQLite
+* SQLite3
 
 ## running
 To run, an instance of src/local_client.pl will need to be started. If using src/server.pl, then a socket will be opened that will be connected to a local_client.

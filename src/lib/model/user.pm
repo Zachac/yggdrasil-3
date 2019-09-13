@@ -10,12 +10,14 @@ use lib::io::file;
 use lib::model::player_list;
 use lib::model::room;
 
+use environment::db qw(conn);
+
 sub isValidUsername {
     "@_" =~ m/^[a-zA-Z0-9]{3,}$/
 }
 
 sub exists {
-    -e "$ENV{DIR}/data/users/@_/password";
+    return 0 != $db::conn->selectrow_array("select count(1) from user where user_name=?;", undef, "@_");
 }
 
 sub tellFrom {
@@ -39,7 +41,6 @@ sub stdout {
 
     open(my $stdout, $open_mode, $stdout_path) or die "Could not open $stdout_path!";
 
-
     return $stdout;
 }
 
@@ -47,7 +48,7 @@ sub login {
     my $username = shift;
     my $password = shift;
 
-    my $realPass = file::slurp("$ENV{DIR}/data/users/$username/password");
+    my $realPass = $db::conn->selectrow_array('select password from user where user_name=?', undef, $username);
     
     open(my $lock, ">", "$ENV{DIR}/data/users/$username/lock");
 
@@ -74,8 +75,8 @@ sub create {
     my $username = shift;
     my $password = shift;
 
-    file::print("$ENV{DIR}/data/users/$username/password", $password);
     setLocation($username, "root/spawn");
+    return eval {$db::conn->do("insert into user (user_name, password, location) values (?, ?, 0);", undef, $username, $password)};
 }
 
 sub getLocation {

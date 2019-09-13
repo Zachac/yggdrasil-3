@@ -1,11 +1,12 @@
 #!/usr/bin/perl
-package file;
+package env;
 
 use strict;
 use warnings;
 
 use File::Basename;
 use Cwd;
+
 
 my $dir = dirname(Cwd::realpath($0));
 
