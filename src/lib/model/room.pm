@@ -19,6 +19,8 @@ sub exists {
 }
 
 sub create {
+    my $relPath = resolveRelative(@_);
+    $db::conn->do('insert or ignore into room(room_name) values(?)', undef, $relPath);
     file::print("@_/description", "It looks like a normal room.")
 }
 

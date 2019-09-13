@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Fcntl qw(:DEFAULT :flock);
+use File::Path qw(make_path);
 
 use lib::io::file;
 use lib::model::player_list;
@@ -74,21 +75,20 @@ sub clean {
 sub create {
     my $username = shift;
     my $password = shift;
-
-    setLocation($username, "root/spawn");
+    my $filesDirectory = "$ENV{'DIR'}/data/users/$username/";
+    
+    make_path($filesDirectory) unless (-d $filesDirectory);
     return eval {$db::conn->do("insert into user (user_name, password, location) values (?, ?, 0);", undef, $username, $password)};
 }
 
 sub getLocation {
-    my $username = "@_";
-    file::slurp("$ENV{DIR}/data/users/$username/location");
+    return $db::conn->selectrow_array('select room_name from room where location = (select location from user where user_name=?)', undef, "@_")
 }
 
 sub setLocation {
     my $username = shift;
     my $location = shift;
-
-    file::print("$ENV{DIR}/data/users/$username/location", $location);
+    $db::conn->do('update user set location = (select location from room where room_name=?) where user_name=?;', undef, $location, $username);
 }
 
 sub processAlive {
