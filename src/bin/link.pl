@@ -4,6 +4,9 @@ use strict;
 use warnings;
 
 require lib::model::room;
+require lib::model::user;
+
+my $location = room::resolve(user::getLocation($ENV{'USERNAME'}));
 
 if (@ARGV < 2) {
     print "ERROR: usage: link detination name\n";
@@ -22,7 +25,7 @@ unless (room::exists($destination)) {
     return 0;
 }
 
-if (room::addExit(".", $destination, $ARGV[1])) {
+if (room::addExit($location, $destination, $ARGV[1])) {
     print "Linked!\n";
 } else {
     print "Could not create link: $!\n";

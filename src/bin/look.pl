@@ -4,15 +4,19 @@ use strict;
 use warnings;
 
 use lib::model::room;
+use lib::model::user;
 
-if (room::exists(".")) {
-    print room::description("."), "\n";
+my $room = user::getLocation($ENV{'USERNAME'});
+$room = room::resolve($room);
 
-    my @players = room::getUsers(".");
+if (room::exists($room)) {
+    print room::description($room), "\n";
+
+    my @players = room::getUsers($room);
 
     print "There is: @players\n";
 
-    my @exits = room::getExits(".");
+    my @exits = room::getExits($room);
 
     if (scalar(@exits) > 0) {
         print "Obvious exits: @exits\n";

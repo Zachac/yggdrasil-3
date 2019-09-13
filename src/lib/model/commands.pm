@@ -14,14 +14,16 @@ sub run {
     my $line = "@_";
     my $command = shift;
 
+    my $location = room::resolve(user::getLocation($ENV{USERNAME}));
+
     if ( commands::exists($command) ) {
         local @ARGV = @_;
         unless (my $return = do "bin/$command.pl") {
             print "Couldn't parse $command: $@\n"      if $@;
             print "Couldn't execute $command: $!\n"    unless defined $return;
         }
-    } elsif (room::getExitExists(".", $line)) {
-        run("jump", room::getExitRelative(".", $line));
+    } elsif (room::getExitExists($location, $line)) {
+        run("jump", room::getExitRelative($location, $line));
     } else {
         print "Command not found!\n";
     }

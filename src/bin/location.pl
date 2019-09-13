@@ -5,6 +5,6 @@ use warnings;
 
 use Cwd;
 
-use lib::model::room;
+use lib::model::user;
 
-print room::resolveRelative(Cwd::cwd()), "\n";
+print user::getLocation($ENV{'USERNAME'}), "\n";

@@ -27,7 +27,6 @@ if (room::isValidRoomPath($path)) {
 
     if (room::exists($abs_path)) {
         room::removeUser(Cwd::cwd(), $ENV{'USERNAME'});
-        chdir($abs_path) or die "Could not enter room!";
         user::setLocation($ENV{'USERNAME'}, $path);
         room::addUser($abs_path, $ENV{'USERNAME'});
         commands::run("look");
