@@ -33,6 +33,13 @@ $conn->do("CREATE TABLE IF NOT EXISTS description (
 	description VARCHAR(500) NOT NULL UNIQUE
 );");
 
+$conn->do("CREATE TABLE IF NOT EXISTS links (
+	src_room_id INTEGER NOT NULL,
+	dest_room_id INTEGER NOT NULL,
+	link_name VARCHAR(20) NOT NULL,
+	PRIMARY KEY(src_room_id, dest_room_id, link_name)
+);");
+
 $conn->do("insert or ignore into description(description) values ('It looks like a normal room.');");
 $conn->do("insert or ignore into room(room_name) values ('root/spawn');");
 

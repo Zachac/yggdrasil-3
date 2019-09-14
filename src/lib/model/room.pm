@@ -23,52 +23,38 @@ sub create {
     $db::conn->do('insert or ignore into room(room_name) values(?)', undef, "@_");
 }
 
-# resolve the relative path from absolute
-sub resolve {
-    return File::Spec->rel2abs("@_", "$ENV{DIR}/data/rooms/");
-}
-
-# resolve the relative path from absolute path
-sub resolveRelative {
-    return File::Spec->abs2rel("@_", "$ENV{DIR}/data/rooms/");
-}
-
-sub isValidRoomPath {
-    "@_" =~ /^\w+(\/\w+)*\/?$/;
-}
-
 sub addExit {
     my $room = shift;
     my $another_room = shift;
-    my $name = quotemeta shift;
+    my $name = shift;
 
-    file::symlink($another_room, "$room/exits/$name");
+    $db::conn->do('insert or ignore into links (link_name, src_room_id, dest_room_id) values (
+        ?,
+	    (select room_id from room where room_name=?),
+	    (select room_id from room where room_name=?)
+    );', undef, $name, $room, $another_room)
 }
 
 sub removeExit {
     my $room = shift;
-    my $exit = quotemeta shift;
-    file::remove("$room/exits/$exit");
+    my $name = shift;
+    
+    $db::conn->do('delete from links where src_room_id=(select room_id from room where room_name=?) and link_name=?;', undef, $room,  $name)
 }
 
 sub getExits {
-    return map { basename $_ } glob(shift() . "/exits/*")
+    return @{$db::conn->selectcol_arrayref('select l.link_name from room r join links l on l.src_room_id = r.room_id where r.room_name = ?;', undef, shift)}
 }
 
-sub getExitExists {
+sub getExit {
     my $room = shift;
-    my $exit_name = shift;
+    my $name = shift;
 
-    -l "$room/exits/$exit_name";
-}
-
-sub getExitRelative {
-    my $room = shift;
-    my $exit_name = shift;
-
-    my $exit = abs_path("$room/exits/$exit_name");
-
-    return resolveRelative $exit;
+    return $db::conn->selectrow_array('
+    select r.room_name from links
+    join room r on r.room_id = dest_room_id 
+    where src_room_id=(select room_id from room where room_name=?) 
+    and link_name=?;', undef, $room,  $name)
 }
 
 1;

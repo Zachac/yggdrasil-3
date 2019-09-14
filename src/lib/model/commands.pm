@@ -14,7 +14,7 @@ sub run {
     my $line = "@_";
     my $command = shift;
 
-    my $location = room::resolve(user::getLocation($ENV{USERNAME}));
+    my $location = user::getLocation($ENV{USERNAME});
 
     if ( commands::exists($command) ) {
         local @ARGV = @_;
@@ -22,8 +22,8 @@ sub run {
             print "Couldn't parse $command: $@\n"      if $@;
             print "Couldn't execute $command: $!\n"    unless defined $return;
         }
-    } elsif (room::getExitExists($location, $line)) {
-        run("jump", room::getExitRelative($location, $line));
+    } elsif (my $dest = room::getExit($location, $line)) {
+        run("jump", $dest);
     } else {
         print "Command not found!\n";
     }
