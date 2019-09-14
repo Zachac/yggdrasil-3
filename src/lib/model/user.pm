@@ -24,40 +24,49 @@ sub exists {
 sub tellFrom {
     my $username = shift;
     my $source = shift;
-    my $stdout_path = "$ENV{DIR}/data/users/$username/stdout";
     my $message = "$source: @_";
+    my $stdout_path = getStdoutPath($username);
     
-    file::printnb($stdout_path, $message) or return 0;
-    return 1;
+    return file::printnb($stdout_path, $message);
 }
 
 sub stdout {
     my $username = shift;
     my $open_mode = shift;
-    my $stdout_path = "$ENV{DIR}/data/users/$username/stdout";
+    my $stdout_path = getStdoutPath($username);
 
+    open(my $stdout, $open_mode, $stdout_path) or die "Could not open $stdout_path!";
+    return $stdout;
+}
+
+sub getStdoutPath {
+    my $fileSafeUsername = quotemeta shift;
+    my $stdout_path = "$ENV{DIR}/runtime/clients/$fileSafeUsername.stdout";
+
+    file::initPathTo($stdout_path);
     unless ( -e $stdout_path) {
         system("mkfifo", "$stdout_path");
     }
 
-    open(my $stdout, $open_mode, $stdout_path) or die "Could not open $stdout_path!";
-
-    return $stdout;
+    return $stdout_path;
 }
 
 sub login {
     my $username = shift;
     my $password = shift;
-
+    my $fileSafeUsername = quotemeta $username;
+    my $lockFile = "$ENV{DIR}/runtime/users/$fileSafeUsername.lock";
     my $realPass = $db::conn->selectrow_array('select password from user where user_name=?', undef, $username);
     
-    open(my $lock, ">", "$ENV{DIR}/data/users/$username/lock");
+    open(my $lock, ">", $lockFile) or die "Couldn't open $username lock: $!";
+    file::initPathTo($lockFile);
 
     die "User is already logged in!" unless (flock( $lock, LOCK_EX|LOCK_NB ));
     die "Passwords do not match!" unless ($realPass eq $password);
 
     $ENV{'USERNAME'}=$username;
-    file::print("$ENV{DIR}/data/users/$username/proc", $$);
+    $lock->autoflush(1);
+    print $lock $$;
     player_list::add($username);
 
     return $lock;
@@ -66,9 +75,11 @@ sub login {
 sub clean {
     die "No user given" unless @_ == 1;
     my $username = shift;
+    my $fileSafeUsername = quotemeta $username;
+    my $lockFile = "$ENV{DIR}/runtime/users/$fileSafeUsername.lock";
 
+    file::remove($lockFile);
     player_list::remove($username);
-    file::remove("$ENV{DIR}/data/users/$username/proc");
 }
 
 sub create {
@@ -95,8 +106,8 @@ sub setLocation {
 }
 
 sub processAlive {
-    my $username = shift;
-    my $proc_file = "$ENV{DIR}/data/users/$username/proc";
+    my $username = quotemeta shift;
+    my $proc_file = "$ENV{DIR}/runtime/users/$username.lock";
 
     if (-e $proc_file) {
         return kill(0, file::slurp($proc_file));

@@ -31,6 +31,7 @@ sub printnb {
     sysopen(my $fh, $filename, O_NONBLOCK|O_WRONLY) or return 0;
     print $fh "@_";
     close $fh;
+    return 1;
 }
 
 sub slurp {
@@ -51,6 +52,14 @@ sub touch {
     open(my $fh, ">>", $filename) or die "Can't touch '$filename'\n";
     print $fh "";
     close $fh;
+}
+
+sub initPathTo {
+	my $directory = dirname(shift);
+
+    unless ( -d $directory ) {
+        make_path($directory) or die "Could not create $directory: $!";
+    }
 }
 
 sub symlink {

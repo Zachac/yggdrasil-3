@@ -1,6 +1,5 @@
 /data/runtime/
-/data/users/
-/data/rooms/
+/runtime/
 
 .vscode/
 
