@@ -9,19 +9,18 @@ use File::Basename;
 use Cwd qw(abs_path);
 
 use lib::io::file;
+use environment::db;
 
 sub description {
-    return file::slurp("@_/description")
+    return $db::conn->selectrow_array('select description from description where description_id=(select description_id from room where room_name=?);', undef, "@_");
 }
 
 sub exists {
-    -f "@_/description";
+    return $db::conn->selectrow_array('select count(1) from room where room_name=?;', undef, "@_");
 }
 
 sub create {
-    my $relPath = resolveRelative(@_);
-    $db::conn->do('insert or ignore into room(room_name) values(?)', undef, $relPath);
-    file::print("@_/description", "It looks like a normal room.")
+    $db::conn->do('insert or ignore into room(room_name) values(?)', undef, "@_");
 }
 
 # resolve the relative path from absolute
@@ -36,22 +35,6 @@ sub resolveRelative {
 
 sub isValidRoomPath {
     "@_" =~ /^\w+(\/\w+)*\/?$/;
-}
-
-sub addUser {
-    my $room = shift;
-    my $username = quotemeta shift;
-    file::touch("$room/players/$username")
-}
-
-sub removeUser {
-    my $room = shift;
-    my $username = quotemeta shift;
-    file::remove("$room/players/$username");
-}
-
-sub getUsers {
-    return map { basename $_ } glob(shift() . "/players/*");
 }
 
 sub addExit {

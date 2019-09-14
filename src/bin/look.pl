@@ -6,13 +6,13 @@ use warnings;
 use lib::model::room;
 use lib::model::user;
 
-my $room = user::getLocation($ENV{'USERNAME'});
-$room = room::resolve($room);
+my $relRoom = user::getLocation($ENV{'USERNAME'});
+my $room = room::resolve($relRoom);
 
-if (room::exists($room)) {
-    print room::description($room), "\n";
+if (room::exists($relRoom)) {
+    print room::description($relRoom), "\n";
 
-    my @players = room::getUsers($room);
+    my @players = user::getUsersNearby($ENV{'USERNAME'});
 
     print "There is: @players\n";
 

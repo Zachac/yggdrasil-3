@@ -20,15 +20,13 @@ $path = user::getLocation($ENV{'USERNAME'}) if ($path =~ /^\s*$/);
 if (room::isValidRoomPath($path)) {
     my $abs_path = room::resolve($path);
 
-    if ($forced_jump && ! room::exists($abs_path)) {
+    if ($forced_jump && ! room::exists($path)) {
         print "Creating room!\n";
-        room::create($abs_path);
+        room::create($path);
     }
 
-    if (room::exists($abs_path)) {
-        room::removeUser(Cwd::cwd(), $ENV{'USERNAME'});
+    if (room::exists($path)) {
         user::setLocation($ENV{'USERNAME'}, $path);
-        room::addUser($abs_path, $ENV{'USERNAME'});
         commands::run("look");
     } else {
         print "This room does not exist! ", $path, "\n";

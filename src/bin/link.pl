@@ -20,7 +20,7 @@ unless (room::isValidRoomPath($ARGV[0])) {
 
 my $destination = room::resolve($ARGV[0]);
 
-unless (room::exists($destination)) {
+unless (room::exists($ARGV[0])) {
     print "ERROR: destination does not exist\n";
     return 0;
 }
