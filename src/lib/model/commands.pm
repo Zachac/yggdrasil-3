@@ -30,6 +30,13 @@ sub run {
  
 }
 
+sub runAs {
+    my $currentUser = $ENV{'USER'};
+    $ENV{'USER'} = shift;
+    run(@_);
+    $ENV{'USER'} = $currentUser;
+}
+
 sub exists {
     my $command = shift;
 

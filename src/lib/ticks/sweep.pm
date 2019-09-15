@@ -8,12 +8,13 @@ use strict;
 use warnings;
 
 use File::Basename;
-use lib::model::user;
+use lib::model::client;
 use lib::model::player_list;
+use lib::model::commmands;
 
 sub sweep {
     foreach (player_list::get()) {
-        user::clean($_) unless user::processAlive($_);
+        commands::runAs($_, "quit") unless client::alive($_);
     }
 }
 
