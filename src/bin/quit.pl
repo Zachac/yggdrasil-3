@@ -3,9 +3,9 @@
 use strict;
 use warnings;
 
-use lib::model::user;
+use lib::model::client;
 
 
-user::clean($ENV{'USERNAME'});
+client::remove($ENV{'USERNAME'});
 
 kill -9, getpgrp($$) or die "Could not terminate successfully!";

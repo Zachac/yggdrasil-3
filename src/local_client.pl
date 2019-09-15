@@ -105,7 +105,7 @@ sub readStdout {
     return if ($child_pid);
 
     my $username = shift;
-    my $stdout = user::stdout($username, "<");
+    my $stdout = client::stdout($username, "<");
 
     while (1) {
         print($_, "\n") while (<$stdout>);
