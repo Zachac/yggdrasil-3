@@ -12,49 +12,32 @@ use lib::io::file;
 use environment::db;
 
 sub description {
-    return $db::conn->selectrow_array('select description from description where description_id=(select description_id from room where room_name=?);', undef, "@_");
-}
-
-sub exists {
-    return $db::conn->selectrow_array('select count(1) from room where room_name=?;', undef, "@_");
-}
-
-sub create {
-    $db::conn->do('insert or ignore into room(room_name) values(?)', undef, "@_");
+    my $result = $db::conn->selectrow_array('select description from room where location=?;', undef, shift);
+    return $result if (defined($result));
+    return "It looks like a normal room";
 }
 
 sub addExit {
     my $room = shift;
     my $another_room = shift;
     my $name = shift;
-
-    $db::conn->do('insert or ignore into links (link_name, src_room_id, dest_room_id) values (
-        ?,
-	    (select room_id from room where room_name=?),
-	    (select room_id from room where room_name=?)
-    );', undef, $name, $room, $another_room)
+    $db::conn->do('insert or ignore into links (link_name, src_location, dest_location) values (?, ?, ?);', undef, $name, $room, $another_room);
 }
 
 sub removeExit {
     my $room = shift;
     my $name = shift;
-    
-    $db::conn->do('delete from links where src_room_id=(select room_id from room where room_name=?) and link_name=?;', undef, $room,  $name)
+    $db::conn->do('delete from links where src_location=? and link_name=?;', undef, $room,  $name);
 }
 
 sub getExits {
-    return @{$db::conn->selectcol_arrayref('select l.link_name from room r join links l on l.src_room_id = r.room_id where r.room_name = ?;', undef, shift)}
+    return @{$db::conn->selectcol_arrayref('select l.link_name from links l where l.src_location = ?;', undef, shift)}
 }
 
 sub getExit {
     my $room = shift;
     my $name = shift;
-
-    return $db::conn->selectrow_array('
-    select r.room_name from links
-    join room r on r.room_id = dest_room_id 
-    where src_room_id=(select room_id from room where room_name=?) 
-    and link_name=?;', undef, $room,  $name)
+    return $db::conn->selectrow_array('select dest_location from links where src_location=? and link_name=?;', undef, $room,  $name)
 }
 
 1;

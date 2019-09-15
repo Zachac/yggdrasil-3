@@ -15,5 +15,3 @@ my $user = shift;
 unless (user::tellFrom($user, $ENV{'USERNAME'}, @ARGV)) {
     print "Could not deliver message to $user\n";
 }
-
-

@@ -85,7 +85,7 @@ sub createUser {
 }
 
 sub commandPrompt {
-    commands::run("jump", "-f");
+    commands::run("look");
 
     while (1) {
         my @prog = stdio::readArgs();

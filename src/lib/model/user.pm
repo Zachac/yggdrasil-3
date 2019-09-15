@@ -85,24 +85,21 @@ sub clean {
 sub create {
     my $username = shift;
     my $password = shift;
-    my $filesDirectory = "$ENV{'DIR'}/data/users/$username/";
-    
-    make_path($filesDirectory) unless (-d $filesDirectory);
     return eval {$db::conn->do("insert into user (user_name, password) values (?, ?);", undef, $username, $password)};
 }
 
 sub getUsersNearby {
-    return @{$db::conn->selectcol_arrayref('select u2.user_name from user u join user u2 on u2.room_id = u.room_id where u.user_name=?;', undef, shift)}
+    return @{$db::conn->selectcol_arrayref('select u2.user_name from user u join user u2 on u2.location = u.location where u.user_name=?;', undef, shift)}
 }
 
 sub getLocation {
-    return $db::conn->selectrow_array('select room_name from room where room_id = (select room_id from user where user_name=?)', undef, "@_")
+    return $db::conn->selectrow_array('select location from user where user_name = ?', undef, "@_")
 }
 
 sub setLocation {
     my $username = shift;
     my $location = shift;
-    $db::conn->do('update user set room_id = (select room_id from room where room_name=?) where user_name=?;', undef, $location, $username);
+    $db::conn->do('update user set location = ? where user_name=?;', undef, $location, $username);
 }
 
 sub processAlive {

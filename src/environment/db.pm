@@ -17,31 +17,24 @@ my $password = "";
 our $conn = DBI->connect($dsn, $userid, $password, { RaiseError => 1 }) or die $DBI::errstr;
 
 $conn->do("CREATE TABLE IF NOT EXISTS user (
-	user_name VARCHAR(20) NOT NULL PRIMARY KEY,
-	password CHAR(43) NOT NULL,
-	room_id INTEGER NOT NULL DEFAULT 1
+	user_name NOT NULL PRIMARY KEY,
+	password NOT NULL,
+	location NOT NULL DEFAULT 'NULL'
 );");
 
 $conn->do("CREATE TABLE IF NOT EXISTS room (
-	room_id INTEGER NOT NULL PRIMARY KEY,
-	room_name VARCHAR(20) NOT NULL UNIQUE,
-	description_id INTEGER NOT NULL DEFAULT 1
-);");
-
-$conn->do("CREATE TABLE IF NOT EXISTS description (
-	description_id INTEGER NOT NULL PRIMARY KEY,
-	description VARCHAR(500) NOT NULL UNIQUE
+	location UNIQUE PRIMARY KEY,
+	room_name,
+	description
 );");
 
 $conn->do("CREATE TABLE IF NOT EXISTS links (
-	src_room_id INTEGER NOT NULL,
-	dest_room_id INTEGER NOT NULL,
-	link_name VARCHAR(20) NOT NULL,
-	PRIMARY KEY(src_room_id, dest_room_id, link_name)
+	link_name,
+	src_location,
+	dest_location
 );");
 
-$conn->do("insert or ignore into description(description) values ('It looks like a normal room.');");
-$conn->do("insert or ignore into room(room_name) values ('root/spawn');");
+$conn->do("insert or ignore into room(location, room_name, description) values ('NULL', 'root/spawn', 'It looks like a very normal room.');");
 
 warn "Database connected!\n";
 
