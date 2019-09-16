@@ -8,7 +8,6 @@ use Fcntl qw(:DEFAULT :flock);
 use File::Path qw(make_path);
 
 use lib::io::file;
-use lib::model::player_list;
 use lib::model::room;
 
 use environment::db qw(conn);
@@ -47,7 +46,6 @@ sub remove {
     my $lockFile = "$ENV{DIR}/runtime/users/$fileSafeUsername.lock";
 
     file::remove($lockFile);
-    player_list::remove($username);
 }
 
 sub alive {
@@ -65,16 +63,20 @@ sub lock {
     my $username = shift;
     my $fileSafeUsername = quotemeta $username;
     my $lockFile = "$ENV{DIR}/runtime/users/$fileSafeUsername.lock";
-    open(my $lock, ">", $lockFile) or die "Couldn't open $lockFile lock: $!";
     file::initPathTo($lockFile);
+    open(my $lock, ">", $lockFile) or die "Couldn't open $lockFile lock: $!";
 
     return 0 unless flock($lock, LOCK_EX|LOCK_NB);
 
     $lock->autoflush(1);
     print $lock $$;
-    player_list::add($username);
 
     return $lock
+}
+
+sub getAll {
+    my $dir = "$ENV{DIR}/runtime/users/";
+    return grep {return $1 if ($_ =~ m/(?<=^\Q$dir\E)(.+)(?=\.lock)/g)} glob("$dir*.lock");
 }
 
 1;

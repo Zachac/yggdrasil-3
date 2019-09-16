@@ -8,7 +8,6 @@ use Fcntl qw(:DEFAULT :flock);
 use File::Path qw(make_path);
 
 use lib::io::file;
-use lib::model::player_list;
 use lib::model::room;
 use lib::model::client;
 

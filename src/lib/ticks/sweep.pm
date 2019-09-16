@@ -9,11 +9,11 @@ use warnings;
 
 use File::Basename;
 use lib::model::client;
-use lib::model::player_list;
 use lib::model::commmands;
 
 sub sweep {
-    foreach (player_list::get()) {
+    foreach (client::getAll()) {
+        print "sweeping $_\n";
         commands::runAs($_, "quit") unless client::alive($_);
     }
 }
