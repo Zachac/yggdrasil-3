@@ -16,11 +16,7 @@ sub run {
     my $command = shift;
 
     if ( commands::exists($command) ) {
-        local @ARGV = @_;
-        unless (my $return = do "bin/$command.pl") {
-            print "Couldn't parse $command: $@\n"      if $@;
-            print "Couldn't execute $command: $!\n"    unless defined $return;
-        }
+        execute("bin/$command.pl");
     } elsif (my $dest = room::getExit(user::getLocation($ENV{USERNAME}), $line)) {
         run("jump", $dest);
     } else {
@@ -29,11 +25,20 @@ sub run {
  
 }
 
+sub execute {
+    my $file = shift;
+    local @ARGV = @_;
+    unless (my $return = do $file) {
+        print "Couldn't parse $file: $@\n"      if $@;
+        print "Couldn't execute $file: $!\n"    unless defined $return;
+    }
+}
+
 sub runAs {
-    my $currentUser = $ENV{'USER'};
-    $ENV{'USER'} = shift;
+    my $currentUser = $ENV{'USERNAME'};
+    $ENV{'USERNAME'} = shift;
     run(@_);
-    $ENV{'USER'} = $currentUser;
+    $ENV{'USERNAME'} = $currentUser;
 }
 
 sub exists {
