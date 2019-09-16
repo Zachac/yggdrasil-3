@@ -76,6 +76,16 @@ sub symlink {
     symlink($relative_path, $new_file);
 }
 
+sub mkfifo {
+    my $fifo = shift;
+    
+    unless ( -e $fifo) {
+        initPathTo($fifo);
+        system("mkfifo", "$fifo");
+    }
+
+}
+
 sub remove {
     die "Not enough arguments!" unless @_ >= 1;
     my $filename = "@_";

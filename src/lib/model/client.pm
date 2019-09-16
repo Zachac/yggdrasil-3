@@ -15,7 +15,9 @@ use environment::db qw(conn);
 sub message {
     my $username = shift;
     my $message = shift;
-    return file::printnb(getStdoutPath($username), $message);
+    my $stdout_path = getStdoutPath($username);
+    file::mkfifo($stdout_path);
+    return file::printnb($stdout_path, $message);
 }
 
 sub stdout {
@@ -23,6 +25,7 @@ sub stdout {
     my $open_mode = shift;
     my $stdout_path = getStdoutPath($username);
 
+    file::mkfifo($stdout_path);
     open(my $stdout, $open_mode, $stdout_path) or die "Could not open $stdout_path!";
     return $stdout;
 }
@@ -30,12 +33,6 @@ sub stdout {
 sub getStdoutPath {
     my $fileSafeUsername = quotemeta shift;
     my $stdout_path = "$ENV{DIR}/runtime/clients/$fileSafeUsername.stdout";
-
-    file::initPathTo($stdout_path);
-    unless ( -e $stdout_path) {
-        system("mkfifo", "$stdout_path");
-    }
-
     return $stdout_path;
 }
 
@@ -43,14 +40,16 @@ sub remove {
     die "No user given" unless @_ == 1;
     my $username = shift;
     my $fileSafeUsername = quotemeta $username;
-    my $lockFile = "$ENV{DIR}/runtime/users/$fileSafeUsername.lock";
+    my $lockFile = "$ENV{DIR}/runtime/clients/$fileSafeUsername.lock";
+    my $stdout_path = getStdoutPath $username;
 
+    file::remove($stdout_path);
     file::remove($lockFile);
 }
 
 sub alive {
-    my $username = quotemeta shift;
-    my $proc_file = "$ENV{DIR}/runtime/users/$username.lock";
+    my $fileSafeUsername = quotemeta shift;
+    my $proc_file = "$ENV{DIR}/runtime/clients/$fileSafeUsername.lock";
 
     if (-e $proc_file) {
         return kill(0, file::slurp($proc_file));
@@ -62,7 +61,7 @@ sub alive {
 sub lock {
     my $username = shift;
     my $fileSafeUsername = quotemeta $username;
-    my $lockFile = "$ENV{DIR}/runtime/users/$fileSafeUsername.lock";
+    my $lockFile = "$ENV{DIR}/runtime/clients/$fileSafeUsername.lock";
     file::initPathTo($lockFile);
     open(my $lock, ">", $lockFile) or die "Couldn't open $lockFile lock: $!";
 
@@ -75,7 +74,7 @@ sub lock {
 }
 
 sub getAll {
-    my $dir = "$ENV{DIR}/runtime/users/";
+    my $dir = "$ENV{DIR}/runtime/clients/";
     return grep {return $1 if ($_ =~ m/(?<=^\Q$dir\E)(.+)(?=\.lock)/g)} glob("$dir*.lock");
 }
 
