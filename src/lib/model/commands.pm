@@ -6,18 +6,20 @@ use warnings;
 
 use lib::model::room;
 use lib::model::user;
+use lib::model::skills;
 
 sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";
 }
 
 sub run {
-    my $line = "@_";
     my $command = shift;
 
     if ( commands::exists($command) ) {
-        execute("bin/$command.pl");
-    } elsif (my $dest = room::getExit(user::getLocation($ENV{USERNAME}), $line)) {
+        execute("bin/$command.pl", @_);
+    } elsif (skills::exists($command)) {
+        skills::execute($command);
+    } elsif (my $dest = room::getExit(user::getLocation($ENV{USERNAME}), "@_")) {
         run("jump", $dest);
     } else {
         print "Command not found!\n";
