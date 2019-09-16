@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use lib::model::room;
+use lib::model::user;
 
 sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";
@@ -14,15 +15,13 @@ sub run {
     my $line = "@_";
     my $command = shift;
 
-    my $location = user::getLocation($ENV{USERNAME});
-
     if ( commands::exists($command) ) {
         local @ARGV = @_;
         unless (my $return = do "bin/$command.pl") {
             print "Couldn't parse $command: $@\n"      if $@;
             print "Couldn't execute $command: $!\n"    unless defined $return;
         }
-    } elsif (my $dest = room::getExit($location, $line)) {
+    } elsif (my $dest = room::getExit(user::getLocation($ENV{USERNAME}), $line)) {
         run("jump", $dest);
     } else {
         print "Command not found!\n";
