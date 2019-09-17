@@ -21,10 +21,16 @@ INIT {
     $db::conn->do("insert or ignore into room(location, room_name, description) values ('root/spawn', 'An empty room', 'It looks like a very normal room.');");
 }
 
+sub name {
+    my $result = $db::conn->selectrow_array('select room_name from room where location=?;', undef, shift);
+    return $result if (defined($result));
+    return "The Void";
+}
+
 sub description {
     my $result = $db::conn->selectrow_array('select description from room where location=?;', undef, shift);
     return $result if (defined($result));
-    return "It looks like a normal room";
+    return "You see nothing.";
 }
 
 1;

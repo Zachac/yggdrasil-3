@@ -8,14 +8,14 @@ use lib::model::links;
 use lib::model::user;
 
 my $room = user::getLocation($ENV{'USERNAME'});
+print "\n";
+print room::name($room), "\n";
 print room::description($room), "\n";
 
 my @players = user::getUsersNearby($ENV{'USERNAME'});
-print "There is: @players\n";
+print "  There is: @players\n";
 
 my @exits = links::getExits($room);
-if (scalar(@exits) > 0) {
-    print "Obvious exits: @exits\n";
-} else {
-    print "Obvious exits: none\n";
-}
+@exits = ("none") unless (@exits > 0);
+print "  Obvious exits: @exits\n";
+
