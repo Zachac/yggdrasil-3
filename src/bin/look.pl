@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use lib::model::room;
+use lib::model::links;
 use lib::model::user;
 
 my $room = user::getLocation($ENV{'USERNAME'});
@@ -12,7 +13,7 @@ print room::description($room), "\n";
 my @players = user::getUsersNearby($ENV{'USERNAME'});
 print "There is: @players\n";
 
-my @exits = room::getExits($room);
+my @exits = links::getExits($room);
 if (scalar(@exits) > 0) {
     print "Obvious exits: @exits\n";
 } else {

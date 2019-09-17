@@ -13,6 +13,16 @@ use lib::model::client;
 
 use environment::db qw(conn);
 
+INIT {
+    $db::conn->do("CREATE TABLE IF NOT EXISTS user (
+        user_name NOT NULL PRIMARY KEY,
+        password NOT NULL,
+        location NOT NULL DEFAULT 'root/spawn'
+    );");
+}
+
+
+
 sub isValidUsername {
     "@_" =~ m/^[a-zA-Z0-9]{3,}$/
 }

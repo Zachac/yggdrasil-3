@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use lib::model::room;
+use lib::model::links;
 use lib::model::user;
 use lib::model::skills;
 
@@ -13,13 +14,13 @@ sub isValid {
 }
 
 sub run {
-    my $command = shift;
+    my $command = $_[0];
 
     if ( commands::exists($command) ) {
         execute("bin/$command.pl", @_);
     } elsif (skills::exists($command)) {
         skills::execute($command);
-    } elsif (my $dest = room::getExit(user::getLocation($ENV{USERNAME}), "@_")) {
+    } elsif (my $dest = links::getExit(user::getLocation($ENV{'USERNAME'}), "@_")) {
         run("jump", $dest);
     } else {
         print "Command not found!\n";
