@@ -13,11 +13,19 @@ sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";
 }
 
+sub runCommand {
+    my $command = shift;
+    execute("bin/$command.pl", @_);
+}
+
 sub run {
     my $command = $_[0];
 
+    # add an empty space between user commands
+    print "\n";
+
     if ( commands::exists($command) ) {
-        execute("bin/$command.pl", @_);
+        runCommand $command, @_;
     } elsif (skills::exists($command)) {
         skills::execute($command);
     } elsif (my $dest = links::getExit(user::getLocation($ENV{'USERNAME'}), "@_")) {
@@ -25,14 +33,13 @@ sub run {
     } else {
         print "Command not found!\n";
     }
- 
+
 }
 
 sub execute {
     my $file = shift;
     local @ARGV = @_;
     
-    print "\n";
     unless (defined(do $file)) {
         print "$@";
     }

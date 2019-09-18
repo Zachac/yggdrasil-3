@@ -14,4 +14,4 @@ unless (@ARGV > 0) {
 }
 
 user::setLocation($ENV{'USERNAME'}, "@ARGV");
-commands::run("look");
+commands::runCommand("look");

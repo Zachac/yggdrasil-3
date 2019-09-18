@@ -6,6 +6,7 @@ use warnings;
 use lib::model::room;
 use lib::model::links;
 use lib::model::user;
+use lib::model::items;
 
 my $room = user::getLocation($ENV{'USERNAME'});
 print room::name($room), "\n";
@@ -18,3 +19,9 @@ my @exits = links::getExits($room);
 @exits = ("none") unless (@exits > 0);
 print "  Obvious exits: @exits\n";
 
+my @items = items::getAll($room);
+
+if (@items > 0) {
+    print "  Visible items:\n";
+    print "    $_\n" for @items;
+}
