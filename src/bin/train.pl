@@ -5,19 +5,9 @@ use warnings;
 
 use lib::model::skills;
 
-print "\n";
+die "usage: $ARGV[0] skill\n" unless (@ARGV == 2);
 
-unless (@ARGV == 2) {
-    print "usage: $ARGV[0] skill\n";
-    return 0;
-}
-
-my $skill = lc $ARGV[1];
-
-if (defined eval {skills::train($skill)}) {
-    print "Level up!\n";
-} else {
-    print "Could not level up: $@";
-}
+skills::train(lc $ARGV[1]);
+print "Level up!\n";
 
 

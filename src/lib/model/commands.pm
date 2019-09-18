@@ -31,9 +31,10 @@ sub run {
 sub execute {
     my $file = shift;
     local @ARGV = @_;
-    unless (my $return = do $file) {
-        print "Couldn't parse $file: $@\n"      if $@;
-        print "Couldn't execute $file: $!\n"    unless defined $return;
+    
+    print "\n";
+    unless (defined(do $file)) {
+        print "$@";
     }
 }
 

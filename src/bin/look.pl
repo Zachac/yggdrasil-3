@@ -8,7 +8,6 @@ use lib::model::links;
 use lib::model::user;
 
 my $room = user::getLocation($ENV{'USERNAME'});
-print "\n";
 print room::name($room), "\n";
 print room::description($room), "\n";
 
