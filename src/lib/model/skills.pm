@@ -53,6 +53,14 @@ sub get {
     return ($level, $experience);
 }
 
+sub requireLevel {
+    my $skill = shift;
+    my $requiredLevel = shift;
+    my $count = $db::conn->selectrow_array('select count(1) from skills where user_name=? and skill_name=? and level >= ?', undef, $ENV{'USERNAME'}, $skill, $requiredLevel);
+
+    die "Requires $skill level $requiredLevel\n" unless $count >= 1;
+}
+
 sub requiredExp {
     my $level = shift;
 
