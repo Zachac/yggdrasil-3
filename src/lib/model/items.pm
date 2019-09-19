@@ -16,15 +16,18 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS items (
     description
 );");
 
-sub descirption {
+sub description {
     my $item_name = shift;
-    return $db::conn->selectrow_array('select description from items where item_name=?');
+    my $description = $db::conn->selectrow_array('select description from items where item_name=?', undef, $item_name);
+    
+    return $description if defined $description;
+    return 'You don\'t notice anything interesting.';
 }
 
-sub exists {
+sub existsIn {
     my $item_name = shift;
     my $location = shift;
-    return $db::conn->selctrow_array('select count(1) from item_instances where item_name=? and location=?', undef, $item_name, $location);
+    return $db::conn->selectrow_array('select count(1) from item_instances where item_name=? and location=?', undef, $item_name, $location);
 }
 
 sub getAll {

@@ -31,6 +31,12 @@ sub exists {
     return 0 != $db::conn->selectrow_array("select count(1) from user where user_name=?;", undef, "@_");
 }
 
+sub existsIn {
+    my $name = shift;
+    my $location = shift;
+    return $db::conn->selectrow_array("select count(1) from user where user_name=? and location=?;", undef, $name, $location);
+}
+
 sub tellFrom {
     my $username = shift;
     my $source = shift;
