@@ -7,14 +7,12 @@ package tick;
 use strict;
 use warnings;
 
-use File::Basename;
-use lib::model::client;
-use lib::model::commmands;
+use lib::model::commands;
+use lib::model::user;
 
 sub sweep {
-    foreach (client::getAll()) {
-        print "sweeping $_\n";
-        commands::runAs($_, "quit") unless client::alive($_);
+    foreach (user::getOnline()) {
+        commands::runAs($_, "quit") unless user::pidAlive($_);
     }
 }
 

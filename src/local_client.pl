@@ -18,6 +18,11 @@ use environment::env;
 # the client.
 setpgrp();
 
+# if we are running locally, die softly and trigger any END blocks
+# when the user interrupts
+$SIG{'INT'} = sub {delete $SIG{'INT'}; die "Interrupted\n"};
+my $parent_pid = $$;
+
 sub login;
 sub getUsername;
 sub createUser;
@@ -30,10 +35,8 @@ sub login {
     
     my $username = getUsername();
     my $password = hash::password($username, stdio::prompt("Please enter the password:"));
-    my $lock;
-    my $stdout;
 
-    until ($lock = eval {user::login($username, $password)}) {
+    until (defined eval {user::login($username, $password)}) {
         print "$@";
         $username = getUsername();
         $password = hash::password($username, stdio::prompt("Please enter the password:"));
@@ -41,7 +44,7 @@ sub login {
 
     print "Logged in!\n";
 
-    return ($username, $lock, $stdout);
+    return $username;
 }
 
 sub getUsername {
@@ -105,7 +108,7 @@ sub readStdout {
     return if ($child_pid);
 
     my $username = shift;
-    my $stdout = client::stdout($username, "<");
+    my $stdout = client::getStdout($username);
 
     while (1) {
         print($_, "\n") while (<$stdout>);
@@ -114,11 +117,15 @@ sub readStdout {
     exit 0;
 }
 
-my ($username, $lock) = login();
+my $username = login();
 
 eval {
     readStdout($username);
     commandPrompt();
 };
 
-commands::run("quit");
+END {
+    if ($ENV{'USERNAME'} && $parent_pid == $$) {
+        commands::runCommand("quit");
+    }
+}
