@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::user;
+use lib::model::entity;
 use lib::model::commands;
 
 my $command = shift;
@@ -13,5 +13,5 @@ unless (@ARGV > 0) {
     return 1;
 }
 
-user::setLocation($ENV{'USERNAME'}, "@ARGV");
+entity::setLocation("@ARGV", 'player', $ENV{'USERNAME'});
 commands::runCommand("look");

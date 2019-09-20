@@ -6,7 +6,7 @@ use warnings;
 
 use lib::model::room;
 use lib::model::links;
-use lib::model::user;
+use lib::model::entity;
 use lib::model::skills;
 
 sub isValid {
@@ -19,7 +19,7 @@ sub runCommand {
 }
 
 sub run {
-    my $command = $_[0];
+    my $command = shift;
 
     # add an empty space between user commands
     print "\n";
@@ -28,7 +28,7 @@ sub run {
         runCommand $command, @_;
     } elsif (skills::exists($command)) {
         skills::execute($command);
-    } elsif (my $dest = links::getExit(user::getLocation($ENV{'USERNAME'}), "@_")) {
+    } elsif (my $dest = links::getExit(entity::getLocation('player', $ENV{'USERNAME'}), "@_")) {
         run("jump", $dest);
     } else {
         print "Command not found!\n";

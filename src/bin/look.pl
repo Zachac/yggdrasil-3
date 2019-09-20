@@ -5,23 +5,19 @@ use warnings;
 
 use lib::model::room;
 use lib::model::links;
-use lib::model::user;
-use lib::model::items;
+use lib::model::entity;
 
-my $room = user::getLocation($ENV{'USERNAME'});
+my $room = entity::getLocation('player', $ENV{'USERNAME'});
 print room::name($room), "\n";
 print room::description($room), "\n";
-
-my @players = user::getUsersNearby($ENV{'USERNAME'});
-print "  There is: @players\n";
 
 my @exits = links::getExits($room);
 @exits = ("none") unless (@exits > 0);
 print "  Obvious exits: @exits\n";
 
-my @items = items::getAll($room);
+my @ents = entity::getAll($room);
 
-if (@items > 0) {
-    print "  Visible items:\n";
-    print "    $_\n" for @items;
+if (@ents > 0) {
+    print "  You can see:\n";
+    print "    $_\n" for @ents;
 }

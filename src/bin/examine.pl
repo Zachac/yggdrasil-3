@@ -3,19 +3,17 @@
 use strict;
 use warnings;
 
-use lib::model::user;
-use lib::model::items;
+use lib::model::entity;
 
 shift(@ARGV);
 
 my $name = "@ARGV";
-my $location = user::getLocation($ENV{'USERNAME'});
+my $location = entity::getLocation('player', $ENV{'USERNAME'});
+my ($entity_type, $entity_id)= entity::existsIn($name, $location);
 
-if (items::existsIn($name, $location)) {
-    print items::description($name), "\n";
+if (defined $entity_type && defined $entity_id) {
+    print entity::description($name, $entity_type, $entity_id), "\n";
     return;
-} elsif (user::existsIn($name, $location)) {
-    print "$name is $name\n";
 } else {
     print "You can't seem to find the '$name'\n";
 }

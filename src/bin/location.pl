@@ -5,6 +5,6 @@ use warnings;
 
 use Cwd;
 
-use lib::model::user;
+use lib::model::entity;
 
-print user::getLocation($ENV{'USERNAME'}), "\n";
+print entity::getLocation('player', $ENV{'USERNAME'}), "\n";
