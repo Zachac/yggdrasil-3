@@ -6,9 +6,9 @@ use warnings;
 
 use lib::model::room;
 use lib::model::links;
-use lib::model::entity;
+use lib::model::entities::entity;
 use lib::model::skills;
-use lib::model::player;
+use lib::model::entities::player;
 
 sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";

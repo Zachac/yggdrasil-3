@@ -5,8 +5,8 @@ use warnings;
 
 use lib::model::room;
 use lib::model::links;
-use lib::model::entity;
-use lib::model::player;
+use lib::model::entities::entity;
+use lib::model::entities::player;
 
 my $room = player::getLocation($ENV{'USERNAME'});
 print room::name($room), "\n";

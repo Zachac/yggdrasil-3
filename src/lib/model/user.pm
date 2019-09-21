@@ -10,7 +10,7 @@ use File::Path qw(make_path);
 use lib::io::file;
 use lib::model::room;
 use lib::model::client;
-use lib::model::player;
+use lib::model::entities::player;
 
 use environment::db qw(conn);
 

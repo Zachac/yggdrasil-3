@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use lib::model::room;
-use lib::model::entity;
+use lib::model::entities::entity;
 
 my @ents = entity::getAll("i:$ENV{'USERNAME'}");
 

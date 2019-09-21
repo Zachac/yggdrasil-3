@@ -5,8 +5,8 @@ use warnings;
 
 require lib::model::room;
 require lib::model::links;
-require lib::model::entity;
-use lib::model::player;
+require lib::model::entities::entity;
+use lib::model::entities::player;
 
 if (@ARGV < 2) {
     print "ERROR: usage: link destination name\n";

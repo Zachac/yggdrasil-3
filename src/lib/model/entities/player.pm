@@ -4,7 +4,7 @@ package player;
 use strict;
 use warnings;
 
-use lib::model::entity;
+use lib::model::entities::entity;
 
 
 sub getLocation($) {

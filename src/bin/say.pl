@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use lib::model::user;
-use lib::model::player;
+use lib::model::entities::player;
 
 my $message = "@ARGV";
 my $location = player::getLocation($ENV{'USERNAME'});

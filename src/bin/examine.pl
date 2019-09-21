@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-use lib::model::entity;
-use lib::model::player;
+use lib::model::entities::entity;
+use lib::model::entities::player;
 
 shift(@ARGV);
 

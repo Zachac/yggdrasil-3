@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-use lib::model::item;
-use lib::model::player;
+use lib::model::entities::item;
+use lib::model::entities::player;
 
 my $command = shift;
 
