@@ -17,10 +17,17 @@ sub getAll($) {
     return entity::getAllOf($location, 'item');
 }
 
-sub setLocation($$) {
+sub setLocation($$$) {
+    my $location = shift;
+    my $name = shift;
+    my $id = shift;
+    return entity::setLocation($location, 'item', $name, $id);
+}
+
+sub find($$) {
     my $name = shift;
     my $location = shift;
-    return entity::setLocation($location, 'item', $name);
+    return entity::typeExistsIn($name, $location, 'item');
 }
 
 1;

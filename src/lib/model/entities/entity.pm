@@ -36,6 +36,13 @@ sub existsIn {
     return $db::conn->selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
 }
 
+sub typeExistsIn($$$) {
+    my $entity_name = shift;
+    my $location = shift;
+    my $type = shift;
+    return $db::conn->selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
+}
+
 sub getAll {
     my $location = shift;
     return @{$db::conn->selectcol_arrayref('select entity_name from entity_instance where location=?', undef, $location)};
