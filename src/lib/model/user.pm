@@ -10,7 +10,7 @@ use File::Path qw(make_path);
 use lib::io::file;
 use lib::model::room;
 use lib::model::client;
-use lib::model::entity;
+use lib::model::player;
 
 use environment::db qw(conn);
 
@@ -76,7 +76,7 @@ sub unlock {
 sub create {
     my $username = shift;
     my $password = shift;
-    entity::setLocation('root/spawn', 'player', $username);
+    player::setLocation($username, 'root/spawn');
     return eval {$db::conn->do("insert into user (user_name, password) values (?, ?);", undef, $username, $password)};
 }
 

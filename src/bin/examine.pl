@@ -4,11 +4,12 @@ use strict;
 use warnings;
 
 use lib::model::entity;
+use lib::model::player;
 
 shift(@ARGV);
 
 my $name = "@ARGV";
-my $location = entity::getLocation('player', $ENV{'USERNAME'});
+my $location = player::getLocation($ENV{'USERNAME'});
 my ($entity_type, $entity_id)= entity::existsIn($name, $location);
 
 if (defined $entity_type && defined $entity_id) {

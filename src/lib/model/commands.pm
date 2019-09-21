@@ -8,6 +8,7 @@ use lib::model::room;
 use lib::model::links;
 use lib::model::entity;
 use lib::model::skills;
+use lib::model::player;
 
 sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";
@@ -23,12 +24,12 @@ sub run {
 
     # add an empty space between user commands
     print "\n";
-
+    my $location = player::getLocation($ENV{'USERNAME'});
     if ( commands::exists($command) ) {
         runCommand $command, @_;
     } elsif (skills::exists($command)) {
         skills::execute($command);
-    } elsif (my $dest = links::getExit(entity::getLocation('player', $ENV{'USERNAME'}), "@_")) {
+    } elsif (my $dest = links::getExit($location, "@_")) {
         run("jump", $dest);
     } else {
         print "Command not found!\n";
