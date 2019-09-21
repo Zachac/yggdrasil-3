@@ -14,7 +14,7 @@ sub isValid {
 }
 
 sub runCommand {
-    my $command = shift;
+    my $command = $_[0];
     execute("bin/$command.pl", @_);
 }
 

@@ -51,6 +51,8 @@ sub getLocation {
     my $type = shift;
     my $name = shift;
     my $id = shift;
+
+    $type = 'entity' unless defined $type;
     $id = 0 unless defined $id;
 
     return $db::conn->selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ? and entity_id = ?', undef, $type, $name, $id)
@@ -61,15 +63,17 @@ sub setLocation {
     my $type = shift;
     my $name = shift;
     my $id = shift;
+
+    $type = 'entity' unless defined $type;
     $id = 0 unless defined $id;
 
-    my $rows_effected = $db::conn->do('insert or ignore into entity_instance(location, entity_type, entity_Name, entity_id) values (?, ?, ?, ?)', undef, $location, $type, $name, $id);
+    my $created = 0 == $db::conn->do('insert or ignore into entity_instance(location, entity_type, entity_Name, entity_id) values (?, ?, ?, ?)', undef, $location, $type, $name, $id);
     
-    if ($rows_effected == 0) {
-        $rows_effected = $db::conn->do('update entity_instance set location = ? where entity_type = ? and entity_name = ? and entity_id = ?', undef, $location, $type, $name, $id);
+    if ($created) {
+        $db::conn->do('update entity_instance set location = ? where entity_type = ? and entity_name = ? and entity_id = ?', undef, $location, $type, $name, $id);
     }
 
-    return $rows_effected;
+    return $created;
 }
 
 1;
