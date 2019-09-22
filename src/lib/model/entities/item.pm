@@ -14,14 +14,14 @@ sub getLocation($) {
 
 sub getAll($) {
     my $location = shift;
-    return entity::getAllOf($location, 'item');
+    return entity::getAllOfIn('item', $location);
 }
 
 sub setLocation($$$) {
     my $location = shift;
     my $name = shift;
     my $id = shift;
-    return entity::setLocation($location, 'item', $name, $id);
+    return entity::setLocation($name, $location, 'item', $id);
 }
 
 sub find($$) {

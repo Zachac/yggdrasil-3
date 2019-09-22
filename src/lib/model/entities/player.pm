@@ -14,13 +14,13 @@ sub getLocation($) {
 
 sub getAll($) {
     my $location = shift;
-    return entity::getAllOf($location, 'player');
+    return entity::getAllOfIn('player', $location);
 }
 
 sub setLocation($$) {
     my $name = shift;
     my $location = shift;
-    return entity::setLocation($location, 'player', $name);
+    return entity::setLocation($name, $location, 'player');
 }
 
 1;
