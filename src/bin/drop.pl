@@ -16,6 +16,7 @@ my $item_name = "@ARGV";
 my $item_id = inventory::drop($ENV{'USERNAME'}, $item_name);
 
 if (defined $item_id) {
+    user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} drops $item_name");
     print "You drop $item_name\n";
 } else {
     print "You can't seem to find '$item_name' in your inventory\n";

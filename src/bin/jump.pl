@@ -14,7 +14,9 @@ unless (@ARGV > 0) {
     return 1;
 }
 
+user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} leaves");
 if (player::setLocation($ENV{'USERNAME'}, "@ARGV")) {
+    user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} enters");
     commands::runCommand("look");
 } else {
     print "Unable to jump to @ARGV\n";
