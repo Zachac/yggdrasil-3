@@ -6,9 +6,11 @@ use warnings;
 use lib::model::user;
 use lib::model::entities::player;
 
-my $message = "@ARGV";
-my $location = player::getLocation($ENV{'USERNAME'});
+my $command = shift;
+my $message = "(s) $ENV{'USERNAME'}: @ARGV";
 
 unless ($message =~ /^\s*$/) {
-    user::tellFrom($_, $ENV{'USERNAME'}, $message) for player::getAll($location);
+    user::broadcast($ENV{'USERNAME'}, $message);
+} else {
+    print "usage: $command message\n";
 }

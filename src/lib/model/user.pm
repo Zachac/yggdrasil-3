@@ -30,11 +30,15 @@ sub exists {
     return 0 != $db::conn->selectrow_array("select count(1) from user where user_name=?;", undef, "@_");
 }
 
-sub tellFrom {
+sub tell {
+    return client::message(@_);
+}
+
+sub broadcast($$) {
     my $username = shift;
-    my $source = shift;
-    my $message = "$source: @_";
-    return client::message($username, $message);
+    my $message = shift;
+    my $location = player::getLocation($username);
+    return client::message($_, $message) for player::getAll($location);
 }
 
 sub login {

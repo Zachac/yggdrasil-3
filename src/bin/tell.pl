@@ -5,13 +5,16 @@ use warnings;
 
 use lib::model::user;
 
+my $command = shift;
+
 if (@ARGV < 2) {
-    print "ERROR: usage: tell user message\n";
+    print "usage: $command user message\n";
     return 0;
 }
 
 my $user = shift;
+my $message = "(w) $ENV{'USERNAME'}: @ARGV";
 
-unless (user::tellFrom($user, $ENV{'USERNAME'}, @ARGV)) {
+unless (user::tell($user, $message)) {
     print "Could not deliver message to $user\n";
 }
