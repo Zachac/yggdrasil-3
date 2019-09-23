@@ -7,19 +7,17 @@ use warnings;
 use environment::db;
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS entity_instance (
+    entity_id INTEGER NOT NULL PRIMARY KEY,
     entity_name NOT NULL,
-    entity_type NOT NULL DEFAULT 'entity',
-    entity_id NOT NULL DEFAULT 0,
-    location,
-    PRIMARY KEY(entity_name, entity_type, entity_id)
+    entity_type NOT NULL,
+    location
 );");
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS entity (
     entity_name NOT NULL,
-    entity_type NOT NULL DEFAULT 'entity',
-    entity_id NOT NULL DEFAULT 0,
+    entity_type NOT NULL,
     description,
-    PRIMARY KEY(entity_name, entity_type, entity_id)
+    PRIMARY KEY(entity_name, entity_type)
 );");
 
 sub description {
@@ -28,6 +26,12 @@ sub description {
     
     return $description if defined $description;
     return 'You don\'t notice anything interesting.';
+}
+
+sub getId($$) {
+    my $entity_name = shift;
+    my $type = shift;
+    return $db::conn->selectrow_array('select entity_id from entity_instance where entity_name=? and entity_type=?', undef, $entity_name, $type);
 }
 
 sub existsIn {
@@ -59,10 +63,11 @@ sub getLocation {
     my $name = shift;
     my $id = shift;
 
-    $type = 'entity' unless defined $type;
-    $id = 0 unless defined $id;
-
-    return $db::conn->selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ? and entity_id = ?', undef, $type, $name, $id)
+    if (defined $id) {
+        return $db::conn->selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ? and entity_id = ?', undef, $type, $name, $id);
+    } else {
+        return $db::conn->selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ?', undef, $type, $name);
+    }
 }
 
 sub setLocation {
@@ -71,16 +76,15 @@ sub setLocation {
     my $type = shift;
     my $id = shift;
 
-    $type = 'entity' unless defined $type;
-    $id = 0 unless defined $id;
-
-    my $created = 0 == $db::conn->do('insert or ignore into entity_instance(location, entity_type, entity_Name, entity_id) values (?, ?, ?, ?)', undef, $location, $type, $name, $id);
-    
-    if ($created) {
-        $db::conn->do('update entity_instance set location = ? where entity_type = ? and entity_name = ? and entity_id = ?', undef, $location, $type, $name, $id);
+    unless (defined $id) {
+        $id = getId($name, $type);
     }
 
-    return $created;
+    if (defined $id) {
+        return 0 != $db::conn->do('update entity_instance set location = ? where entity_type = ? and entity_name = ? and entity_id = ?', undef, $location, $type, $name, $id);
+    } else {
+        return 0 != $db::conn->do('insert into entity_instance(location, entity_type, entity_name) values (?, ?, ?)', undef, $location, $type, $name);
+    }
 }
 
 1;

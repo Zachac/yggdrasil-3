@@ -6,6 +6,7 @@ use warnings;
 use lib::model::entities::player;
 use lib::model::commands;
 
+
 my $command = shift;
 
 unless (@ARGV > 0) {
@@ -13,5 +14,8 @@ unless (@ARGV > 0) {
     return 1;
 }
 
-player::setLocation($ENV{'USERNAME'}, "@ARGV");
-commands::runCommand("look");
+if (player::setLocation($ENV{'USERNAME'}, "@ARGV")) {
+    commands::runCommand("look");
+} else {
+    print "Unable to jump to @ARGV\n";
+}

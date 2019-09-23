@@ -14,13 +14,11 @@ use lib::model::entities::player;
 
 use environment::db qw(conn);
 
-INIT {
-    $db::conn->do("CREATE TABLE IF NOT EXISTS user (
-        user_name NOT NULL PRIMARY KEY,
-        password NOT NULL,
-        pid
-    );");
-}
+$db::conn->do("CREATE TABLE IF NOT EXISTS user (
+    user_name NOT NULL PRIMARY KEY,
+    password NOT NULL,
+    pid
+);");
 
 sub lock;
 
