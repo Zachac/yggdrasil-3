@@ -3,8 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::entities::item;
-use lib::model::entities::player;
+use lib::model::inventory;
 
 my $command = shift;
 
@@ -14,14 +13,10 @@ unless (@ARGV > 0) {
 }
 
 my $item_name = "@ARGV";
-
-my $location = player::getLocation($ENV{'USERNAME'});
-my $item_id = item::find($item_name, "i:$ENV{'USERNAME'}");
-
+my $item_id = inventory::drop($ENV{'USERNAME'}, $item_name);
 
 if (defined $item_id) {
-    item::setLocation($location, $item_name, $item_id);
     print "You drop $item_name\n";
 } else {
-    print "You can't seem to find the '$item_name' in your inventory\n";
+    print "You can't seem to find '$item_name' in your inventory\n";
 }

@@ -3,10 +3,9 @@
 use strict;
 use warnings;
 
-use lib::model::room;
-use lib::model::entities::entity;
+use lib::model::inventory;
 
-my @ents = entity::getAll("i:$ENV{'USERNAME'}");
+my @ents = inventory::getAll($ENV{'USERNAME'});
 
 if (@ents > 0) {
     print "  You have in your inventory:\n";
