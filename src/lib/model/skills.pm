@@ -34,8 +34,10 @@ sub execute {
 sub require {
     my $skill = shift;
     my $level = shift;
+    my $name = shift;
+    $name = $ENV{'USERNAME'} unless defined $name;
 
-    return 1 if ($db::conn->selectrow_array("select 1 from skills where user_name = ? and skill_name = ? and level >= ?", undef, $ENV{'USERNAME'}, $skill, $level));
+    return 1 if ($db::conn->selectrow_array("select 1 from skills where user_name = ? and skill_name = ? and level >= ?", undef, $name, $skill, $level));
 
     print "Level $level $skill required\n";
     return 0;
@@ -53,10 +55,24 @@ sub get {
     return ($level, $experience);
 }
 
+sub getLevel {
+    my $skill = shift;
+    my $name = shift;
+    $name = $ENV{'USERNAME'} unless defined $name;
+
+    my $level = $db::conn->selectrow_array("select level from skills where user_name = ? and skill_name = ?", undef, $name, $skill);
+    $level = 0 unless defined $level;
+
+    return $level;
+}
+
 sub requireLevel {
     my $skill = shift;
     my $requiredLevel = shift;
-    my $count = $db::conn->selectrow_array('select count(1) from skills where user_name=? and skill_name=? and level >= ?', undef, $ENV{'USERNAME'}, $skill, $requiredLevel);
+    my $name = shift;
+    $name = $ENV{'USERNAME'} unless defined $name;
+
+    my $count = $db::conn->selectrow_array('select count(1) from skills where user_name=? and skill_name=? and level >= ?', undef, $name, $skill, $requiredLevel);
 
     die "Requires $skill level $requiredLevel\n" unless $count >= 1;
 }
