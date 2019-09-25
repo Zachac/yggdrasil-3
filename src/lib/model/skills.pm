@@ -12,7 +12,8 @@ INIT {
         user_name,
         skill_name,
         experience,
-        level
+        level,
+        PRIMARY KEY(user_name, skill_name)
     );");
 }
 
@@ -107,7 +108,7 @@ sub train {
 }
 
 sub totalLevel {
-    return $db::conn->selectrow_array('select sum(level) from skills where user_name = ?', undef, $ENV{'USERNAME'});
+    return $db::conn->selectrow_array('select IFNULL(sum(level), 0) from skills where user_name = ?', undef, $ENV{'USERNAME'});
 }
 
 1;
