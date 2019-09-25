@@ -30,4 +30,10 @@ sub find($$) {
     return entity::typeExistsIn($name, $location, 'item');
 }
 
+sub create($$) {
+    my $name = shift;
+    my $location = shift;
+    return entity::create($name, $location, 'item');
+}
+
 1;

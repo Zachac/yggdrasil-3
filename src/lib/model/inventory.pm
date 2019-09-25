@@ -39,6 +39,12 @@ sub take($$) {
     return $item_id;
 }
 
+sub add($$) {
+    my $username = shift;
+    my $item_name = shift;
+    return item::create($item_name, "i:$username");
+}
+
 
 
 1;

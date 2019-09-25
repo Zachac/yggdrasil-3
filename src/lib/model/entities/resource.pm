@@ -7,6 +7,7 @@ use warnings;
 use lib::model::entities::entity;
 use lib::model::entities::player;
 use lib::model::skills;
+use lib::model::inventory;
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS resource (
     resource_name NOT NULL,
@@ -37,6 +38,7 @@ sub gather($$$) {
         my ($wheight, $item) = @{$_};
         $totalWheight -= $wheight;
         if ($selected >= $totalWheight) {
+            inventory::add($name, $item);
             return $item;
         }
     }
