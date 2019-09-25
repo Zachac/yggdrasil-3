@@ -28,7 +28,7 @@ sub exists {
 
 sub execute {
     my $skill = shift;
-    commands::execute("bin/skills/$skill.pl", @_);
+    commands::execute("bin/skills/$skill.pl", $skill, @_);
 }
 
 sub require {
@@ -64,6 +64,13 @@ sub getLevel {
     $level = 0 unless defined $level;
 
     return $level;
+}
+
+sub addExp($$$) {
+    my $name = shift;
+    my $skill = shift;
+    my $exp = shift;
+    return 0 != $db::conn->do('update skills set experience = experience + ? where user_name = ? and skill_name = ?', undef, $exp, $name, $skill);
 }
 
 sub requireLevel {

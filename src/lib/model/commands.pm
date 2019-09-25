@@ -28,7 +28,7 @@ sub run {
     if ( commands::exists($command) ) {
         runCommand $command, @_;
     } elsif (skills::exists($command)) {
-        skills::execute($command);
+        skills::execute($command, @_);
     } elsif (my $dest = links::getExit($location, "@_")) {
         run("jump", $dest);
     } else {

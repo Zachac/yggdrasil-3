@@ -87,4 +87,11 @@ sub setLocation {
     }
 }
 
+sub create($$$) {
+    my $name = shift;
+    my $location = shift;
+    my $type = shift;
+    return 0 != $db::conn->do('insert or ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
+}
+
 1;

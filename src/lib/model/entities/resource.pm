@@ -13,34 +13,41 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS resource (
     skill NOT NULL,
     level NOT NULL DEFAULT 0,
     produces NOT NULL,
-    wheight NOT NULL DEFAULT 1
+    wheight NOT NULL DEFAULT 1,
     UNIQUE(resource_name, skill, level, produces)
 );");
 
 $db::conn->do("insert or ignore into resource(resource_name, skill, level, produces, wheight) values ('forest undergrowth', 'scavenge', 0, 'leaves', 1)");
 $db::conn->do("insert or ignore into resource(resource_name, skill, level, produces, wheight) values ('forest undergrowth', 'scavenge', 0, 'rocks', 1)");
 
-sub use($$$) {
+sub gather($$$) {
     my $name = shift;
     my $action = shift;
     my $resource = shift;
     my $location = player::getLocation($name);
-    my $level = skill::getLevel($name, $action);
+    my $level = skills::getLevel($name, $action);
 
-    die "Could not find resource $name" unless entity::typeExistsIn($resource, $location, 'resource');
-    my @resourceResults = @{$db::conn->selectall_arrayref('select wheight, produces from resource where resource_name = ? and skill = ? and level >= ?', undef, $resource, $action, $level)};
+    die "Could not find resource: $resource\n" unless entity::typeExistsIn($resource, $location, 'resource');
+    my @resourceResults = @{$db::conn->selectall_arrayref("select wheight, produces from resource where resource_name = ? and skill = ? and level <= ?", undef, $resource, $action, $level)};
     my $totalWheight = 0;
-    $totalWheight += $_[0] for @resourceResults;
-    my $selected = rand $totalWheight;
+    $totalWheight += @{$_}[0] for @resourceResults;
 
+    my $selected = rand $totalWheight;
     for (@resourceResults) {
-        $totalWheight -= $_[0];
-        if ($selectedValue <= $totalWheight) {
-            return $_[1];
+        my ($wheight, $item) = @{$_};
+        $totalWheight -= $wheight;
+        if ($selected >= $totalWheight) {
+            return $item;
         }
     }
 
     return undef;
+}
+
+sub create($$) {
+    my $name = shift;
+    my $location = shift;
+    return entity::create($name, $location, 'resource');
 }
 
 1;
