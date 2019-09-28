@@ -13,27 +13,25 @@ sub getAll($) {
     return entity::getAll("i:$username");
 }
 
-sub drop($$) {
-    my $username = shift;
-    my $item_name = shift;
-    my $location = player::getLocation($username);
-    my $item_id = item::find($item_name, "i:$username");
+sub take($$;$) {
+    my ($username, $item_name, $location) = @_;
+    $location = player::getLocation($username) unless defined $location;
+    my $item_id = item::find($item_name, $location);
 
     if (defined $item_id) {
-        item::setLocation($location, $item_name, $item_id);
+        item::setLocation("i:$username", $item_name, $item_id);
     }
 
     return $item_id;
 }
 
-sub take($$) {
-    my $username = shift;
-    my $item_name = shift;
-    my $location = player::getLocation($username);
-    my $item_id = item::find($item_name, $location);
+sub drop($$;$) {
+    my ($username, $item_name, $location) = @_;
+    $location = player::getLocation($username) unless defined $location;
+    my $item_id = item::find($item_name, "i:$username");
 
     if (defined $item_id) {
-        item::setLocation("i:$username", $item_name, $item_id);
+        warn "unable to move $item_name\n" unless item::setLocation($location, $item_name, $item_id);
     }
 
     return $item_id;

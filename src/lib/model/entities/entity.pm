@@ -94,4 +94,9 @@ sub create($$$) {
     return 0 != $db::conn->do('insert or ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
 }
 
+sub deleteAll($$) {
+    my ($location, $type) = @_;
+    return $db::conn->do('delete from entity_instance where location = ? and entity_type = ?', undef, $location, $type);
+}
+
 1;

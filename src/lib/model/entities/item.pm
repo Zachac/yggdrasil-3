@@ -36,4 +36,9 @@ sub create($$) {
     return entity::create($name, $location, 'item');
 }
 
+sub deleteAll($) {
+    my $location = shift;
+    return entity::deleteAll($location, 'item');
+}
+
 1;

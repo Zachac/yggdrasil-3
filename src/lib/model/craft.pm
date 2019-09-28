@@ -21,20 +21,54 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS recipe (
 );");
 
 
-
 sub exists($) {
     my $item_name = shift;
-    return 0 == $db::conn->selectrow_array('select count(1) from recipe where item_name = ?', undef, $item_name);
+    return 0 != $db::conn->selectrow_array('select count(1) from recipe where item_name = ?', undef, $item_name);
 }
 
 sub craft($$) {
     my $username = shift;
     my $item_name = shift;
 
-    die "recipe does not exist" unless exists($item_name);
+    die "recipe for $item_name does not exist\n" unless craft::exists($item_name);
 
-    my @required_items = @{$db::conn->selectcol_arrayref('select required_name from recipe where item_name = ?', undef, $item_name)};
-    inventory::destroyAll()
+    my @required_items = sort @{$db::conn->selectcol_arrayref('select required_name from recipe_requirements where item_name = ?', undef, $item_name)};
+
+    if (@required_items <= 0) {
+        inventory::add($username, $item_name);
+        return 1;
+    }
+
+    my @inv = sort(inventory::getAll($username));
+
+    my $i = 0;
+    my $j = 0;
+    while ($i < @required_items && $j < @inv) {
+        if ($inv[$j] eq $required_items[$i]) {
+            $i++;
+            $j++;
+        } else {
+            $j++;
+        }
+    }
+
+    if ($i < @required_items) {
+        return 0;
+    }
+
+    my $swapLocation = "p:d:$$";
+    my @items = ();
+    for (@required_items) {
+        my $item = inventory::drop($username, $_, $swapLocation);
+
+        unless ($item) {
+            inventory::take($username, $_, $swapLocation) for @items;
+            return 0;
+        }
+    }
+
+    inventory::add($username, $item_name);
+    item::deleteAll($swapLocation);
 }
 
 1;
