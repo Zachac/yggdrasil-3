@@ -5,9 +5,16 @@ use warnings;
 
 use lib::model::skills;
 
-die "usage: $ARGV[0] skill\n" unless (@ARGV == 2);
+my $command = shift;
 
-skills::train(lc $ARGV[1]);
-print "Level up!\n";
+die "usage: $command skill\n" unless (@ARGV >= 1);
+
+my $skill = "@ARGV";
+my $newLevel = skills::train(lc $skill);
+if ($newLevel != 1) {
+    print "Level up, $skill level $newLevel!\n";
+} else {
+    print "You begin to pay closer attention when you $skill\n";
+}
 
 
