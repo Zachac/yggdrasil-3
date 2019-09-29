@@ -67,7 +67,7 @@ sub getLevel {
     return $level;
 }
 
-sub addExp($$$) {
+sub addExp {
     my $name = shift;
     my $skill = shift;
     my $exp = shift;
@@ -105,6 +105,7 @@ sub train {
     die "total level cap already reached\n" unless totalLevel() < 100;
     die "not enough experience to train another level\n" if $requiredExp > $experience;
     $db::conn->do('insert or replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $ENV{'USERNAME'}, $skill, $level + 1, $experience - $requiredExp) or die;
+    return $level;
 }
 
 sub totalLevel {

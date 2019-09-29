@@ -47,6 +47,11 @@ sub getLevel($) {
     return $db::conn->selectrow_array('select skill_name, required_level from recipe where item_name = ?', undef, $item_name);
 }
 
+sub getExp($) {
+    my $item_name = shift;
+    return $db::conn->selectrow_array('select skill_name, experience from recipe where item_name = ?', undef, $item_name);
+}
+
 sub craft($$) {
     my $username = shift;
     my $item_name = shift;
@@ -93,6 +98,7 @@ sub craft($$) {
 
     inventory::add($username, $item_name);
     item::deleteAll($swapLocation);
+    skills::addExp($username, getExp($item_name));
 }
 
 
