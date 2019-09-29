@@ -63,29 +63,31 @@ sub craft($$) {
 
     my @inv = sort(inventory::getAll($username));
 
-    my $i = 0;
     my $j = 0;
-    while ($i < @required_items && $j < @inv) {
-        if ($inv[$j] eq $required_items[$i][0]) {
-            $i++;
-            $j++;
-        } else {
+    for my $item (@required_items) {
+        for (1 .. @$item[1]) {
+            $j++ while ($j < @inv && $inv[$j] ne @$item[0]);
+            
+            unless ($j < @inv) {
+                die "missing (@$item[0]) required: @{[map {\"\n  $_\"} recipe($item_name, @required_items)]}\n";
+            }
+            
             $j++;
         }
     }
 
-    if ($i < @required_items) {
-        die "required items: @{[map {\"\n  $_\"} recipe($item_name, @required_items)]}\n";
-    }
-
     my $swapLocation = "p:d:$$";
     my @items = ();
-    for (@required_items) {
-        my $item = inventory::drop($username, @$_[0], $swapLocation);
+    for my $item (@required_items) {
+        for (1 .. @$item[1]) {
+            my $item_id = inventory::drop($username, @$item[0], $swapLocation);
 
-        unless ($item) {
-            inventory::take($username, @$_[0], $swapLocation) for @items;
-            die "Recipe component removed from inventory during crafting!\n";
+            unless ($item_id) {
+                inventory::take($username, @$_[0], $swapLocation) for @items;
+                die "Recipe component removed from inventory during crafting!\n";
+            } else {
+                unshift @items, @$item[0];
+            }
         }
     }
 
