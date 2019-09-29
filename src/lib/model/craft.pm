@@ -6,6 +6,7 @@ use warnings;
 
 use environment::db qw(conn);
 use lib::model::inventory;
+use lib::model::skills;
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS recipe_requirements (
     item_name NOT NULL,
@@ -21,7 +22,7 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS recipe (
     experience NOT NULL DEFAULT 0
 );");
 
-$db::conn->do('insert or ignore into recipe(item_name, skill_name, required_level, experience) values("fire pit kit", "scavenging", 2, 10)');
+$db::conn->do('insert or ignore into recipe(item_name, skill_name, required_level, experience) values("fire pit kit", "forage", 2, 10)');
 $db::conn->do('insert or ignore into recipe_requirements(item_name, required_name, count) values("fire pit kit", "rocks", 3)');
 $db::conn->do('insert or ignore into recipe_requirements(item_name, required_name, count) values("fire pit kit", "leaves", 2)');
 
@@ -41,11 +42,17 @@ sub recipe($;@) {
     return map { "@$_[0] x@$_[1]" } @required_items;
 }
 
+sub getLevel($) {
+    my $item_name = shift;
+    return $db::conn->selectrow_array('select skill_name, required_level from recipe where item_name = ?', undef, $item_name);
+}
+
 sub craft($$) {
     my $username = shift;
     my $item_name = shift;
 
     die "recipe for $item_name does not exist\n" unless craft::exists($item_name);
+    skills::requireLevel(getLevel($item_name), $username);
 
     my @required_items = sort {@$a[0] cmp @$b[0]} @{$db::conn->selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
 
@@ -78,7 +85,7 @@ sub craft($$) {
 
         unless ($item) {
             inventory::take($username, @$_[0], $swapLocation) for @items;
-            die "Item removed from inventory during crafting!\n";
+            die "Recipe component removed from inventory during crafting!\n";
         }
     }
 

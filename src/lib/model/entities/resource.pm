@@ -18,8 +18,8 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS resource (
     UNIQUE(resource_name, skill, level, produces)
 );");
 
-$db::conn->do("insert or ignore into resource(resource_name, skill, level, produces, wheight) values ('forest undergrowth', 'scavenge', 0, 'leaves', 1)");
-$db::conn->do("insert or ignore into resource(resource_name, skill, level, produces, wheight) values ('forest undergrowth', 'scavenge', 0, 'rocks', 1)");
+$db::conn->do("insert or ignore into resource(resource_name, skill, level, produces, wheight) values ('forest undergrowth', 'forage', 0, 'leaves', 1)");
+$db::conn->do("insert or ignore into resource(resource_name, skill, level, produces, wheight) values ('forest undergrowth', 'forage', 0, 'rocks', 1)");
 
 sub gather($$$) {
     my $name = shift;
