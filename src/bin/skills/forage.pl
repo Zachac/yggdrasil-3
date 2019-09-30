@@ -12,6 +12,11 @@ unless (@ARGV > 0) {
     return;
 }
 
+if (skills::randomFailure($command, $ENV{'USERNAME'})) {
+    print "you fail to produce anything of value this time\n";
+    return;
+}
+
 my $result = resource::gather($ENV{'USERNAME'}, $command, "@ARGV");
 
 if (defined $result) {

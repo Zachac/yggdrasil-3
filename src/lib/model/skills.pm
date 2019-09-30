@@ -17,6 +17,9 @@ INIT {
     );");
 }
 
+my $max_level = 10;
+my @failure_table = (0.05, 0.05, 0.1, 0.2, 0.4, 0.6, 0.75, 0.85, 0.9, 0.95, 1);
+
 sub exists {
     my $skill = shift;
 
@@ -62,6 +65,7 @@ sub getLevel {
     $name = $ENV{'USERNAME'} unless defined $name;
 
     my $level = $db::conn->selectrow_array("select level from skills where user_name = ? and skill_name = ?", undef, $name, $skill);
+
     $level = 0 unless defined $level;
 
     return $level;
@@ -89,8 +93,21 @@ sub requiredExp {
     my $level = shift;
 
     return 0 if $level == 0;
-    return undef if $level >= 10;
+    return undef if $level >= $max_level;
     return 10 ** $level;
+}
+
+sub randomFailure($$) {
+    my ($skill, $name) = @_;
+    my $level = getLevel $skill, $name;
+    
+    if ($level < 0) {
+        $level = 0
+    } elsif ($level > $max_level) {
+        $level = $max_level;
+    }
+
+    return rand() > $failure_table[$level];
 }
 
 sub train {

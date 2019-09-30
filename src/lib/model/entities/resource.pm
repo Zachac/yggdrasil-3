@@ -13,7 +13,7 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS resource (
     resource_name NOT NULL,
     skill NOT NULL,
     level NOT NULL DEFAULT 0,
-    produces NOT NULL,
+    produces,
     wheight NOT NULL DEFAULT 1,
     UNIQUE(resource_name, skill, level, produces)
 );");
@@ -38,7 +38,7 @@ sub gather($$$) {
         my ($wheight, $item) = @{$_};
         $totalWheight -= $wheight;
         if ($selected >= $totalWheight) {
-            inventory::add($name, $item);
+            inventory::add($name, $item) if defined $item;
             return $item;
         }
     }
