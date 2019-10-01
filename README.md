@@ -10,8 +10,9 @@ To give form to my ideals.
 ## requirements
 * Linux/Mac or Windows with WSL (Tested with Ubuntu 18.04.2)
 * Perl (Tested with v5.26)
-    * DBI
-    * DBD::SQLite
+    * DBI (1.642)
+    * DBD::SQLite (1.64)
+    * Math::Fractal::Noisemaker (0.105)
 * SQLite3
 
 ## running
