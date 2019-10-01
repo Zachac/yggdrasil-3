@@ -7,6 +7,9 @@ use warnings;
 use File::Basename;
 use Cwd;
 
+BEGIN {
+    srand(0);
+}
 
 my $dir = dirname(Cwd::realpath($0));
 
