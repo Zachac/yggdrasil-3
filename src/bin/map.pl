@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 
-use Math::Fractal::Noisemaker;
-
 use lib::model::map;
 
 my $command = shift;

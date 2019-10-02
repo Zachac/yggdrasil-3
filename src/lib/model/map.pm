@@ -4,8 +4,11 @@ package map;
 use strict;
 use warnings;
 
+srand(0); # init prng before using library
+require Math::Fractal::Noisemaker;
+
 my @ascii_table = (' ', '~', '#');
-my @desc_table = ('Ocean', 'Shore', 'Forest');
+my @name_table = ('Ocean', 'Shore', 'Forest');
 
 sub getBiome($$) {
     my ($x, $y) = @_;
@@ -20,8 +23,8 @@ sub getBiome($$) {
     }
 }
 
-sub getBiomeDescription($$) {
-    return $desc_table[getBiome(shift, shift)];
+sub getBiomeName($$) {
+    return $name_table[getBiome(shift, shift)];
 }
 
 sub get(;$$$) {

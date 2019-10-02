@@ -9,6 +9,7 @@ use File::Basename;
 use Cwd qw(abs_path);
 
 use lib::io::file;
+use lib::model::map;
 use environment::db;
 
 INIT {
@@ -21,9 +22,17 @@ INIT {
     $db::conn->do("insert or ignore into room(location, room_name, description) values ('root/spawn', 'An empty room', 'It looks like a very normal room.');");
 }
 
-sub name {
-    my $result = $db::conn->selectrow_array('select room_name from room where location=?;', undef, shift);
+sub name($) {
+    my $room = shift;
+    my $result = $db::conn->selectrow_array('select room_name from room where location=?;', undef, $room);
     return $result if (defined($result));
+
+    my @coords = $room =~ /^d:(\d+) (\d+)$/;
+
+    if (@coords) {
+        return map::getBiomeName($coords[0], $coords[1]);
+    }
+
     return "The Void";
 }
 
