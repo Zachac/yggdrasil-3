@@ -4,6 +4,25 @@ package map;
 use strict;
 use warnings;
 
+my @ascii_table = (' ', '~', '#');
+my @desc_table = ('Ocean', 'Shore', 'Forest');
+
+sub getBiome($$) {
+    my ($x, $y) = @_;
+    my $noise = Math::Fractal::Noisemaker::_snoise($y/10, $x/10);
+
+    if ($noise > 0.005) {
+        return 2;
+    } elsif ($noise > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+sub getBiomeDescription($$) {
+    return $desc_table[getBiome(shift, shift)];
+}
 
 sub get(;$$$) {
     my @map = ();
@@ -18,16 +37,7 @@ sub get(;$$$) {
     for my $x ($offsetX - $r .. $offsetX + $r) {
         
         for my $y ($offsetY - $r .. $offsetY + $r) {
-            my $noise = Math::Fractal::Noisemaker::_snoise($x/10, $y/10);
-
-            if ($noise > 0.005) {
-                push @map, '#';
-            } elsif ($noise > 0) {
-                push @map, '~';
-            } else {
-                push @map, ' ';
-            }
-
+            push @map, $ascii_table[getBiome($x, $y)];
             push @map, ' ';
         }
 
