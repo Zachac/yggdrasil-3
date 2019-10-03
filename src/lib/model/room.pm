@@ -27,11 +27,8 @@ sub name($) {
     my $result = $db::conn->selectrow_array('select room_name from room where location=?;', undef, $room);
     return $result if (defined($result));
 
-    my @coords = $room =~ /^d:(\d+) (\d+)$/;
-
-    if (@coords) {
-        return map::getBiomeName($coords[0], $coords[1]);
-    }
+    $result = map::getBiomeName($room);
+    return $result if (defined($result));
 
     return "The Void";
 }

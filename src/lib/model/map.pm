@@ -10,6 +10,17 @@ require Math::Fractal::Noisemaker;
 my @ascii_table = (' ', '~', '#');
 my @name_table = ('Ocean', 'Shore', 'Forest');
 
+sub getCoordinates($;$) {
+    my $room = shift;
+    my $strict = shift;
+
+    if ($strict) {
+        return $room =~ /^d:(\d+) (\d+)$/;
+    } else {
+        return $room =~ /^d:(\d+) (\d+)/;
+    }
+}
+
 sub getBiome($$) {
     my ($x, $y) = @_;
     my $noise = Math::Fractal::Noisemaker::_snoise($y/10, $x/10);
@@ -23,8 +34,9 @@ sub getBiome($$) {
     }
 }
 
-sub getBiomeName($$) {
-    return $name_table[getBiome(shift, shift)];
+sub getBiomeName($) {
+    my ($x, $y) = getCoordinates(shift);
+    return $name_table[getBiome($x, $y)];
 }
 
 sub get(;$$$) {
