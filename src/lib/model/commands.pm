@@ -20,15 +20,15 @@ sub runCommand {
 }
 
 sub run {
-    my $command = shift;
+    my $command = $_[0];
 
     # add an empty space between user commands
     print "\n";
     my $location = player::getLocation($ENV{'USERNAME'});
     if ( commands::exists($command) ) {
-        runCommand $command, @_;
+        runCommand @_;
     } elsif (skills::exists($command)) {
-        skills::execute($command, @_);
+        skills::execute(@_);
     } elsif (my $dest = links::getExit($location, "@_")) {
         run("jump", $dest);
     } else {
