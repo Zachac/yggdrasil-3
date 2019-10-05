@@ -6,12 +6,40 @@ use feature qw(switch);
 use strict;
 use warnings;
 
-srand(0); # init prng before using library
+my $seed = 0;
+srand($seed); # init prng before using library
 require Math::Fractal::Noisemaker;
+
+use environment::db;
+use lib::model::entities::entity;
 
 my @ascii_table = (' ', '~', '#');
 my @name_table = ('Ocean', 'Shore', 'Forest');
 my @enterable_table = (0, 1, 1);
+
+
+$db::conn->do("CREATE TABLE IF NOT EXISTS map_tiles (
+    x NOT NULL,
+    y NOT NULL,
+    UNIQUE(x, y)
+);");
+
+$db::conn->do("CREATE TABLE IF NOT EXISTS map_icons (
+    x NOT NULL,
+    y NOT NULL,
+    icon NOT NULL,
+    UNIQUE(x, y)
+);");
+
+$db::conn->do("CREATE TABLE IF NOT EXISTS biome_spawns (
+    biome_name NOT NULL,
+    entity_name NOT NULL,
+    entity_type NOT NULL,
+    chance,
+    UNIQUE(biome_name, entity_name, entity_type)
+);");
+
+$db::conn->do("insert or ignore into biome_spawns(biome_name, entity_name, entity_type, chance) values ('Forest', 'undergrowth', 'resource', 0.25)");
 
 sub getCoordinates($;$) {
     my $room = shift;
@@ -38,7 +66,7 @@ sub getBiome($$) {
 }
 
 sub getBiomeName($) {
-    my ($x, $y) = getCoordinates(shift);
+    my ($x, $y) = getCoordinates(shift, 1);
     return undef unless defined $x;
     return $name_table[getBiome($x, $y)];
 }
@@ -121,6 +149,28 @@ sub getDirection($$) {
     }
 
     return undef;
+}
+
+
+sub init($) {
+    my $room = shift;
+    my ($x, $y) = getCoordinates($room, 1);
+    return unless defined $x;
+    return unless 0 != $db::conn->do("insert or ignore into map_tiles(x, y) values (?, ?)", undef, $x, $y);
+
+    my $biome_name = $name_table[getBiome($x, $y)];
+    my @spawns = @{$db::conn->selectall_arrayref("select entity_name, entity_type, chance from biome_spawns where biome_name = ? order by entity_name, entity_type, chance", undef, $biome_name)};
+
+    my $max_value = 2 ** 32 - 1;
+    srand $seed;
+    srand rand($max_value) + $x;
+    srand rand($max_value) + $y;
+
+    for (@spawns) {
+        if (rand() <= @$_[2]) {
+            entity::create(@$_[0], $room, @$_[1]);
+        }
+    }
 }
 
 1;

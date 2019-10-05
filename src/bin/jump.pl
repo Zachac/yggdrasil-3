@@ -5,6 +5,7 @@ use warnings;
 
 use lib::model::entities::player;
 use lib::model::commands;
+use lib::model::map;
 
 
 my $command = shift;
@@ -14,8 +15,11 @@ unless (@ARGV > 0) {
     return 1;
 }
 
+my $location = "@ARGV";
+
 user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} leaves");
-if (player::setLocation($ENV{'USERNAME'}, "@ARGV")) {
+if (player::setLocation($ENV{'USERNAME'}, $location)) {
+    map::init($location);
     user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} enters");
     commands::runCommand("look");
 } else {
