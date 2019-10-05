@@ -19,16 +19,16 @@ my @enterable_table = (0, 1, 1);
 
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS map_tiles (
-    x NOT NULL,
-    y NOT NULL,
+    x INTEGER NOT NULL,
+    y INTEGER NOT NULL,
     UNIQUE(x, y)
 );");
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS map_icons (
-    x NOT NULL,
-    y NOT NULL,
-    icon NOT NULL,
-    UNIQUE(x, y)
+    x INTEGER NOT NULL,
+    y INTEGER NOT NULL,
+    icon CHARACTER(3) NOT NULL,
+    PRIMARY KEY(x, y)
 );");
 
 $db::conn->do("CREATE TABLE IF NOT EXISTS biome_spawns (
@@ -80,10 +80,15 @@ sub get(;$$$) {
     unless (defined $r && $r > 0) {
         $r = 5;
     }
+    
+    my $minx = $offsetX - $r;
+    my $maxx = $offsetX + $r;
+    my $miny = $offsetY - $r;
+    my $maxy = $offsetY + $r;
 
-    for my $x ($offsetX - $r .. $offsetX + $r) {
+    for my $x ($minx .. $maxx) {
         
-        for my $y ($offsetY - $r .. $offsetY + $r) {
+        for my $y ($miny .. $maxy) {
             push @map, $ascii_table[getBiome($x, $y)];
             push @map, ' ';
         }
@@ -91,9 +96,22 @@ sub get(;$$$) {
         push @map, "\n";
     }
 
-    my $middle = $#map/2;
-    $map[$middle] = '<';
-    $map[$middle - 2] = '>';
+    my @arr = @{$db::conn->selectall_arrayref('select x, y, icon from map_icons where x between ? and ? and y between ? and ?', undef, $minx, $maxx, $miny, $maxy)};
+    push @arr, [$offsetX, $offsetY, '< >'];
+
+    my $width = $r * 4 + 3;
+    for my $mark (@arr) {
+
+        my $position = ($r + @$mark[0] - $offsetX) * $width
+                     + ($r + @$mark[1] - $offsetY) * 2;
+        my $length = length @$mark[2];
+        my $offset = $length / 2 - 1;
+        my $c;
+
+        for (0 .. $length - 1) {
+            $map[$position + $_ - $offset] = $c unless ($c = substr(@$mark[2],$_,1)) eq ' ';
+        }
+    }
 
     return @map, "\n";
 }
@@ -171,6 +189,17 @@ sub init($) {
             entity::create(@$_[0], $room, @$_[1]);
         }
     }
+}
+
+sub mark($$) {
+    my ($x, $y) = getCoordinates shift;
+    my $mark = shift;
+    my $length = length $mark;
+    
+    die "This place cannot be marked\n" unless defined $x;
+    die "Mark length must be between 1-3 charachters\n" unless ($length >= 1 && $length <= 3);
+
+    $db::conn->do('insert or replace into map_icons(x, y, icon) values (?, ?, ?)', undef, $x, $y, $mark);
 }
 
 1;
