@@ -19,6 +19,7 @@ print "  Obvious exits: @exits\n";
 my @ents = entity::getAll($room);
 
 if (@ents > 0) {
+    commands::runCommand("map", 2);
     print "  You can see:\n";
     print "    $_\n" for @ents;
 }
