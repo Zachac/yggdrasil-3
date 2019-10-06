@@ -153,6 +153,10 @@ sub getDirection($$) {
 
     return undef unless defined $x;
 
+    # make a copy to save the original values
+    my $oldx = $x;
+    my $oldy = $y;
+
     if ($direction eq 'n') { $x-- }
     elsif ($direction eq 's') { $x++ }
     elsif ($direction eq 'e') { $y++ }
@@ -163,12 +167,16 @@ sub getDirection($$) {
     elsif ($direction eq 'sw') { $x++; $y-- }
     else { return undef }
     
-
-    if ($enterable_table[getBiome($x, $y)]) {
-        return "d:$x $y";
+    
+    return undef unless $enterable_table[getBiome($x, $y)];
+    
+    if (length $direction == 2) {
+        # ensure that diagonal direction isn't being used superfulously
+        return undef if $enterable_table[getBiome($oldx, $y)];
+        return undef if $enterable_table[getBiome($x, $oldy)];
     }
-
-    return undef;
+    
+    return "d:$x $y";
 }
 
 
