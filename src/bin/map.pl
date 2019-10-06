@@ -9,6 +9,5 @@ use lib::model::entities::player;
 my $command = shift;
 
 my $location = player::getLocation($ENV{'USERNAME'});
-my ($x, $y) = map::getCoordinates($location);
-
-print map::get($x, $y, shift);
+my ($x, $y) = map::getCoordinates($location, 1);
+print map::get($x, $y, shift) if defined $x;
