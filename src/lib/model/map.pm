@@ -88,6 +88,8 @@ sub get(;$$$) {
 
     for my $x ($minx .. $maxx) {
         
+        push @map, ' ';
+
         for my $y ($miny .. $maxy) {
             push @map, $ascii_table[getBiome($x, $y)];
             push @map, ' ';
@@ -99,11 +101,11 @@ sub get(;$$$) {
     my @arr = @{$db::conn->selectall_arrayref('select x, y, icon from map_icons where x between ? and ? and y between ? and ?', undef, $minx, $maxx, $miny, $maxy)};
     push @arr, [$offsetX, $offsetY, '< >'];
 
-    my $width = $r * 4 + 3;
+    my $width = $r * 4 + 4;
     for my $mark (@arr) {
 
         my $position = ($r + @$mark[0] - $offsetX) * $width
-                     + ($r + @$mark[1] - $offsetY) * 2;
+                     + ($r + @$mark[1] - $offsetY) * 2 + 1;
         my $length = length @$mark[2];
         my $offset = $length / 2 - 1;
         my $c;
