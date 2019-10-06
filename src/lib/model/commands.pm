@@ -10,6 +10,8 @@ use lib::model::entities::entity;
 use lib::model::skills;
 use lib::model::entities::player;
 
+use lib::model::meta_scripts;
+
 sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";
 }
@@ -30,7 +32,7 @@ sub run {
     } elsif (skills::exists($command)) {
         skills::execute(@_);
     } elsif (my $dest = links::getExit($location, "@_")) {
-        run("jump", $dest);
+        meta_scripts::execute("jump", $dest);
     } else {
         print "Command not found!\n";
     }
