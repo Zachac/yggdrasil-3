@@ -27,7 +27,7 @@ sub run {
     # add an empty space between user commands
     print "\n";
     my $location = player::getLocation($ENV{'USERNAME'});
-    if ( commands::exists($command) ) {
+    if ( commands::exists("bin/$command.pl") ) {
         runCommand @_;
     } elsif (skills::exists($command)) {
         skills::execute(@_);
@@ -47,8 +47,8 @@ sub execute {
     unless (defined($result)) {
         if (defined $@ && $@ ne '') {
             print "$@";
-        } else {
-            print "Unable to execute $file\n";
+        } elsif (! commands::exists($file)) {
+            print "File not found $file\n";
         }
     }
 
@@ -62,11 +62,18 @@ sub runAs {
     $ENV{'USERNAME'} = $currentUser;
 }
 
+
+my %FILES_FOUND = ();
 sub exists {
-    my $command = shift;
+    my $file = shift;
+
+    return 1 if $FILES_FOUND{$file};
 
     for (@INC) {
-        return 1 if (-e "$_/bin/$command.pl");
+        if (-e "$_/$file") {
+            $FILES_FOUND{$file} = 1;
+            return 1;
+        }
     }
 
     return 0;

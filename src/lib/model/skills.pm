@@ -22,12 +22,7 @@ my @failure_table = (0.05, 0.05, 0.1, 0.2, 0.4, 0.6, 0.75, 0.85, 0.9, 0.95, 1);
 
 sub exists {
     my $skill = shift;
-
-    for (@INC) {
-        return 1 if (-e "$_/bin/skills/$skill.pl");
-    }
-
-    return 0;
+    return commands::exists("bin/skills/$skill.pl");
 }
 
 sub execute {
