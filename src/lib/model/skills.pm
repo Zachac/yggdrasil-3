@@ -32,7 +32,7 @@ sub exists {
 
 sub execute {
     my $skill = shift;
-    commands::execute("bin/skills/$skill.pl", $skill, @_);
+    return commands::execute("bin/skills/$skill.pl", $skill, @_);
 }
 
 sub require {

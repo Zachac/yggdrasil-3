@@ -43,6 +43,12 @@ sub add($$) {
     return item::create($item_name, "i:$username");
 }
 
+sub find($$) {
+    my $username = shift;
+    my $item_name = shift;
+    return item::find($item_name, "i:$username");
+}
+
 
 
 1;

@@ -6,12 +6,6 @@ use warnings;
 
 use lib::model::entities::entity;
 
-
-sub getLocation($) {
-    my $name = shift;
-    return entity::getLocation('item', $name);
-}
-
 sub getAll($) {
     my $location = shift;
     return entity::getAllOfIn('item', $location);
@@ -39,6 +33,11 @@ sub create($$) {
 sub deleteAll($) {
     my $location = shift;
     return entity::deleteAll($location, 'item');
+}
+
+sub delete($) {
+    my $id = shift;
+    return entity::delete('item', $id);
 }
 
 1;

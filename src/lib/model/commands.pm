@@ -42,10 +42,13 @@ sub run {
 sub execute {
     my $file = shift;
     local @ARGV = @_;
-    
-    unless (defined(do $file)) {
+    my $result = do $file;
+
+    unless (defined($result)) {
         print "$@";
     }
+
+    return $result;
 }
 
 sub runAs {

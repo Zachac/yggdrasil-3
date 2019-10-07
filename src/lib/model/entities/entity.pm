@@ -99,4 +99,10 @@ sub deleteAll($$) {
     return $db::conn->do('delete from entity_instance where location = ? and entity_type = ?', undef, $location, $type);
 }
 
+sub delete($$) {
+    my $entity_type = shift;
+    my $entity_id = shift;
+    return $db::conn->do('delete from entity_instance where entity_id = ? and entity_type = ?', undef, $entity_id, $entity_type);
+}
+
 1;

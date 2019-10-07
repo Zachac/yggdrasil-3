@@ -26,3 +26,5 @@ if (player::setLocation($ENV{'USERNAME'}, $location)) {
 } else {
     print "Unable to jump to @ARGV\n";
 }
+
+return 1;
