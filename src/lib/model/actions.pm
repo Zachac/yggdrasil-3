@@ -19,6 +19,7 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS actions (
 );");
 
 $db::conn->do("insert or ignore into actions(item_name, action, script, consume) values('magic mirror', 'use', 'jump root/spawn', 0)");
+$db::conn->do("insert or ignore into actions(item_name, action, script, consume) values('broken item', 'use', 'j d:0 0', 0)");
 
 sub setAction($$$;$) {
     my $item_name = shift;

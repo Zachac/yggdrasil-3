@@ -45,7 +45,11 @@ sub execute {
     my $result = do $file;
 
     unless (defined($result)) {
-        print "$@";
+        if (defined $@ && $@ ne '') {
+            print "$@";
+        } else {
+            print "Unable to execute $file\n";
+        }
     }
 
     return $result;
