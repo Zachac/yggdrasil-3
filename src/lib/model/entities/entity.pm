@@ -52,6 +52,11 @@ sub getAll {
     return @{$db::conn->selectcol_arrayref('select entity_name from entity_instance where location=?', undef, $location)};
 }
 
+sub getAllEx {
+    my $location = shift;
+    return $db::conn->selectall_arrayref('select entity_name, entity_type, entity_id from entity_instance where location=?', undef, $location);
+}
+
 sub getAllOfIn {
     my $type = shift;
     my $location = shift;

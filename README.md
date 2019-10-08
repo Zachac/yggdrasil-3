@@ -7,13 +7,14 @@ A [MUD](https://en.wikipedia.org/wiki/MUD) is a role playing game simulated and 
 ## purpose
 To give form to my ideals.
 
-## requirements
+## environment
 * Linux/Mac or Windows with WSL (Tested with Ubuntu 18.04.2)
-* Perl (Tested with v5.26)
+* Perl (5.26)
     * DBI (1.642)
     * DBD::SQLite (1.64)
     * Math::Fractal::Noisemaker (0.105)
-* SQLite3
+    * Lingua::EN::Inflexion (0.001008)
+* SQLite3 (3.22.0)
 
 ## running
 To run, an instance of src/local_client.pl will need to be started. If using src/server.pl, then a socket will be opened that will be connected to a local_client.

@@ -23,4 +23,8 @@ sub setLocation($$) {
     return entity::setLocation($name, $location, 'player');
 }
 
+sub isPlayer($) {
+    return shift eq 'player';
+}
+
 1;
