@@ -8,7 +8,7 @@ use lib::model::links;
 use lib::model::entities::entity;
 use lib::model::entities::player;
 
-use Lingua::EN::Inflexion qw(noun inflect);
+use lib::io::format;
 
 commands::runCommand("map", 2);
 
@@ -28,16 +28,8 @@ if (@$ents > 0) {
         if (player::isPlayer(@$_[1])) {
             print "    @$_[0]\n" 
         } else {
-            my $noun = noun(@$_[0]);
-            my $article;
-
-            if ($noun->is_singular()) {
-                $article = $noun->indef_article();
-            } else {
-                $article = "the";
-            }
-
-            print "    $article @$_[0]\n" 
+            my $item = format::withArticle(@$_[0]);
+            print "    $item\n" 
         }
     }
 }

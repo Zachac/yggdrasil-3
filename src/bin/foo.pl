@@ -6,8 +6,7 @@ use warnings;
 
 use lib::model::entities::resource;
 use lib::model::inventory;
-
-use Lingua::EN::Inflexion qw< noun inflect wordlist >;
+use lib::io::format;
 
 
 
@@ -20,14 +19,9 @@ use Lingua::EN::Inflexion qw< noun inflect wordlist >;
 
 sub create($) {
     my $item = shift;        
-    my $noun = noun($item);
-    my $article;
-    
-    if ($noun->is_singular()) {
-        $article = $noun->indef_article();
-    } else {$article = "the"}
-    
-    die "you already have a $item\n" if defined inventory::find($ENV{'USERNAME'}, $item);
+    my $value = format::withArticle($item);
+
+    die "you already have $value\n" if defined inventory::find($ENV{'USERNAME'}, $item);
     inventory::add($ENV{'USERNAME'}, $item);
 }
 
