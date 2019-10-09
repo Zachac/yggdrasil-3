@@ -14,6 +14,7 @@ To give form to my ideals.
     * DBD::SQLite (1.64)
     * Math::Fractal::Noisemaker (0.105)
     * Lingua::EN::Inflexion (0.001008)
+    * YAML (1.29)
 * SQLite3 (3.22.0)
 
 ## running

@@ -7,7 +7,9 @@ use warnings;
 use lib::model::entities::resource;
 use lib::model::inventory;
 use lib::io::format;
+use lib::io::db;
 use environment::db;
+
 
 
 
@@ -30,6 +32,7 @@ sub create($) {
 # create('broken item');
 # create('trees');
 
-print @{$db::conn->selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
+# print @{$db::conn->selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
+db::dump();
 
