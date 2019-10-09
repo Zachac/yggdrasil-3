@@ -9,9 +9,9 @@ use File::Path qw(make_path);
 use File::Basename;
 use File::Spec;
 
-sub print {
-    die "Not enough arguments!" unless @_ >= 1;
+sub print($$) {
     my $filename = shift;
+    my $value = shift;
 	my $directory = dirname($filename);
 
     unless ( -d $directory ) {
@@ -19,7 +19,7 @@ sub print {
     }
 
     open(my $handle, '>', $filename) or die "Could not open $filename: $!";
-    print $handle "@_";
+    print $handle $value;
     close $handle;
 }
 

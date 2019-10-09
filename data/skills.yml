@@ -1,0 +1,9 @@
+skills:
+  - experience: 29
+    level: 2
+    skill_name: scavenge
+    user_name: abc
+  - experience: 19
+    level: 2
+    skill_name: forage
+    user_name: abc

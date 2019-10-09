@@ -1,0 +1,213 @@
+entity_instance:
+  - entity_id: 1
+    entity_name: abc
+    entity_type: player
+    location: d:1 -1
+  - entity_id: 2
+    entity_name: forest undergrowth
+    entity_type: resource
+    location: root/spawn
+  - entity_id: 3
+    entity_name: rocks
+    entity_type: item
+    location: root/spawn
+  - entity_id: 4
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 5
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 6
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 7
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 8
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 9
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 10
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 11
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 12
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 13
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 14
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 15
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 16
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 17
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 18
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 19
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 20
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 21
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 22
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 23
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 24
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 25
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 26
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 27
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 28
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 29
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 30
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 31
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 32
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 33
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 34
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 35
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 36
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 37
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 38
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 39
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 40
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 41
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 42
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 43
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 44
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 45
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 46
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 47
+    entity_name: leaves
+    entity_type: item
+    location: i:abc
+  - entity_id: 48
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 49
+    entity_name: rocks
+    entity_type: item
+    location: i:abc
+  - entity_id: 50
+    entity_name: magic mirror
+    entity_type: item
+    location: i:abc
+  - entity_id: 51
+    entity_name: undergrowth
+    entity_type: resource
+    location: d:1 -1
+  - entity_id: 52
+    entity_name: trees
+    entity_type: item
+    location: d:1 -1
+  - entity_id: 53
+    entity_name: trees
+    entity_type: item
+    location: i:abc

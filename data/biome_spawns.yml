@@ -1,0 +1,5 @@
+biome_spawns:
+  - biome_name: Forest
+    chance: 0.25
+    entity_name: undergrowth
+    entity_type: resource

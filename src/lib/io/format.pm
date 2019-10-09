@@ -27,6 +27,10 @@ sub withArticle($) {
     }
 }
 
+sub withCommas(@) {
+    return join(', ', @_);
+}
+
 sub getCounts {
     return () if @_ <= 0;
 

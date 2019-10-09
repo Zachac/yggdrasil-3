@@ -1,0 +1,9 @@
+actions:
+  - action: use
+    consume: 0
+    item_name: magic mirror
+    script: jump root/spawn
+  - action: use
+    consume: 0
+    item_name: broken item
+    script: j d:0 0
