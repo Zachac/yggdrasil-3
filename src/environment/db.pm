@@ -15,6 +15,7 @@ my $userid = "";
 my $password = "";
 
 our $conn = DBI->connect($dsn, $userid, $password, { RaiseError => 1 }) or die $DBI::errstr;
+$conn->do('PRAGMA case_sensitive_like = ON');
 
 warn "Database connected!\n";
 

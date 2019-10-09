@@ -7,6 +7,7 @@ use warnings;
 use lib::model::entities::resource;
 use lib::model::inventory;
 use lib::io::format;
+use environment::db;
 
 
 
@@ -27,7 +28,8 @@ sub create($) {
 
 # create('magic mirror');
 # create('broken item');
-create('trees');
+# create('trees');
 
+print @{$db::conn->selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
 
