@@ -19,6 +19,8 @@ sub loadData($$);
 sub loadTable($$$);
 sub loadRow($$$$);
 
+# dump all tables and rows into the data/tables folder in YAML format, 
+# deletes existing files as neccessary 
 sub dump() {
     my @tables = @{$db::conn->selectcol_arrayref('select name from sqlite_master where type="table"')};
 
@@ -41,8 +43,9 @@ sub dump() {
     }
 }
 
+# loads all files from the data/ folder recursively
+# for each file, use the loadFile function to consume it into the db
 sub load() {
-    # for each yaml file in the data folder...
     find(sub {
         return unless $_ =~ /.*\.yml/;
         loadFile("$File::Find::dir/$_");
@@ -50,7 +53,7 @@ sub load() {
 }
 
 sub loadFile($) {
-    my $file = shift;
+    my $file = shift; # abs path to yaml file to load
     my $relPath = File::Spec->abs2rel($file, $ENV{'DIR'});
     my $data = Load(file::slurp($file));
     
@@ -63,7 +66,8 @@ sub loadFile($) {
 }
 
 sub loadData($$) {
-    my ($identifier, $data) = @_;
+    my $identifier = shift; # identifier for debuging
+    my $data = shift; # hashref of tables to insert
 
     die "Expected hash reference for $identifier\n" unless (defined $data && ref $data eq 'HASH');
 
@@ -78,7 +82,9 @@ sub loadData($$) {
 }
 
 sub loadTable($$$) {
-    my ($identifier, $table_name, $rows) = @_;
+    my $identifier = shift; # identifier for debuging
+    my $table_name = shift; # table name to insert the rows into
+    my $rows = shift; # arrayref of rows as hashrefs
 
     die "Expected arrayref of rows for table $identifier:$table_name\n" unless (defined $rows && ref $rows eq 'ARRAY');
     
@@ -91,7 +97,10 @@ sub loadTable($$$) {
 }
 
 sub loadRow($$$$) {
-    my ($identifier, $table_name, $row_count, $row) = @_;
+    my $identifier = shift; # identifier for debuging
+    my $table_name = shift; # table name to insert the row into
+    my $row_count = shift; # row count for debugging
+    my $row = shift; # hashref of collumns mapped to values
 
     die "Expected table of values for row $identifier:$table_name:$row_count\n" unless (defined $row && ref $row eq 'HASH');
 

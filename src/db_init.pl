@@ -12,13 +12,24 @@ use environment::env;
 
 sub init;
 
+
+# delete the original database,
 unlink "$ENV{'DIR'}/yggdrasil.db";
+
+
+# for each perl module, in src/
+#   use require to load it,
+#   if it has db table initialze code,
+#   then the code will get run with the require
 find (\&init, "$ENV{'DIR'}/src");
 
-require lib::io::db; # redundant
+
+# finally, load the data/ folder into db
+require lib::io::db;
 db::load();
 
 
+# initialize the given file found from the find callback
 sub init {
     return unless ($_ =~ /.*\.pm/);
 
