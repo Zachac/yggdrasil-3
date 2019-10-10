@@ -87,8 +87,11 @@ sub unlock {
 sub create {
     my $username = shift;
     my $password = shift;
-    player::setLocation($username, 'root/spawn');
-    return eval {$db::conn->do("insert into user (user_name, password) values (?, ?);", undef, $username, $password)};
+
+    return unless eval {$db::conn->do("insert into user (user_name, password) values (?, ?);", undef, $username, $password)};
+    player::setLocation($username, 'd:0 0');
+    
+    return 1;
 }
 
 sub getOnline {
