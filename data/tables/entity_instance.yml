@@ -2,7 +2,7 @@ entity_instance:
   - entity_id: 1
     entity_name: abc
     entity_type: player
-    location: d:1 -1
+    location: d:0 0
   - entity_id: 2
     entity_name: magic mirror
     entity_type: item
