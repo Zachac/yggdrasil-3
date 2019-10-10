@@ -18,6 +18,12 @@ To give form to my ideals.
 * SQLite3 (3.22.0)
 
 ## running
-To run, an instance of src/local_client.pl will need to be started. If using src/server.pl, then a socket will be opened that will be connected to a local_client.
-* execute src/local_client.pl or
-* execute src/server.pl and connect through netcat/telnet
+# setup
+* Install the modules listed above through cpan/package manager
+* Run src/db_init.pl for first time database setup & loading
+
+# server startup
+* Run src/server.pl and connect to socket 3329 through netcat/telnet client
+
+# local client startup
+* Run src/local_client.pl to run an interactive client locally
