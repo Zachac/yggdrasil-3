@@ -12,15 +12,14 @@ use lib::io::file;
 use lib::model::map;
 use environment::db;
 
-INIT {
-    $db::conn->do("CREATE TABLE IF NOT EXISTS room (
-        location UNIQUE PRIMARY KEY,
-        room_name,
-        description
-    );");
 
-    $db::conn->do("insert or ignore into room(location, room_name, description) values ('root/spawn', 'An empty room', 'It looks like a very normal room.');");
-}
+$db::conn->do("CREATE TABLE IF NOT EXISTS room (
+    location UNIQUE PRIMARY KEY,
+    room_name,
+    description
+);");
+
+$db::conn->do("insert or ignore into room(location, room_name, description) values ('root/spawn', 'An empty room', 'It looks like a very normal room.');");
 
 sub name($) {
     my $room = shift;
