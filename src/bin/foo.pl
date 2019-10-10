@@ -34,5 +34,5 @@ sub create($) {
 
 # print @{$db::conn->selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
-db::dump();
+db::load();
 
