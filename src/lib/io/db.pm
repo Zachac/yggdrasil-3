@@ -12,6 +12,12 @@ use environment::db;
 use lib::io::file;
 use lib::io::format;
 
+sub dump();
+sub load();
+sub loadFile($);
+sub loadData($$);
+sub loadTable($$$);
+sub loadRow($$$$);
 
 sub dump() {
     my @tables = @{$db::conn->selectcol_arrayref('select name from sqlite_master where type="table"')};
@@ -35,43 +41,31 @@ sub dump() {
     }
 }
 
-sub loadRow($$$$) {
-    my ($identifier, $table_name, $row_count, $row) = @_;
-    
-    unless (defined $row && ref $row eq 'HASH') {
-        warn "Warning: expected table of values for row $identifier:$table_name:$row_count\n";
-        continue;
-    }
-
-    my @collumns = keys %$row;
-    my @values = @$row{@collumns};
-    my @place_holders = format::withCommas(map {"?"} @collumns);
-    return 0 == $db::conn->do("insert or replace into $table_name(${\(format::withCommas(@collumns))}) values (@place_holders)\n", undef, @values);
+sub load() {
+    # for each yaml file in the data folder...
+    find(sub {
+        return unless $_ =~ /.*\.yml/;
+        loadFile("$File::Find::dir/$_");
+    }, "$ENV{'DIR'}/data/");
 }
 
-sub loadTable($$$) {
-    my ($identifier, $table_name, $rows) = @_;
+sub loadFile($) {
+    my $file = shift;
+    my $relPath = File::Spec->abs2rel($file, $ENV{'DIR'});
+    my $data = Load(file::slurp($file));
+    
+    eval {
+        my ($table_count, $row_count) = loadData($file, $data);
+        print "processed $table_count tables with $row_count total rows from $relPath\n";
+    };
 
-    unless (defined $rows && ref $rows eq 'ARRAY') {
-        warn "Warning: expected arrayref of rows for table $identifier:$table_name\n"; 
-        return 0;
-    }
-
-    my $row_count = 0;
-    for my $row (@$rows) {
-        loadRow($identifier, $table_name, $row_count++, $row);
-    }
-
-    return $row_count;
+    warn $@ if $@;
 }
 
 sub loadData($$) {
     my ($identifier, $data) = @_;
 
-    unless (defined $data && ref $data eq 'HASH') {
-        warn "Warning: expected hash reference for $identifier\n";
-        return (0, 0);
-    }
+    die "Expected hash reference for $identifier\n" unless (defined $data && ref $data eq 'HASH');
 
     my $row_count = 0;
     my $table_count = 0;
@@ -83,21 +77,28 @@ sub loadData($$) {
     return ($table_count, $row_count);
 }
 
-sub loadFile($) {
-    my $file = shift;
-    my $relPath = File::Spec->abs2rel($file, $ENV{'DIR'});
-    my $data = Load(file::slurp($file));
-    my ($table_count, $row_count) = loadData($relPath, $data);
+sub loadTable($$$) {
+    my ($identifier, $table_name, $rows) = @_;
+
+    die "Expected arrayref of rows for table $identifier:$table_name\n" unless (defined $rows && ref $rows eq 'ARRAY');
     
-    print "processed $table_count tables with $row_count total rows from $relPath\n"
+    my $row_count = 0;
+    for my $row (@$rows) {
+        loadRow($identifier, $table_name, $row_count++, $row);
+    }
+
+    return $row_count;
 }
 
-sub load() {
-    # for each yaml file in the data folder...
-    find(sub {
-        return unless $_ =~ /.*\.yml/;
-        loadFile("$File::Find::dir/$_");
-    }, "$ENV{'DIR'}/data/");
+sub loadRow($$$$) {
+    my ($identifier, $table_name, $row_count, $row) = @_;
+
+    die "Expected table of values for row $identifier:$table_name:$row_count\n" unless (defined $row && ref $row eq 'HASH');
+
+    my @collumns = keys %$row;
+    my @values = @$row{@collumns};
+    my @place_holders = format::withCommas(map {"?"} @collumns);
+    return 0 == $db::conn->do("insert or replace into $table_name(${\(format::withCommas(@collumns))}) values (@place_holders)\n", undef, @values);
 }
 
 1;
