@@ -64,19 +64,22 @@ sub login {
 
 sub pid {
     my $username = shift;
-    $db::conn->selectrow_array('select pid from user where user_name=?', undef, $username);
+    return $db::conn->selectrow_array('select pid from user where user_name=?', undef, $username);
 }
 
 sub pidAlive {
     my $lock_pid = pid shift;
-    return 0 unless defined $lock_pid;
+    return 0 unless defined $lock_pid && $lock_pid >= 0;
     return kill(0, $lock_pid);
 }
 
 sub lock {
     my $username = shift;
     my $pid = $$;
-    return 0 != $db::conn->do('update user set pid=? where user_name=? and (pid is null or pid < 0)', undef, $pid, $username);
+
+    return 0 if pidAlive $username;
+    return 0 if 0 == $db::conn->do('update user set pid=? where user_name=?', undef, $pid, $username);
+    return $pid == pid $username;
 }
 
 sub unlock {
