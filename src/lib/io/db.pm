@@ -58,49 +58,49 @@ sub loadFile($) {
     my $data = Load(file::slurp($file));
     
     eval {
-        my ($table_count, $row_count) = loadData($file, $data);
+        my ($table_count, $row_count) = loadData($data, $file);
         print "processed $table_count tables with $row_count total rows from $relPath\n";
     };
 
     warn $@ if $@;
 }
 
-sub loadData($$) {
-    my $identifier = shift; # identifier for debuging
+sub loadData($;$) {
     my $data = shift; # hashref of tables to insert
+    my $identifier = shift // 'default'; # identifier for debuging
 
     die "Expected hash reference for $identifier\n" unless (defined $data && ref $data eq 'HASH');
 
     my $row_count = 0;
     my $table_count = 0;
-    for my $k (keys %$data) {
+    for my $table_name (keys %$data) {
         $table_count++;
-        $row_count += loadTable($identifier, $k, %$data{$k});
+        $row_count += loadTable($table_name, %$data{$table_name}, $identifier);
     }
 
     return ($table_count, $row_count);
 }
 
-sub loadTable($$$) {
-    my $identifier = shift; # identifier for debuging
+sub loadTable($$;$) {
     my $table_name = shift; # table name to insert the rows into
     my $rows = shift; # arrayref of rows as hashrefs
+    my $identifier = shift // 'default'; # identifier for debuging
 
     die "Expected arrayref of rows for table $identifier:$table_name\n" unless (defined $rows && ref $rows eq 'ARRAY');
     
     my $row_count = 0;
     for my $row (@$rows) {
-        loadRow($identifier, $table_name, $row_count++, $row);
+        loadRow($table_name, $row, $row_count++, $identifier);
     }
 
     return $row_count;
 }
 
-sub loadRow($$$$) {
-    my $identifier = shift; # identifier for debuging
+sub loadRow($$;$$) {
     my $table_name = shift; # table name to insert the row into
-    my $row_count = shift; # row count for debugging
     my $row = shift; # hashref of collumns mapped to values
+    my $row_count = shift // 0; # row count for debugging
+    my $identifier = shift // 'default'; # identifier for debuging
 
     die "Expected table of values for row $identifier:$table_name:$row_count\n" unless (defined $row && ref $row eq 'HASH');
 
