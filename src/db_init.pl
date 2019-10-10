@@ -8,9 +8,16 @@ use File::Find;
 use File::Spec;
 
 use lib dirname(Cwd::realpath($0));
-require environment::env;
+use environment::env;
+
+sub init;
 
 unlink "$ENV{'DIR'}/yggdrasil.db";
+find (\&init, "$ENV{'DIR'}/src");
+
+require lib::io::db; # redundant
+db::load();
+
 
 sub init {
     return unless ($_ =~ /.*\.pm/);
@@ -20,5 +27,3 @@ sub init {
     
     require $relPath;
 }
-
-find (\&init, "$ENV{'DIR'}/src");

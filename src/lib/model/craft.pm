@@ -22,10 +22,6 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS recipe (
     experience NOT NULL DEFAULT 0
 );");
 
-$db::conn->do('insert or ignore into recipe(item_name, skill_name, required_level, experience) values("fire pit kit", "forage", 2, 10)');
-$db::conn->do('insert or ignore into recipe_requirements(item_name, required_name, count) values("fire pit kit", "rocks", 3)');
-$db::conn->do('insert or ignore into recipe_requirements(item_name, required_name, count) values("fire pit kit", "leaves", 2)');
-
 sub exists($) {
     my $item_name = shift;
     return 0 != $db::conn->selectrow_array('select count(1) from recipe where item_name = ?', undef, $item_name);

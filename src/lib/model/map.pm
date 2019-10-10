@@ -39,8 +39,6 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS biome_spawns (
     UNIQUE(biome_name, entity_name, entity_type)
 );");
 
-$db::conn->do("insert or ignore into biome_spawns(biome_name, entity_name, entity_type, chance) values ('Forest', 'undergrowth', 'resource', 0.25)");
-
 sub getCoordinates($;$) {
     my $room = shift;
     my $strict = shift;

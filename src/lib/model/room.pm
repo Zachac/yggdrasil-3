@@ -19,8 +19,6 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS room (
     description
 );");
 
-$db::conn->do("insert or ignore into room(location, room_name, description) values ('root/spawn', 'An empty room', 'It looks like a very normal room.');");
-
 sub name($) {
     my $room = shift;
     my $result = $db::conn->selectrow_array('select room_name from room where location=?;', undef, $room);
