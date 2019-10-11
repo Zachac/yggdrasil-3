@@ -22,10 +22,15 @@ sub runCommand {
 }
 
 sub run {
-    my $command = $_[0];
-
     # add an empty space between user commands
     print "\n";
+    
+    return runNoNewLine(@_);
+}
+
+sub runNoNewLine {
+    my $command = $_[0];
+
     my $location = player::getLocation($ENV{'USERNAME'});
     if ( commands::exists("bin/$command.pl") ) {
         runCommand @_;
@@ -36,7 +41,6 @@ sub run {
     } else {
         print "Command not found!\n";
     }
-
 }
 
 sub execute {
