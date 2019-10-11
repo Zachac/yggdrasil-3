@@ -1,0 +1,5 @@
+recipe:
+  - item_name: fire pit kit
+    skill_name: forage
+    required_level: 2
+    experience: 10
