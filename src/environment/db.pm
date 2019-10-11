@@ -14,7 +14,11 @@ my $dsn = "DBI:$driver:dbname=$database;$options";
 my $userid = "";
 my $password = "";
 
-our $conn = DBI->connect($dsn, $userid, $password, { RaiseError => 1 }) or die $DBI::errstr;
+our $conn = DBI->connect($dsn, $userid, $password, { 
+    PrintError => 0,
+    RaiseError => 1,
+    AutoCommit => 1,
+}) or die $DBI::errstr;
 $conn->do('PRAGMA case_sensitive_like = ON');
 
 warn "Database connected!\n";

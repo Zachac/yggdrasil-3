@@ -15,9 +15,9 @@ use lib::io::format;
 sub dump();
 sub load();
 sub loadFile($);
-sub loadData($$);
-sub loadTable($$$);
-sub loadRow($$$$);
+sub loadData($;$);
+sub loadTable($$;$);
+sub loadRow($$;$$);
 
 # dump all tables and rows into the data/tables folder in YAML format, 
 # deletes existing files as neccessary 
@@ -107,7 +107,12 @@ sub loadRow($$;$$) {
     my @collumns = keys %$row;
     my @values = @$row{@collumns};
     my @place_holders = format::withCommas(map {"?"} @collumns);
-    return 0 == $db::conn->do("insert or replace into $table_name(${\(format::withCommas(@collumns))}) values (@place_holders)\n", undef, @values);
+    my $affected_rows = eval { $db::conn->do("insert or replace into $table_name(${\(format::withCommas(@collumns))}) values (@place_holders)\n", undef, @values) };
+
+    return 0 == $affected_rows if defined $affected_rows;
+
+    print $db::conn->errstr, " at $identifier:$table_name:$row_count\n";
+    return 0;
 }
 
 1;
