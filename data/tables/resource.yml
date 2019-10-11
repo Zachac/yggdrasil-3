@@ -1,21 +1,11 @@
 resource:
   - level: 0
     produces: leaves
-    resource_name: forest undergrowth
-    skill: scavenge
-    wheight: 1
-  - level: 0
-    produces: rocks
-    resource_name: forest undergrowth
-    skill: scavenge
-    wheight: 1
-  - level: 0
-    produces: leaves
-    resource_name: forest undergrowth
+    resource_name: undergrowth
     skill: forage
     wheight: 1
   - level: 0
     produces: rocks
-    resource_name: forest undergrowth
+    resource_name: undergrowth
     skill: forage
     wheight: 1
