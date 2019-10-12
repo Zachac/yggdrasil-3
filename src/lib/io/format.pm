@@ -23,7 +23,7 @@ sub withArticle($) {
     if ($noun->is_singular) {
         return $noun->indef_article() . " $value"
     } else {
-        return "the $value";
+        return "some $value";
     }
 }
 
