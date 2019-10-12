@@ -55,8 +55,8 @@ sub login {
     my $password = shift;
     my $realPass = $db::conn->selectrow_array('select password from user where user_name=?', undef, $username);
     
-    die "User is already logged in!\n" unless lock $username;
     die "Passwords do not match!\n" unless ($realPass eq $password);
+    die "User is already logged in!\n" unless lock $username;
 
     $ENV{'USERNAME'}=$username;
     return 1;
