@@ -102,6 +102,12 @@ sub getSpawn($) {
     return $db::conn->selectrow_array('select spawn from user where user_name = ?', undef, $username);
 }
 
+sub setSpawn($$) {
+    my $username = shift;
+    my $spawn = shift // player::getLocation($username);
+    return 0 != $db::conn->do('update user set spawn=? where user_name = ?', undef, $spawn, $username);
+}
+
 sub spawn($;$) {
     my $username = shift;
     my $spawn = shift // getSpawn $username;
