@@ -51,6 +51,10 @@ sub execute {
     unless (defined($result)) {
         if (defined $@ && $@ ne '') {
             print "$@";
+
+            if ($@ eq "Interrupted\n") {
+                die;
+            }
         } elsif (! commands::exists($file)) {
             print "File not found $file\n";
         }
