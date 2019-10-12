@@ -43,6 +43,8 @@ sub getCoordinates($;$) {
     my $room = shift;
     my $strict = shift;
 
+    return undef unless defined $room;
+
     if ($strict) {
         return $room =~ /^d:(-?\d+) (-?\d+)$/;
     } else {

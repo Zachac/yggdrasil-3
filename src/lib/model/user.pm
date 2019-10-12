@@ -17,6 +17,7 @@ use environment::db qw(conn);
 $db::conn->do("CREATE TABLE IF NOT EXISTS user (
     user_name NOT NULL PRIMARY KEY,
     password NOT NULL,
+    spawn NOT NULL DEFAULT 'd:0 0',
     pid
 );");
 
@@ -92,9 +93,19 @@ sub create {
     my $password = shift;
 
     return unless eval {$db::conn->do("insert into user (user_name, password) values (?, ?);", undef, $username, $password)};
-    player::setLocation($username, 'd:0 0');
-    
+    spawn($username);
     return 1;
+}
+
+sub getSpawn($) {
+    my $username = shift;
+    return $db::conn->selectrow_array('select spawn from user where user_name = ?', undef, $username);
+}
+
+sub spawn($;$) {
+    my $username = shift;
+    my $spawn = shift // getSpawn $username;
+    player::setLocation $username, $spawn;
 }
 
 sub getOnline {
