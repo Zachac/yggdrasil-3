@@ -1,9 +1,9 @@
 actions:
-  - action: use
-    consume: 0
-    item_name: magic mirror
+  - item_name: magic mirror
+    action: use
     script: jump d:0 0
-  - action: use
     consume: 0
-    item_name: broken item
+  - item_name: broken item
+    action: use
     script: j d:0 0
+    consume: 0

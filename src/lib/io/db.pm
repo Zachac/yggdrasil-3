@@ -6,6 +6,7 @@ use warnings;
 
 use YAML qw(Dump Load);
 use File::Find;
+use Tie::IxHash;
 
 use environment::env;
 use environment::db;
@@ -25,6 +26,7 @@ sub dump() {
     my @tables = @{$db::conn->selectcol_arrayref('select name from sqlite_master where type="table"')};
 
     local $YAML::UseHeader = 0;
+    local $YAML::SortKeys = 0;
     for my $t (@tables) {
         my @headers = @{$db::conn->selectcol_arrayref('select name from pragma_table_info(?)', undef, $t)};
         my @rows = @{$db::conn->selectall_arrayref("select ${\(format::withCommas(@headers))} from $t", undef)};
@@ -32,6 +34,7 @@ sub dump() {
         my @mapped_rows = ();
         for my $r (@rows) {
             my %row = ();
+            tie(%row, 'Tie::IxHash');
             @row{@headers} = @$r;
             push @mapped_rows, \%row;
         }

@@ -15,6 +15,7 @@ To give form to my ideals.
     * Math::Fractal::Noisemaker (0.105)
     * Lingua::EN::Inflexion (0.001008)
     * YAML (1.29)
+    * Tie::IxHash (1.23)
 * SQLite3 (3.22.0)
 
 ## running

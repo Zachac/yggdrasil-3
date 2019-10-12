@@ -1,4 +1,4 @@
 room:
-  - description: It looks like a very normal room.
-    location: root/spawn
+  - location: root/spawn
     room_name: An empty room
+    description: It looks like a very normal room.
