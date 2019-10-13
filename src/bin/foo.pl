@@ -34,6 +34,6 @@ sub create($) {
 
 # print @{$db::conn->selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
-# db::loadFile("$ENV{'DIR'}/data/tables/user.yml");
-db::dump();
+db::loadFile("$ENV{'DIR'}/data/tables/actions.yml");
+# db::dump();
 

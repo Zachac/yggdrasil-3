@@ -7,3 +7,15 @@ actions:
     action: use
     script: j d:0 0
     consume: 0
+  - item_name: fire pit kit
+    action: use
+    script: create fire pit;
+    consume: 1
+  - item_name: fire pit
+    action: light
+    script: create bonfire;
+    consume: 1
+  - item_name: bonfire
+    action: touch
+    script: setspawn
+    consume: 0
