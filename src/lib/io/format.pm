@@ -6,8 +6,11 @@ use warnings;
 
 use Lingua::EN::Inflexion qw( noun );
 
+sub withArticle($);
+
 sub withCount($$) {
-    my ($item, $count) = @_;
+    my $item = withArticle shift;
+    my $count = shift;
 
     if ($count <= 1) {
         return $item;
