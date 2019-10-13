@@ -9,4 +9,4 @@ my $command = shift;
 
 die "usage: $command meta_script [args]\n" unless (@ARGV > 0);
 
-meta_scripts::execute(@ARGV);
+meta_scripts::execute("@ARGV");

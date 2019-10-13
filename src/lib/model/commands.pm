@@ -37,7 +37,7 @@ sub runNoNewLine {
     } elsif (skills::exists($command)) {
         skills::execute(@_);
     } elsif (my $dest = links::getExit($location, "@_")) {
-        meta_scripts::execute("jump", $dest);
+        meta_scripts::execute("jump $dest");
     } else {
         print "Command not found!\n";
     }

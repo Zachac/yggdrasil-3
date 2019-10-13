@@ -44,9 +44,7 @@ sub execute($$$) {
 
     die "Nothing interesting happens\n" unless defined $action;
 
-    my @script_args = split /\s+/, $script;
-
-    my $result = meta_scripts::execute(@script_args);
+    my $result = meta_scripts::execute($script);
 
     if ($result && $consume) {
         item::delete($item_id);

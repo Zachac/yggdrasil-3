@@ -8,7 +8,16 @@ use lib::model::commands;
 
 sub execute {
     my $script = shift;
-    return commands::execute("bin/meta_scripts/$script.pl", $script, @_);
+    my @commands = split /[;\s]*;[;\s]*/, $script;
+
+    for (@commands) {
+        my @args =  split /\s+/, $_;
+        my $command = shift @args;
+        
+        return 0 unless commands::execute("bin/meta_scripts/$command.pl", $command, @args);
+    }
+
+    return 1;
 }
 
 1;
