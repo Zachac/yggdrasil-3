@@ -19,11 +19,15 @@ sub withCount($$) {
     }
 }
 
+sub isPlural($) {
+    return noun(shift)->is_plural();
+}
+
 sub withArticle($) {
     my $value = shift;
     my $noun = noun($value);
 
-    if ($noun->is_singular) {
+    unless ($noun->is_plural) {
         return $noun->indef_article() . " $value"
     } else {
         return "some $value";
