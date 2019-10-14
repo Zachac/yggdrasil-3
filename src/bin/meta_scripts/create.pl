@@ -18,6 +18,6 @@ my $an_item_name = format::withArticle($item_name);
 
 die "could not create $item_name\n" unless item::create($item_name, $location);
 
-print "created $an_item_name\n";
+print "Created $an_item_name!\n";
 
 1;
