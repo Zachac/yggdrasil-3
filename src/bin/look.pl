@@ -21,7 +21,7 @@ my @exits = links::getExits($room);
 
 my $ents = entity::getAllEx($room) // [];
 my @players = map {@$_[0]} grep { player::isPlayer(@$_[1]) } @$ents;
-my @ents = format::getCounts(map {@$_[0]} grep { ! player::isPlayer(@$_[1]) } @$ents);
+my @ents = map {@$_[0]} grep { ! player::isPlayer(@$_[1]) } @$ents;
 
 my @look = (
 "$room_name\n",
@@ -31,7 +31,7 @@ my @look = (
 
 if (@ents > 0) {
     push @look, "  You can see:\n";
-    push @look, "    $_\n" for (@ents);
+    push @look, "    ", format::withArticle($_), "\n" for (@ents);
 }
 
 print @look;
