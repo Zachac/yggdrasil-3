@@ -16,9 +16,9 @@ if (@ARGV > 0) {
 }
 
 if (map::mark(player::getLocation($ENV{'USERNAME'}), $mark)) {
-    print "You carefully mark the map with $mark at your location\n";
+    print "You carefully mark the map with $mark at your location.\n";
     return 1;
 } else {
-    print "You were unable to mark the map at your location\n";
+    print "You were unable to mark the map at your location.\n";
     return 0;
 }
