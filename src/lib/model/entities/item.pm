@@ -29,6 +29,16 @@ sub isStackable($) {
     return format::isPlural shift;
 }
 
+sub findCount($$) {
+    my $name = shift;
+    my $location = shift;
+    my $id = find($name, $location);
+    
+    return 0 unless defined $id;
+    return 1 unless isStackable $name;
+    return getCount($id);
+}
+
 sub getCount($) {
     my $entity_id = shift;
     return $db::conn->selectrow_array('select count from item_instance where entity_id = ?', undef, $entity_id)
