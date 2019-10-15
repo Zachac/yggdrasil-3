@@ -16,7 +16,16 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS item_instance (
 
 sub getAll($) {
     my $location = shift;
-    return entity::getAllOfIn('item', $location);
+    return entity::getEntityNamesByTypeAndLocation('item', $location);
+}
+
+sub getNamesAndCountsByLocation($) {
+    my $location = shift;
+    my @results = entity::getNamesAndEntityIdsByTypeAndLocation('item', $location);
+
+    @$_[1] = getCount(@$_[1]) for @results;
+
+    return @results;
 }
 
 sub find($$) {
@@ -33,7 +42,7 @@ sub findCount($$) {
     my $name = shift;
     my $location = shift;
     my $id = find($name, $location);
-    
+
     return 0 unless defined $id;
     return 1 unless isStackable $name;
     return getCount($id);

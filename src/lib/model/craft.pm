@@ -62,7 +62,7 @@ sub craft($$) {
         return 1;
     }
 
-    my @inv = sort(inventory::getAll($username));
+    my @inv = sort(inventory::getAllItemNames($username));
 
     my $j = 0;
     for my $item (@required_items) {

@@ -8,9 +8,14 @@ use lib::model::entities::entity;
 use lib::model::entities::item;
 use lib::model::entities::player;
 
-sub getAll($) {
+sub getAllItemNames($) {
     my $username = shift;
-    return entity::getAll("i:$username");
+    return item::getAll("i:$username");
+}
+
+sub getAllNamesAndCounts($) {
+    my $username = shift;
+    return item::getNamesAndCountsByLocation("i:$username");
 }
 
 sub take($$;$) {

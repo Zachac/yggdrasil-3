@@ -14,7 +14,7 @@ sub getLocation($) {
 
 sub getAll($) {
     my $location = shift;
-    return entity::getAllOfIn('player', $location);
+    return entity::getEntityNamesByTypeAndLocation('player', $location);
 }
 
 sub setLocation($$) {
