@@ -90,24 +90,33 @@ sub create($$) {
     return entity::create($name, $location, 'item');;
 }
 
-sub setLocation($$$) {
+sub setLocationByIdAndName($$;$) {
     my $location = shift;
-    my $name = shift;
     my $id = shift;
-    my $entity_id;
+    my $name = shift;
+
+    return 0 unless defined $id;
 
     if (isStackable $name) {
-        $entity_id = find($name, $location);
+        my $entity_id = find($name, $location);
 
         if (defined $entity_id) {
             my $temp_location = "p:$$";
-            my $moved = entity::setLocation($name, $temp_location, 'item', $id);
+            my $moved = entity::setLocationById($temp_location, $id);
             return 0 unless $moved;
             return mergeCounts($entity_id, $id);
         }
     }
 
-    return entity::setLocation($name, $location, 'item', $id);
+    return entity::setLocationById($location, $id);
+}
+
+sub setLocationByNameAndLocation($$$) {
+    my $location1 = shift;
+    my $name = shift;
+    my $location2 = shift;
+    my $id = find($name, $location2);
+    return setLocationByIdAndName($location1, $id, $name)
 }
 
 sub deleteAll($) {

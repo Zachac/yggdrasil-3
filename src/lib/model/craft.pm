@@ -81,9 +81,9 @@ sub craft($$) {
     my @items = ();
     for my $item (@required_items) {
         for (1 .. @$item[1]) {
-            my $item_id = inventory::drop($username, @$item[0], $swapLocation);
+            my $success = inventory::drop($username, @$item[0], $swapLocation);
 
-            unless ($item_id) {
+            unless ($success) {
                 inventory::take($username, @$_[0], $swapLocation) for @items;
                 die "Recipe component removed from inventory during crafting!\n";
             } else {

@@ -20,7 +20,7 @@ sub getAll($) {
 sub setLocation($$) {
     my $name = shift;
     my $location = shift;
-    return entity::setLocation($name, $location, 'player');
+    return entity::setLocationByNameAndType($location, $name, 'player');
 }
 
 sub isPlayer($) {

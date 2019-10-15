@@ -87,21 +87,17 @@ sub getLocation {
     }
 }
 
-sub setLocation {
-    my $name = shift;
+sub setLocationByNameAndType($$$) {
     my $location = shift;
+    my $name = shift;
     my $type = shift;
+    return 0 != $db::conn->do('update entity_instance set location = ? where entity_name = ? and entity_type = ?', undef, $location, $name, $type);
+}
+
+sub setLocationById($$) {
+    my $location = shift;
     my $id = shift;
-
-    unless (defined $id) {
-        $id = getId($name, $type);
-    }
-
-    if (defined $id) {
-        return 0 != $db::conn->do('update entity_instance set location = ? where entity_type = ? and entity_name = ? and entity_id = ?', undef, $location, $type, $name, $id);
-    } else {
-        return 0 != $db::conn->do('insert into entity_instance(location, entity_type, entity_name) values (?, ?, ?)', undef, $location, $type, $name);
-    }
+    return 0 != $db::conn->do('update entity_instance set location = ? where entity_id = ?', undef, $location, $id);
 }
 
 sub create($$$) {

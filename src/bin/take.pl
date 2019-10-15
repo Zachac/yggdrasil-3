@@ -13,10 +13,10 @@ unless (@ARGV > 0) {
 }
 
 my $item_name = "@ARGV";
-my $item_id = inventory::take($ENV{'USERNAME'}, "$item_name");
+my $success = inventory::take($ENV{'USERNAME'}, "$item_name");
 
 
-if (defined $item_id) {
+if (defined $success) {
     user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} takes $item_name");
     print "You take $item_name and put it in your inventory\n";
 } else {

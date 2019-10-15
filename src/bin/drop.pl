@@ -13,9 +13,9 @@ unless (@ARGV > 0) {
 }
 
 my $item_name = "@ARGV";
-my $item_id = inventory::drop($ENV{'USERNAME'}, $item_name);
+my $success = inventory::drop($ENV{'USERNAME'}, $item_name);
 
-if (defined $item_id) {
+if (defined $success) {
     user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} drops $item_name");
     print "You drop $item_name\n";
 } else {
