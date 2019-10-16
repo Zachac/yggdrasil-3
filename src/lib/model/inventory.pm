@@ -17,9 +17,9 @@ sub take($$;$$) {
     my $username = shift;
     my $item_name = shift;
     my $location = shift // player::getLocation($username);
-    my $count = shift // 1;
+    my $count = shift;
 
-    if ($count == 1) {
+    if (! defined $count) {
         return item::setLocationByNameAndLocation("i:$username", $item_name, $location) ? 1 : 0;
     } elsif (item::isStackable $item_name) {
         return item::splitByNameAndLocationAndCountToLocation($item_name, $location, $count, "i:$username") ? $count : 0;

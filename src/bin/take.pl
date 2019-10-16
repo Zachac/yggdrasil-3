@@ -3,7 +3,11 @@
 use strict;
 use warnings;
 
+use Scalar::Util qw(looks_like_number);
+use Lingua::EN::Inflexion qw( inflect );
+
 use lib::model::inventory;
+use lib::io::format;
 
 my $command = shift;
 my $count;
@@ -21,7 +25,7 @@ my $count_taken = inventory::take($ENV{'USERNAME'}, "$item_name", undef, $count)
 if ($count_taken) {
     if ($count_taken == 1) {
         my $withArticle = format::withArticle($item_name);
-        user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} takes $withArticle");
+        user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} takes $withArticle");
         print "You take $withArticle\n";
     } else {
         user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} takes <#w:$count_taken> <N:$item_name>");

@@ -91,7 +91,7 @@ sub create($$;$) {
     
     entity::create($name, $location, 'item') or die "could not create entity for new item $name\n";
 
-    return 0 if ($count <= 1);
+    return 1 if ($count <= 1);
     return create($name, $location, $count - 1);
 }
 

@@ -8,6 +8,7 @@ use Lingua::EN::Inflexion qw( inflect );
 
 use lib::model::inventory;
 use lib::model::user;
+use lib::io::format;
 
 my $command = shift;
 my $count;
@@ -25,7 +26,7 @@ my $count_dropped = inventory::drop($ENV{'USERNAME'}, $item_name, undef, $count)
 if ($count_dropped) {
     if ($count_dropped == 1) {
         my $withArticle = format::withArticle($item_name);
-        user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} drops $withArticle");
+        user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} drops $withArticle");
         print "You drop $withArticle\n";
     } else {
         user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} drops <#w:$count_dropped> <N:$item_name>");
