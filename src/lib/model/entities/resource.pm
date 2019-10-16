@@ -9,7 +9,7 @@ use lib::model::entities::player;
 use lib::model::skills;
 use lib::model::inventory;
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS resource (
+db::do("CREATE TABLE IF NOT EXISTS resource (
     resource_name NOT NULL,
     skill NOT NULL,
     level INTEGER NOT NULL DEFAULT 0,
@@ -26,7 +26,7 @@ sub gather($$$) {
     my $level = skills::getLevel($name, $action);
 
     die "Could not find resource: $resource\n" unless entity::typeExistsIn($resource, $location, 'resource');
-    my @resourceResults = @{$db::conn->selectall_arrayref("select wheight, produces from resource where resource_name = ? and skill = ? and level <= ?", undef, $resource, $action, $level)};
+    my @resourceResults = @{db::selectall_arrayref("select wheight, produces from resource where resource_name = ? and skill = ? and level <= ?", undef, $resource, $action, $level)};
     my $totalWheight = 0;
     $totalWheight += @{$_}[0] for @resourceResults;
 

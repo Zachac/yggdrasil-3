@@ -18,20 +18,20 @@ my @name_table = ('Ocean', 'Shore', 'Forest');
 my @enterable_table = (0, 1, 1);
 
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS map_tiles (
+db::do("CREATE TABLE IF NOT EXISTS map_tiles (
     x INTEGER NOT NULL,
     y INTEGER NOT NULL,
     UNIQUE(x, y)
 );");
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS map_icons (
+db::do("CREATE TABLE IF NOT EXISTS map_icons (
     x INTEGER NOT NULL,
     y INTEGER NOT NULL,
     icon CHARACTER(3) NOT NULL,
     PRIMARY KEY(x, y)
 );");
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS biome_spawns (
+db::do("CREATE TABLE IF NOT EXISTS biome_spawns (
     biome_name NOT NULL,
     entity_name NOT NULL,
     entity_type NOT NULL,
@@ -98,7 +98,7 @@ sub get(;$$$) {
         push @map, "\n";
     }
 
-    my @arr = @{$db::conn->selectall_arrayref('select x, y, icon from map_icons where x between ? and ? and y between ? and ?', undef, $minx, $maxx, $miny, $maxy)};
+    my @arr = @{db::selectall_arrayref('select x, y, icon from map_icons where x between ? and ? and y between ? and ?', undef, $minx, $maxx, $miny, $maxy)};
     push @arr, [$offsetX, $offsetY, '< >'];
 
     my $width = $r * 4 + 4;
@@ -184,10 +184,10 @@ sub init($) {
     my $room = shift;
     my ($x, $y) = getCoordinates($room, 1);
     return unless defined $x;
-    return unless 0 != $db::conn->do("insert or ignore into map_tiles(x, y) values (?, ?)", undef, $x, $y);
+    return unless 0 != db::do("insert or ignore into map_tiles(x, y) values (?, ?)", undef, $x, $y);
 
     my $biome_name = $name_table[getBiome($x, $y)];
-    my @spawns = @{$db::conn->selectall_arrayref("select entity_name, entity_type, chance from biome_spawns where biome_name = ? order by entity_name, entity_type, chance", undef, $biome_name)};
+    my @spawns = @{db::selectall_arrayref("select entity_name, entity_type, chance from biome_spawns where biome_name = ? order by entity_name, entity_type, chance", undef, $biome_name)};
 
     my $max_value = 2 ** 32 - 1;
     srand $seed;
@@ -209,7 +209,7 @@ sub mark($$) {
     die "This place cannot be marked\n" unless defined $x;
     die "Mark length must be between 1-3 charachters\n" unless ($length >= 1 && $length <= 3);
 
-    $db::conn->do('insert or replace into map_icons(x, y, icon) values (?, ?, ?)', undef, $x, $y, $mark);
+    db::do('insert or replace into map_icons(x, y, icon) values (?, ?, ?)', undef, $x, $y, $mark);
 }
 
 1;

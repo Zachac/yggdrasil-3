@@ -6,14 +6,14 @@ use warnings;
 
 use environment::db;
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS entity_instance (
+db::do("CREATE TABLE IF NOT EXISTS entity_instance (
     entity_id INTEGER NOT NULL PRIMARY KEY,
     entity_name NOT NULL,
     entity_type NOT NULL,
     location
 );");
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS entity (
+db::do("CREATE TABLE IF NOT EXISTS entity (
     entity_name NOT NULL,
     entity_type NOT NULL,
     description,
@@ -22,7 +22,7 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS entity (
 
 sub description {
     my $entity_name = shift;
-    my $description = $db::conn->selectrow_array('select description from entity where entity_name=?', undef, $entity_name);
+    my $description = db::selectrow_array('select description from entity where entity_name=?', undef, $entity_name);
     
     return $description if defined $description;
     return 'You don\'t notice anything interesting.';
@@ -31,48 +31,48 @@ sub description {
 sub getId($$) {
     my $entity_name = shift;
     my $type = shift;
-    return $db::conn->selectrow_array('select entity_id from entity_instance where entity_name=? and entity_type=?', undef, $entity_name, $type);
+    return db::selectrow_array('select entity_id from entity_instance where entity_name=? and entity_type=?', undef, $entity_name, $type);
 }
 
 sub existsIn {
     my $entity_name = shift;
     my $location = shift;
-    return $db::conn->selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
+    return db::selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
 }
 
 sub typeExistsIn($$$) {
     my $entity_name = shift;
     my $location = shift;
     my $type = shift;
-    return $db::conn->selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
+    return db::selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
 }
 
 sub getAll {
     my $location = shift;
-    return @{$db::conn->selectcol_arrayref('select entity_name from entity_instance where location=?', undef, $location)};
+    return @{db::selectcol_arrayref('select entity_name from entity_instance where location=?', undef, $location)};
 }
 
 sub getAllEx {
     my $location = shift;
-    return $db::conn->selectall_arrayref('select entity_name, entity_type, entity_id from entity_instance where location=?', undef, $location);
+    return db::selectall_arrayref('select entity_name, entity_type, entity_id from entity_instance where location=?', undef, $location);
 }
 
 sub getEntityNamesByTypeAndLocation {
     my $type = shift;
     my $location = shift;
-    return @{$db::conn->selectcol_arrayref('select entity_name from entity_instance where location=? and entity_type=?', undef, $location, $type)};
+    return @{db::selectcol_arrayref('select entity_name from entity_instance where location=? and entity_type=?', undef, $location, $type)};
 }
 
 sub getNamesAndEntityIdsByTypeAndLocation {
     my $type = shift;
     my $location = shift;
-    return @{$db::conn->selectall_arrayref('select entity_name, entity_id from entity_instance where location=? and entity_type=?', undef, $location, $type)};
+    return @{db::selectall_arrayref('select entity_name, entity_id from entity_instance where location=? and entity_type=?', undef, $location, $type)};
 }
 
 sub getEntityIdsAndNameAndLocation {
     my $name = shift;
     my $location = shift;
-    return @{$db::conn->selectcol_arrayref('select entity_id from entity_instance where location=? and entity_name=?', undef, $location, $name)};
+    return @{db::selectcol_arrayref('select entity_id from entity_instance where location=? and entity_name=?', undef, $location, $name)};
 }
 
 sub getLocation {
@@ -81,9 +81,9 @@ sub getLocation {
     my $id = shift;
 
     if (defined $id) {
-        return $db::conn->selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ? and entity_id = ?', undef, $type, $name, $id);
+        return db::selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ? and entity_id = ?', undef, $type, $name, $id);
     } else {
-        return $db::conn->selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ?', undef, $type, $name);
+        return db::selectrow_array('select location from entity_instance where entity_type = ? and entity_name = ?', undef, $type, $name);
     }
 }
 
@@ -91,31 +91,31 @@ sub setLocationByNameAndType($$$) {
     my $location = shift;
     my $name = shift;
     my $type = shift;
-    return 0 != $db::conn->do('update entity_instance set location = ? where entity_name = ? and entity_type = ?', undef, $location, $name, $type);
+    return 0 != db::do('update entity_instance set location = ? where entity_name = ? and entity_type = ?', undef, $location, $name, $type);
 }
 
 sub setLocationById($$) {
     my $location = shift;
     my $id = shift;
-    return 0 != $db::conn->do('update entity_instance set location = ? where entity_id = ?', undef, $location, $id);
+    return 0 != db::do('update entity_instance set location = ? where entity_id = ?', undef, $location, $id);
 }
 
 sub create($$$) {
     my $name = shift;
     my $location = shift;
     my $type = shift;
-    return 0 != $db::conn->do('insert or ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
+    return 0 != db::do('insert or ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
 }
 
 sub deleteAll($$) {
     my ($location, $type) = @_;
-    return $db::conn->do('delete from entity_instance where location = ? and entity_type = ?', undef, $location, $type);
+    return db::do('delete from entity_instance where location = ? and entity_type = ?', undef, $location, $type);
 }
 
 sub delete($$) {
     my $entity_type = shift;
     my $entity_id = shift;
-    return $db::conn->do('delete from entity_instance where entity_id = ? and entity_type = ?', undef, $entity_id, $entity_type);
+    return db::do('delete from entity_instance where entity_id = ? and entity_type = ?', undef, $entity_id, $entity_type);
 }
 
 1;

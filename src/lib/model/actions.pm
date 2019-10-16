@@ -10,7 +10,7 @@ use lib::model::inventory;
 
 use lib::model::meta_scripts;
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS actions (
+db::do("CREATE TABLE IF NOT EXISTS actions (
     item_name NOT NULL,
     action NOT NULL,
     script NOT NULL,
@@ -23,7 +23,7 @@ sub setAction($$$;$) {
     my $action = shift;
     my $script = shift;
     my $consume = shift;
-    $db::conn->do('insert or replace into actions(item_name, action, script, consume) values(?,?,?)', undef, $item_name, $action, $script, $consume);
+    db::do('insert or replace into actions(item_name, action, script, consume) values(?,?,?)', undef, $item_name, $action, $script, $consume);
 }
 
 sub execute($$$) {
@@ -40,7 +40,7 @@ sub execute($$$) {
         die "Could not find $item_name\n" unless defined $item_id;
     }
 
-    my ($script, $consume) = $db::conn->selectrow_array('select script, consume from actions where item_name = ? and action = ?', undef, $item_name, $action);
+    my ($script, $consume) = db::selectrow_array('select script, consume from actions where item_name = ? and action = ?', undef, $item_name, $action);
 
     die "Nothing interesting happens\n" unless defined $action;
 

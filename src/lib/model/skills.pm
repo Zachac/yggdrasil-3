@@ -7,7 +7,7 @@ use warnings;
 use lib::model::commands;
 use environment::db;
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS skills (
+db::do("CREATE TABLE IF NOT EXISTS skills (
     user_name,
     skill_name,
     experience,
@@ -34,19 +34,19 @@ sub require {
     my $name = shift;
     $name = $ENV{'USERNAME'} unless defined $name;
 
-    return 1 if ($db::conn->selectrow_array("select 1 from skills where user_name = ? and skill_name = ? and level >= ?", undef, $name, $skill, $level));
+    return 1 if (db::selectrow_array("select 1 from skills where user_name = ? and skill_name = ? and level >= ?", undef, $name, $skill, $level));
 
     print "Level $level $skill required\n";
     return 0;
 }
 
 sub getAll {
-    return @{$db::conn->selectall_arrayref("select skill_name, level, experience from skills where user_name = ?", undef, $ENV{'USERNAME'})};
+    return @{db::selectall_arrayref("select skill_name, level, experience from skills where user_name = ?", undef, $ENV{'USERNAME'})};
 }
 
 sub get {
     my $skill = shift;
-    my ($level, $experience) = $db::conn->selectrow_array("select level, experience from skills where user_name = ? and skill_name = ?", undef, $ENV{'USERNAME'}, $skill);
+    my ($level, $experience) = db::selectrow_array("select level, experience from skills where user_name = ? and skill_name = ?", undef, $ENV{'USERNAME'}, $skill);
     $level = 0 unless defined $level;
     $experience = 0 unless defined $experience;
     return ($level, $experience);
@@ -57,7 +57,7 @@ sub getLevel {
     my $name = shift;
     $name = $ENV{'USERNAME'} unless defined $name;
 
-    my $level = $db::conn->selectrow_array("select level from skills where user_name = ? and skill_name = ?", undef, $name, $skill);
+    my $level = db::selectrow_array("select level from skills where user_name = ? and skill_name = ?", undef, $name, $skill);
 
     $level = 0 unless defined $level;
 
@@ -68,7 +68,7 @@ sub addExp {
     my $name = shift;
     my $skill = shift;
     my $exp = shift;
-    return 0 != $db::conn->do('update skills set experience = experience + ? where user_name = ? and skill_name = ?', undef, $exp, $name, $skill);
+    return 0 != db::do('update skills set experience = experience + ? where user_name = ? and skill_name = ?', undef, $exp, $name, $skill);
 }
 
 sub requireLevel {
@@ -77,7 +77,7 @@ sub requireLevel {
     my $name = shift;
     $name = $ENV{'USERNAME'} unless defined $name;
 
-    my $count = $db::conn->selectrow_array('select count(1) from skills where user_name=? and skill_name=? and level >= ?', undef, $name, $skill, $requiredLevel);
+    my $count = db::selectrow_array('select count(1) from skills where user_name=? and skill_name=? and level >= ?', undef, $name, $skill, $requiredLevel);
 
     die "Requires $skill level $requiredLevel\n" unless $count >= 1;
 }
@@ -116,12 +116,12 @@ sub train {
     die "not enough experience to train another level\n" if $requiredExp > $experience;
     
     $level = $level + 1;
-    $db::conn->do('insert or replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $ENV{'USERNAME'}, $skill, $level, $experience - $requiredExp) or die;
+    db::do('insert or replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $ENV{'USERNAME'}, $skill, $level, $experience - $requiredExp) or die;
     return $level;
 }
 
 sub totalLevel {
-    return $db::conn->selectrow_array('select IFNULL(sum(level), 0) from skills where user_name = ?', undef, $ENV{'USERNAME'});
+    return db::selectrow_array('select IFNULL(sum(level), 0) from skills where user_name = ?', undef, $ENV{'USERNAME'});
 }
 
 1;

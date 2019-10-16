@@ -8,14 +8,14 @@ use environment::db qw(conn);
 use lib::model::inventory;
 use lib::model::skills;
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS recipe_requirements (
+db::do("CREATE TABLE IF NOT EXISTS recipe_requirements (
     item_name NOT NULL,
     required_name NOT NULL,
     count NOT NULL DEFAULT 0,
     PRIMARY KEY(item_name, required_name)
 );");
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS recipe (
+db::do("CREATE TABLE IF NOT EXISTS recipe (
     item_name NOT NULL PRIMARY KEY,
     skill_name,
     required_level NOT NULL DEFAULT 0,
@@ -24,7 +24,7 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS recipe (
 
 sub exists($) {
     my $item_name = shift;
-    return 0 != $db::conn->selectrow_array('select count(1) from recipe where item_name = ?', undef, $item_name);
+    return 0 != db::selectrow_array('select count(1) from recipe where item_name = ?', undef, $item_name);
 }
 
 sub recipe($;@) {
@@ -32,7 +32,7 @@ sub recipe($;@) {
     my @required_items = @_;
     
     unless (@required_items) {
-        @required_items = @{$db::conn->selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
+        @required_items = @{db::selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
     }
 
     return map { "@$_[0] x@$_[1]" } @required_items;
@@ -40,12 +40,12 @@ sub recipe($;@) {
 
 sub getLevel($) {
     my $item_name = shift;
-    return $db::conn->selectrow_array('select skill_name, required_level from recipe where item_name = ?', undef, $item_name);
+    return db::selectrow_array('select skill_name, required_level from recipe where item_name = ?', undef, $item_name);
 }
 
 sub getExp($) {
     my $item_name = shift;
-    return $db::conn->selectrow_array('select skill_name, experience from recipe where item_name = ?', undef, $item_name);
+    return db::selectrow_array('select skill_name, experience from recipe where item_name = ?', undef, $item_name);
 }
 
 sub craft($$) {
@@ -55,7 +55,7 @@ sub craft($$) {
     die "recipe for $item_name does not exist\n" unless craft::exists($item_name);
     skills::requireLevel(getLevel($item_name), $username);
 
-    my @required_items = @{$db::conn->selectall_arrayref('select required_name, count from recipe_requirements where item_name = ? order by required_name asc', undef, $item_name)};
+    my @required_items = @{db::selectall_arrayref('select required_name, count from recipe_requirements where item_name = ? order by required_name asc', undef, $item_name)};
 
     if (@required_items <= 0) {
         return defined inventory::add($username, $item_name);

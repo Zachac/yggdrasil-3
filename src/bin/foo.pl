@@ -32,7 +32,7 @@ sub create($) {
 # create('broken item');
 # create('trees');
 
-# print @{$db::conn->selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
+# print @{db::selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
 db::loadFile("$ENV{'DIR'}/data/tables/actions.yml");
 # db::dump();

@@ -13,7 +13,7 @@ use lib::model::map;
 use environment::db;
 
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS room (
+db::do("CREATE TABLE IF NOT EXISTS room (
     location UNIQUE PRIMARY KEY,
     room_name,
     description
@@ -21,7 +21,7 @@ $db::conn->do("CREATE TABLE IF NOT EXISTS room (
 
 sub name($) {
     my $room = shift;
-    my $result = $db::conn->selectrow_array('select room_name from room where location=?;', undef, $room);
+    my $result = db::selectrow_array('select room_name from room where location=?;', undef, $room);
     return $result if (defined($result));
 
     $result = map::getBiomeName($room);
@@ -31,7 +31,7 @@ sub name($) {
 }
 
 sub description {
-    my $result = $db::conn->selectrow_array('select description from room where location=?;', undef, shift);
+    my $result = db::selectrow_array('select description from room where location=?;', undef, shift);
     return $result if (defined($result));
     return "You see nothing.";
 }

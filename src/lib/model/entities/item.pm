@@ -9,7 +9,7 @@ use environment::db;
 use lib::io::format;
 
 
-$db::conn->do("CREATE TABLE IF NOT EXISTS item_instance (
+db::do("CREATE TABLE IF NOT EXISTS item_instance (
     entity_id INTEGER NOT NULL PRIMARY KEY,
     count INTEGER NOT NULL DEFAULT 0
 );");
@@ -50,7 +50,7 @@ sub findCount($$) {
 
 sub getCount($) {
     my $entity_id = shift;
-    return $db::conn->selectrow_array('select count from item_instance where entity_id = ?', undef, $entity_id)
+    return db::selectrow_array('select count from item_instance where entity_id = ?', undef, $entity_id)
             // 1;
 }
 
@@ -58,8 +58,8 @@ sub addCount($$) {
     my $entity_id = shift;
     my $count = shift;
 
-    $db::conn->do('insert or ignore into item_instance(entity_id, count) values (?, 1)', undef, $entity_id);
-    $db::conn->do('update item_instance set count = count + ? where entity_id = ?', undef, $count, $entity_id);
+    db::do('insert or ignore into item_instance(entity_id, count) values (?, 1)', undef, $entity_id);
+    db::do('update item_instance set count = count + ? where entity_id = ?', undef, $count, $entity_id);
 }
 
 sub mergeCounts($$) {
@@ -68,7 +68,7 @@ sub mergeCounts($$) {
     my $add_count = getCount($entity_id2);
 
     addCount($entity_id1, $add_count);
-    $db::conn->do('delete from item_instance where entity_id = ?', undef, $entity_id2);
+    db::do('delete from item_instance where entity_id = ?', undef, $entity_id2);
     entity::delete('item', $entity_id2);
 
     return 1;
@@ -133,10 +133,10 @@ sub splitByNameAndLocationAndCountToLocation($$$$) {
     my $id = find($name, $location1);
     return undef unless defined $id;
 
-    my $removed = 0 != $db::conn->do('update item_instance set count = count - ? where entity_id = ? and count >= ?', undef, $count, $id, $count);
+    my $removed = 0 != db::do('update item_instance set count = count - ? where entity_id = ? and count >= ?', undef, $count, $id, $count);
     return undef unless $removed;
 
-    my $deleted = 0 != $db::conn->do('delete from item_instance where count = 0 and entity_id = ?', undef, $id);
+    my $deleted = 0 != db::do('delete from item_instance where count = 0 and entity_id = ?', undef, $id);
     entity::delete('item', $id) if $deleted;
 
     return create($name, $location2, $count);
