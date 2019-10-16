@@ -66,42 +66,40 @@ sub craft($$) {
     my $j = 0;
     for my $item (@required_items) {
         for (my $i = 0; $i < @$item[1]; $i++) {
-            $j++ while ($j < @inv && $inv[$j][0] ne @$item[0]);
+            $j++ while ($j < @inv && ($inv[$j][0] ne @$item[0] || $inv[$j][1] <= 0));
             
             unless ($j < @inv) {
                 die "missing (@$item[0]) required: @{[map {\"\n  $_\"} recipe($item_name, @required_items)]}\n";
             }
-            
-            if ($inv[$j][1] >= @$item[1]) {
-                $j++;
-                last;
+
+            my $required_count = @$item[1] - $i;
+            if ($inv[$j][1] >= $required_count) {
+                $i += $required_count;
+                $inv[$j][1] -= $required_count;
             } elsif ($j + 1 < @inv) {
                 $inv[$j + 1][1] += $inv[$j][1];
-                $i += $inv[$j][1];
+                $i += $inv[$j][1] - 1;
                 $inv[$j][1] = 0;
-                redo;
             }
         }
     }
 
     my $swapLocation = "p:d:$$";
     my @items = ();
-    # for my $item (@required_items) {
-    #     for (1 .. @$item[1]) {
-    #         my $success = inventory::drop($username, @$item[0], $swapLocation);
+    for my $item (@required_items) {
+        my $dropped_count = inventory::drop($username, @$item[0], $swapLocation, @$item[1]);
+        
+        push @items, @$item[0];
 
-    #         unless ($success) {
-    #             inventory::take($username, @$_[0], $swapLocation) for @items;
-    #             die "Recipe component removed from inventory during crafting!\n";
-    #         } else {
-    #             unshift @items, @$item[0];
-    #         }
-    #     }
-    # }
+        unless ($dropped_count == @$item[1]) {
+            inventory::take($username, $_, $swapLocation, "inf") for @items;
+            die "Recipe component removed from inventory during crafting!\n";
+        }
+    }
 
-    # inventory::add($username, $item_name);
-    # item::deleteAll($swapLocation);
-    # skills::addExp($username, getExp($item_name));
+    inventory::add($username, $item_name);
+    item::deleteAll($swapLocation);
+    skills::addExp($username, getExp($item_name));
 }
 
 
