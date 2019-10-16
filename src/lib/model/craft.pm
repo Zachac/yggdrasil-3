@@ -55,46 +55,53 @@ sub craft($$) {
     die "recipe for $item_name does not exist\n" unless craft::exists($item_name);
     skills::requireLevel(getLevel($item_name), $username);
 
-    my @required_items = sort {@$a[0] cmp @$b[0]} @{$db::conn->selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
+    my @required_items = @{$db::conn->selectall_arrayref('select required_name, count from recipe_requirements where item_name = ? order by required_name asc', undef, $item_name)};
 
     if (@required_items <= 0) {
-        inventory::add($username, $item_name);
-        return 1;
+        return defined inventory::add($username, $item_name);
     }
 
-    my @inv = sort(inventory::getAllItemNames($username));
+    my @inv = sort {@$a[0] cmp @$b[0]} inventory::getAllNamesAndCounts($username);
 
     my $j = 0;
     for my $item (@required_items) {
-        for (1 .. @$item[1]) {
-            $j++ while ($j < @inv && $inv[$j] ne @$item[0]);
+        for (my $i = 0; $i < @$item[1]; $i++) {
+            $j++ while ($j < @inv && $inv[$j][0] ne @$item[0]);
             
             unless ($j < @inv) {
                 die "missing (@$item[0]) required: @{[map {\"\n  $_\"} recipe($item_name, @required_items)]}\n";
             }
             
-            $j++;
+            if ($inv[$j][1] >= @$item[1]) {
+                $j++;
+                last;
+            } elsif ($j + 1 < @inv) {
+                $inv[$j + 1][1] += $inv[$j][1];
+                $i += $inv[$j][1];
+                $inv[$j][1] = 0;
+                redo;
+            }
         }
     }
 
     my $swapLocation = "p:d:$$";
     my @items = ();
-    for my $item (@required_items) {
-        for (1 .. @$item[1]) {
-            my $success = inventory::drop($username, @$item[0], $swapLocation);
+    # for my $item (@required_items) {
+    #     for (1 .. @$item[1]) {
+    #         my $success = inventory::drop($username, @$item[0], $swapLocation);
 
-            unless ($success) {
-                inventory::take($username, @$_[0], $swapLocation) for @items;
-                die "Recipe component removed from inventory during crafting!\n";
-            } else {
-                unshift @items, @$item[0];
-            }
-        }
-    }
+    #         unless ($success) {
+    #             inventory::take($username, @$_[0], $swapLocation) for @items;
+    #             die "Recipe component removed from inventory during crafting!\n";
+    #         } else {
+    #             unshift @items, @$item[0];
+    #         }
+    #     }
+    # }
 
-    inventory::add($username, $item_name);
-    item::deleteAll($swapLocation);
-    skills::addExp($username, getExp($item_name));
+    # inventory::add($username, $item_name);
+    # item::deleteAll($swapLocation);
+    # skills::addExp($username, getExp($item_name));
 }
 
 
