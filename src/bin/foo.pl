@@ -9,6 +9,7 @@ use lib::model::inventory;
 use lib::io::format;
 use lib::io::db;
 use environment::db;
+use environment::env;
 
 
 
@@ -34,6 +35,6 @@ sub create($) {
 
 # print @{db::selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
-db::loadFile("$ENV{'DIR'}/data/tables/actions.yml");
+db::loadFile(env::dir() . "/data/tables/actions.yml");
 # db::dump();
 

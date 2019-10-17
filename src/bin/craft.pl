@@ -3,15 +3,13 @@
 use strict;
 use warnings;
 
+use environment::env;
 use lib::model::craft;
 use lib::model::user;
 
 my $command = shift;
 
-unless (@ARGV > 0) {
-    print "usage: $command item name\n";
-    return 1;
-}
+die "usage: $command item name\n" if (@ARGV <= 0);
 
 my $item_name = "@ARGV";
 

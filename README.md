@@ -18,6 +18,10 @@ To give form to my ideals.
     * Tie::IxHash (1.23)
 * SQLite3 (3.22.0)
 
+## suggested
+* Perl::Critic
+* Perl::Tidy
+
 ## running
 # setup
 * Install the modules listed above through cpan/package manager

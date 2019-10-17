@@ -10,6 +10,7 @@ use File::Path qw(make_path);
 use lib::io::file;
 use lib::model::room;
 
+use environment::env;
 use environment::db qw(conn);
 
 sub message {
@@ -30,7 +31,7 @@ sub getStdout {
 
 sub getStdoutPath {
     my $fileSafeUsername = quotemeta shift;
-    my $stdout_path = "$ENV{DIR}/runtime/clients/$fileSafeUsername.stdout";
+    my $stdout_path = "${\(env::dir())}/runtime/clients/$fileSafeUsername.stdout";
     return $stdout_path;
 }
 

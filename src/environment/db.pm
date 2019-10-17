@@ -8,7 +8,7 @@ use DBI;
 use environment::env;
 
 my $driver   = "SQLite"; 
-my $database = "$ENV{'DIR'}/yggdrasil.db";
+my $database = "${\(env::dir())}/yggdrasil.db";
 my $options = "foreign keys=True";
 my $dsn = "DBI:$driver:dbname=$database;$options";
 my $userid = "";

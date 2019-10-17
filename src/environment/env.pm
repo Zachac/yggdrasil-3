@@ -4,15 +4,21 @@ package env;
 use strict;
 use warnings;
 
+use English qw(-no_match_vars);
 use File::Basename;
 use Cwd;
 
-my $dir = dirname(Cwd::realpath($0));
+my $full_dir = dirname(Cwd::realpath($PROGRAM_NAME));
+my $dir;
 
-if ($dir =~ /(.*\/yggdrasil-3)/) {
-    $ENV{"DIR"} = $1;
+if ($full_dir =~ /(.*\/yggdrasil-3)/xms) {
+    $dir = $1;
 } else {
-    die "Could not find base directory.";
+    die "Could not find base directory of yggdrasil installation.\n";
+}
+
+sub dir() {
+    return $dir;
 }
 
 1;

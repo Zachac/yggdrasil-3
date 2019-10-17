@@ -40,7 +40,7 @@ sub dump() {
         }
         
         if (@mapped_rows) {
-            file::print "$ENV{'DIR'}/data/tables/$t.yml", Dump {$t => \@mapped_rows};
+            file::print "${\(env::dir())}/data/tables/$t.yml", Dump {$t => \@mapped_rows};
             print "dumped $t: ${\($#mapped_rows + 1)} rows\n";
         }
     }
@@ -52,12 +52,12 @@ sub load() {
     find(sub {
         return unless $_ =~ /.*\.yml/;
         loadFile("$File::Find::dir/$_");
-    }, "$ENV{'DIR'}/data/");
+    }, "${\(env::dir())}/data/");
 }
 
 sub loadFile($) {
     my $file = shift; # abs path to yaml file to load
-    my $relPath = File::Spec->abs2rel($file, $ENV{'DIR'});
+    my $relPath = File::Spec->abs2rel($file, env::dir());
     my $data = Load(file::slurp($file));
     
     eval {

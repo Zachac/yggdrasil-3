@@ -1,0 +1,6 @@
+severity=cruel
+
+[-Perl::Critic::Policy::Modules::RequireVersionVar]
+[-Subroutines::ProhibitSubroutinePrototypes]
+[InputOutput::RequireCheckedSyscalls]
+exclude_functions = print

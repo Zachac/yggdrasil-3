@@ -14,14 +14,14 @@ sub init;
 
 
 # delete the original database,
-unlink "$ENV{'DIR'}/yggdrasil.db";
+unlink "${\(env::dir())}/yggdrasil.db";
 
 
 # for each perl module, in src/
 #   use require to load it,
 #   if it has db table initialze code,
 #   then the code will get run with the require
-find (\&init, "$ENV{'DIR'}/src");
+find (\&init, "${\(env::dir())}/src");
 
 
 # finally, load the data/ folder into db
@@ -34,7 +34,7 @@ sub init {
     return unless ($_ =~ /.*\.pm/);
 
     my $file = "$File::Find::dir/$_";
-    my $relPath = File::Spec->abs2rel($file, "$ENV{'DIR'}/src");
+    my $relPath = File::Spec->abs2rel($file, "${\(env::dir())}/src");
     
     require $relPath;
 }
