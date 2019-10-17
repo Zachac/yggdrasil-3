@@ -26,7 +26,7 @@ sub create($) {
     my $value = format::withArticle($item);
 
     die "you already have $value\n" if defined inventory::find($ENV{'USERNAME'}, $item);
-    inventory::add($ENV{'USERNAME'}, $item);
+    return inventory::add($ENV{'USERNAME'}, $item);
 }
 
 # create('magic mirror');

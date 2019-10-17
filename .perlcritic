@@ -2,5 +2,7 @@ severity=cruel
 
 [-Perl::Critic::Policy::Modules::RequireVersionVar]
 [-Subroutines::ProhibitSubroutinePrototypes]
+[-ControlStructures::ProhibitPostfixControls]
+
 [InputOutput::RequireCheckedSyscalls]
 exclude_functions = print

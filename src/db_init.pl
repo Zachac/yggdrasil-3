@@ -6,8 +6,9 @@ use Cwd;
 use File::Basename;
 use File::Find;
 use File::Spec;
+use English qw(-no_match_vars);
 
-use lib dirname(Cwd::realpath($0));
+use lib dirname(Cwd::realpath($PROGRAM_NAME));
 use environment::env;
 
 sub init;
@@ -31,10 +32,10 @@ db::load();
 
 # initialize the given file found from the find callback
 sub init {
-    return unless ($_ =~ /.*\.pm/);
+    return unless /.*\.pm/xms;
 
     my $file = "$File::Find::dir/$_";
     my $relPath = File::Spec->abs2rel($file, "${\(env::dir())}/src");
     
-    require $relPath;
+    return require $relPath;
 }

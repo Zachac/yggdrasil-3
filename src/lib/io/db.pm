@@ -49,7 +49,7 @@ sub dump() {
 # loads all files from the data/ folder recursively
 # for each file, use the loadFile function to consume it into the db
 sub load() {
-    find(sub {
+    return find(sub {
         return unless $_ =~ /.*\.yml/;
         loadFile("$File::Find::dir/$_");
     }, "${\(env::dir())}/data/");
