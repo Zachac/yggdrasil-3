@@ -10,13 +10,6 @@ use lib::model::inventory;
 
 use lib::model::meta_scripts;
 
-db::do("CREATE TABLE IF NOT EXISTS actions (
-    item_name NOT NULL,
-    action NOT NULL,
-    script NOT NULL,
-    consume,
-    UNIQUE(item_name, action)
-);");
 
 sub setAction($$$;$) {
     my $item_name = shift;

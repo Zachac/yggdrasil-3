@@ -6,20 +6,6 @@ use warnings;
 
 use environment::db;
 
-db::do("CREATE TABLE IF NOT EXISTS entity_instance (
-    entity_id INTEGER NOT NULL PRIMARY KEY,
-    entity_name NOT NULL,
-    entity_type NOT NULL,
-    location
-);");
-
-db::do("CREATE TABLE IF NOT EXISTS entity (
-    entity_name NOT NULL,
-    entity_type NOT NULL,
-    description,
-    PRIMARY KEY(entity_name, entity_type)
-);");
-
 sub description {
     my $entity_name = shift;
     my $description = db::selectrow_array('select description from entity where entity_name=?', undef, $entity_name);

@@ -5,23 +5,18 @@ use strict;
 use warnings;
 use DBI;
 
-use environment::env;
+my $driver   = "MariaDB"; 
+my $database = "yggdrasil";
+my $dsn = "DBI:$driver:dbname=$database;host=localhost";
+my $username = "abc";
+my $password = "def";
 
-my $driver   = "SQLite"; 
-my $database = "${\(env::dir())}/yggdrasil.db";
-my $options = "foreign keys=True";
-my $dsn = "DBI:$driver:dbname=$database;$options";
-my $userid = "";
-my $password = "";
-
-our $conn = DBI->connect($dsn, $userid, $password, { 
+# use sudo to connect
+our $conn = DBI->connect($dsn, $username, $password, { 
     PrintError => 0,
     RaiseError => 1,
     AutoCommit => 1,
 }) or die $DBI::errstr;
-$conn->do('PRAGMA case_sensitive_like = ON');
-
-warn "Database connected!\n";
 
 my %prepared_statements = ();
 
@@ -58,5 +53,7 @@ sub selectrow_array($;@) {
 sub selectcol_arrayref($;@) {
     return $conn->selectcol_arrayref(getStatement(shift), @_);
 }
+
+warn "Database connected!\n";
 
 1;

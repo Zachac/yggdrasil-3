@@ -13,11 +13,6 @@ use lib::model::map;
 use environment::db;
 
 
-db::do("CREATE TABLE IF NOT EXISTS room (
-    location UNIQUE PRIMARY KEY,
-    room_name,
-    description
-);");
 
 sub name($) {
     my $room = shift;

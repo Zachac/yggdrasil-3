@@ -9,14 +9,6 @@ use lib::model::entities::player;
 use lib::model::skills;
 use lib::model::inventory;
 
-db::do("CREATE TABLE IF NOT EXISTS resource (
-    resource_name NOT NULL,
-    skill NOT NULL,
-    level INTEGER NOT NULL DEFAULT 0,
-    produces,
-    wheight INTEGER NOT NULL DEFAULT 1,
-    UNIQUE(resource_name, skill, level, produces)
-);");
 
 sub gather($$$) {
     my $name = shift;

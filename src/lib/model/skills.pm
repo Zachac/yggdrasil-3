@@ -7,14 +7,6 @@ use warnings;
 use lib::model::commands;
 use environment::db;
 
-db::do("CREATE TABLE IF NOT EXISTS skills (
-    user_name,
-    skill_name,
-    experience,
-    level,
-    PRIMARY KEY(user_name, skill_name)
-);");
-
 my $max_level = 10;
 my @failure_table = (0.05, 0.05, 0.1, 0.2, 0.4, 0.6, 0.75, 0.85, 0.9, 0.95, 1);
 

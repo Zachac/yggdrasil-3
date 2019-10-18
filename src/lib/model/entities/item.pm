@@ -9,11 +9,6 @@ use environment::db;
 use lib::io::format;
 
 
-db::do("CREATE TABLE IF NOT EXISTS item_instance (
-    entity_id INTEGER NOT NULL PRIMARY KEY,
-    count INTEGER NOT NULL DEFAULT 0
-);");
-
 sub getAll($) {
     my $location = shift;
     return entity::getEntityNamesByTypeAndLocation('item', $location);

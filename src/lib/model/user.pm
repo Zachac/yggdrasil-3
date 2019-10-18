@@ -14,12 +14,6 @@ use lib::model::entities::player;
 
 use environment::db qw(conn);
 
-db::do("CREATE TABLE IF NOT EXISTS user (
-    user_name NOT NULL PRIMARY KEY,
-    password NOT NULL,
-    spawn NOT NULL DEFAULT 'd:0 0',
-    pid
-);");
 
 sub lock;
 

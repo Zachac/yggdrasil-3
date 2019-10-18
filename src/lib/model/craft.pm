@@ -8,19 +8,6 @@ use environment::db qw(conn);
 use lib::model::inventory;
 use lib::model::skills;
 
-db::do("CREATE TABLE IF NOT EXISTS recipe_requirements (
-    item_name NOT NULL,
-    required_name NOT NULL,
-    count NOT NULL DEFAULT 0,
-    PRIMARY KEY(item_name, required_name)
-);");
-
-db::do("CREATE TABLE IF NOT EXISTS recipe (
-    item_name NOT NULL PRIMARY KEY,
-    skill_name,
-    required_level NOT NULL DEFAULT 0,
-    experience NOT NULL DEFAULT 0
-);");
 
 sub exists($) {
     my $item_name = shift;

@@ -18,26 +18,7 @@ my @name_table = ('Ocean', 'Shore', 'Forest');
 my @enterable_table = (0, 1, 1);
 
 
-db::do("CREATE TABLE IF NOT EXISTS map_tiles (
-    x INTEGER NOT NULL,
-    y INTEGER NOT NULL,
-    UNIQUE(x, y)
-);");
 
-db::do("CREATE TABLE IF NOT EXISTS map_icons (
-    x INTEGER NOT NULL,
-    y INTEGER NOT NULL,
-    icon CHARACTER(3) NOT NULL,
-    PRIMARY KEY(x, y)
-);");
-
-db::do("CREATE TABLE IF NOT EXISTS biome_spawns (
-    biome_name NOT NULL,
-    entity_name NOT NULL,
-    entity_type NOT NULL,
-    chance,
-    UNIQUE(biome_name, entity_name, entity_type)
-);");
 
 sub getCoordinates($;$) {
     my $room = shift;

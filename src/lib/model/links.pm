@@ -15,11 +15,6 @@ use lib::model::map;
 use lib::model::wall;
 use environment::db;
 
-db::do("CREATE TABLE IF NOT EXISTS links (
-    link_name,
-    src_location,
-    dest_location
-);");
 
 sub add {
     my $room = shift;

@@ -4,11 +4,6 @@ package wall;
 use strict;
 use warnings;
 
-db::do("CREATE TABLE IF NOT EXISTS wall (
-    location NOT NULL,
-    name NOT NULL,
-    UNIQUE(location, name)
-);");
 
 sub getAll($) {
     my $location = shift;
