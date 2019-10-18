@@ -1,105 +1,105 @@
 
-CREATE TABLE IF NOT EXISTS actions (
-    item_name NOT NULL,
-    action NOT NULL,
-    script NOT NULL,
-    consume,
+CREATE TABLE actions (
+    item_name VARCHAR(80) NOT NULL,
+    action VARCHAR(80) NOT NULL,
+    script VARCHAR(200) NOT NULL,
+    consume BOOLEAN,
     UNIQUE(item_name, action)
 );
 
 
-CREATE TABLE IF NOT EXISTS recipe_requirements (
-    item_name NOT NULL,
-    required_name NOT NULL,
-    count NOT NULL DEFAULT 0,
+CREATE TABLE recipe_requirements (
+    item_name VARCHAR(80) NOT NULL,
+    required_name VARCHAR(80) NOT NULL,
+    count INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY(item_name, required_name)
 );
 
-CREATE TABLE IF NOT EXISTS recipe (
-    item_name NOT NULL PRIMARY KEY,
-    skill_name,
-    required_level NOT NULL DEFAULT 0,
-    experience NOT NULL DEFAULT 0
+CREATE TABLE recipe (
+    item_name VARCHAR(80) NOT NULL PRIMARY KEY,
+    skill_name VARCHAR(80),
+    required_level INTEGER NOT NULL DEFAULT 0,
+    experience INTEGER NOT NULL DEFAULT 0
 );
 
 
-CREATE TABLE IF NOT EXISTS entity_instance (
+CREATE TABLE entity_instance (
     entity_id INTEGER NOT NULL PRIMARY KEY,
-    entity_name NOT NULL,
-    entity_type NOT NULL,
-    location
+    entity_name VARCHAR(80) NOT NULL,
+    entity_type VARCHAR(80) NOT NULL,
+    location VARCHAR(80)
 );
 
-CREATE TABLE IF NOT EXISTS entity (
-    entity_name NOT NULL,
-    entity_type NOT NULL,
-    description,
+CREATE TABLE entity (
+    entity_name VARCHAR(80) NOT NULL,
+    entity_type VARCHAR(80) NOT NULL,
+    description VARCHAR(200),
     PRIMARY KEY(entity_name, entity_type)
 );
 
-CREATE TABLE IF NOT EXISTS item_instance (
+CREATE TABLE item_instance (
     entity_id INTEGER NOT NULL PRIMARY KEY,
     count INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS resource (
-    resource_name NOT NULL,
-    skill NOT NULL,
+CREATE TABLE resource (
+    resource_name VARCHAR(80) NOT NULL,
+    skill VARCHAR(80) NOT NULL,
     level INTEGER NOT NULL DEFAULT 0,
-    produces,
+    produces VARCHAR(80),
     wheight INTEGER NOT NULL DEFAULT 1,
     UNIQUE(resource_name, skill, level, produces)
 );
 
-CREATE TABLE IF NOT EXISTS links (
-    link_name,
-    src_location,
-    dest_location
+CREATE TABLE links (
+    link_name VARCHAR(80),
+    src_location VARCHAR(80),
+    dest_location VARCHAR(80)
 );
-CREATE TABLE IF NOT EXISTS map_tiles (
+CREATE TABLE map_tiles (
     x INTEGER NOT NULL,
     y INTEGER NOT NULL,
-    UNIQUE(x, y)
+    PRIMARY KEY(x, y)
 );
 
-CREATE TABLE IF NOT EXISTS map_icons (
+CREATE TABLE map_icons (
     x INTEGER NOT NULL,
     y INTEGER NOT NULL,
     icon CHARACTER(3) NOT NULL,
     PRIMARY KEY(x, y)
 );
 
-CREATE TABLE IF NOT EXISTS biome_spawns (
-    biome_name NOT NULL,
-    entity_name NOT NULL,
-    entity_type NOT NULL,
-    chance,
-    UNIQUE(biome_name, entity_name, entity_type)
+CREATE TABLE biome_spawns (
+    biome_name VARCHAR(80) NOT NULL,
+    entity_name VARCHAR(80) NOT NULL,
+    entity_type VARCHAR(80) NOT NULL,
+    chance FLOAT,
+    PRIMARY KEY(biome_name, entity_name, entity_type)
 );
 
-CREATE TABLE IF NOT EXISTS room (
-    location UNIQUE PRIMARY KEY,
-    room_name,
-    description
+CREATE TABLE room (
+    location VARCHAR(80) NOT NULL PRIMARY KEY,
+    room_name VARCHAR(80),
+    description VARCHAR(512)
 );
 
-CREATE TABLE IF NOT EXISTS skills (
-    user_name,
-    skill_name,
-    experience,
-    level,
+CREATE TABLE skills (
+    user_name VARCHAR(30),
+    skill_name VARCHAR(80),
+    experience BIGINT,
+    level INTEGER,
     PRIMARY KEY(user_name, skill_name)
 );
 
-CREATE TABLE IF NOT EXISTS user (
-    user_name NOT NULL PRIMARY KEY,
-    password NOT NULL,
-    spawn NOT NULL DEFAULT 'd:0 0',
-    pid
+CREATE TABLE user (
+    user_name VARCHAR(30) NOT NULL PRIMARY KEY,
+    password CHAR(44) NOT NULL,
+    spawn VARCHAR(80) NOT NULL DEFAULT 'd:0 0',
+    pid INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS wall (
-    location NOT NULL,
-    name NOT NULL,
-    UNIQUE(location, name)
+CREATE TABLE wall (
+    location VARCHAR(80) NOT NULL,
+    name VARCHAR(80) NOT NULL,
+    PRIMARY KEY(location, name)
 );

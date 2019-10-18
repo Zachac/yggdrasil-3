@@ -53,7 +53,7 @@ sub addCount($$) {
     my $entity_id = shift;
     my $count = shift;
 
-    db::do('insert or ignore into item_instance(entity_id, count) values (?, 1)', undef, $entity_id);
+    db::do('insert ignore into item_instance(entity_id, count) values (?, 1)', undef, $entity_id);
     db::do('update item_instance set count = count + ? where entity_id = ?', undef, $count, $entity_id);
 }
 

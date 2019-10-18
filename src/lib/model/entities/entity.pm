@@ -23,14 +23,14 @@ sub getId($$) {
 sub existsIn {
     my $entity_name = shift;
     my $location = shift;
-    return db::selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
+    return defined db::selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
 }
 
 sub typeExistsIn($$$) {
     my $entity_name = shift;
     my $location = shift;
     my $type = shift;
-    return db::selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
+    return defined db::selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
 }
 
 sub getAll {
@@ -90,7 +90,7 @@ sub create($$$) {
     my $name = shift;
     my $location = shift;
     my $type = shift;
-    return 0 != db::do('insert or ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
+    return 0 != db::do('insert ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
 }
 
 sub deleteAll($$) {

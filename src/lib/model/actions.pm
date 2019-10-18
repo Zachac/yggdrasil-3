@@ -16,7 +16,7 @@ sub setAction($$$;$) {
     my $action = shift;
     my $script = shift;
     my $consume = shift;
-    db::do('insert or replace into actions(item_name, action, script, consume) values(?,?,?)', undef, $item_name, $action, $script, $consume);
+    db::do('replace into actions(item_name, action, script, consume) values(?,?,?)', undef, $item_name, $action, $script, $consume);
 }
 
 sub execute($$$) {

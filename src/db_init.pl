@@ -29,14 +29,26 @@ $dbh->do('GRANT SELECT, INSERT, UPDATE ON yggdrasil.* TO abc');
 
 $dbh->do('use yggdrasil');
 
+sub getOffset($) {
+    my $line = shift;
+    my $start = $-[0] if $line =~ /\S/;
+    return substr($line, 0, $start // 0) =~ tr/\n//;
+}
+
 find (sub {
     return unless $_ =~ /.*\.sql/;
     
     my $file = file::slurp("$File::Find::dir/$_");
-    for (split(';', $file)) {
-        next if /^\s$/;
-        say $_;
-        $dbh->do($_) or die $DBI::errstr;
+    my $line = 1;
+    for my $sql (split /;/, $file) {
+        my $line_offset = $line + getOffset($sql);
+        if ($sql =~ /\S/) {
+            unless (defined eval {$dbh->do($sql)}) {
+                die "$DBI::errstr from offset $line_offset in $_\n"
+            }
+        }
+        
+        $line += ($sql =~ tr/\n//);
     }
 
 }, "${\(env::dir())}/data/ddl");
@@ -46,7 +58,7 @@ say "Created database";
 
 
 # finally, load the data/ folder into db
-# require lib::io::db;
-# db::load();
+require lib::io::db;
+db::load();
 
 1;

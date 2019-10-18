@@ -108,7 +108,7 @@ sub train {
     die "not enough experience to train another level\n" if $requiredExp > $experience;
     
     $level = $level + 1;
-    db::do('insert or replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $ENV{'USERNAME'}, $skill, $level, $experience - $requiredExp) or die;
+    db::do('replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $ENV{'USERNAME'}, $skill, $level, $experience - $requiredExp) or die;
     return $level;
 }
 

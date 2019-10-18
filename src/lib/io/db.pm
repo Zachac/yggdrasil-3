@@ -110,7 +110,7 @@ sub loadRow($$;$$) {
     my @collumns = keys %$row;
     my @values = @$row{@collumns};
     my @place_holders = format::withCommas(map {"?"} @collumns);
-    my $affected_rows = eval { db::do("insert or replace into $table_name(${\(format::withCommas(@collumns))}) values (@place_holders)\n", undef, @values) };
+    my $affected_rows = eval { db::do("insert into $table_name(${\(format::withCommas(@collumns))}) values (@place_holders)\n", undef, @values) };
 
     return 0 == $affected_rows if defined $affected_rows;
 

@@ -19,7 +19,7 @@ sub find($$) {
 sub create($$) {
     my $name = shift;
     my $location = shift;
-    return db::selectrow_array('insert or ignore into wall(location, name) values(?,?)', undef, $location, $name);
+    return db::selectrow_array('insert ignore into wall(location, name) values(?,?)', undef, $location, $name);
 }
 
 1;
