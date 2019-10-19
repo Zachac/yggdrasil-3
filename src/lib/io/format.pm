@@ -62,4 +62,12 @@ sub getCounts {
     return @result;
 }
 
+sub number($) {
+    my $number = shift;
+
+    while($number =~ s/^(\d+)(\d\d\d)/$1\,$2/){}
+
+    return $number;
+}
+
 1;
