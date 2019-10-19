@@ -11,12 +11,12 @@ To give form to my ideals.
 * Linux/Mac or Windows with WSL (Tested with Ubuntu 18.04.2)
 * Perl (5.26)
     * DBI (1.642)
-    * DBD::SQLite (1.64)
+    * DBD::MariaDB (1.21)
     * Math::Fractal::Noisemaker (0.105)
     * Lingua::EN::Inflexion (0.001008)
     * YAML (1.29)
     * Tie::IxHash (1.23)
-* SQLite3 (3.22.0)
+* MariaDB (10.1.41-MariaDB-0ubuntu0.18.04.1)
 
 ## suggested
 * Perl::Critic
