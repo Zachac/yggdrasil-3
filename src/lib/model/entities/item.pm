@@ -29,32 +29,24 @@ sub find($$) {
     return entity::typeExistsIn($name, $location, 'item');
 }
 
-sub isStackable($) {
-    return format::isPlural shift;
-}
-
 sub findCount($$) {
     my $name = shift;
     my $location = shift;
     my $id = find($name, $location);
 
     return 0 unless defined $id;
-    return 1 unless isStackable $name;
     return getCount($id);
 }
 
 sub getCount($) {
     my $entity_id = shift;
-    return db::selectrow_array('select count from item_instance where entity_id = ?', undef, $entity_id)
-            // 1;
+    return db::selectrow_array('select count from item_stack where entity_id = ?', undef, $entity_id);
 }
 
 sub addCount($$) {
     my $entity_id = shift;
     my $count = shift;
-
-    db::do('insert ignore into item_instance(entity_id, count) values (?, 1)', undef, $entity_id);
-    db::do('update item_instance set count = count + ? where entity_id = ?', undef, $count, $entity_id);
+    db::do('insert into item_stack(entity_id, count) values (?, ?) on duplicate key update count = count + ?', undef, $entity_id, $count, $count);
 }
 
 sub mergeCounts($$) {
@@ -63,51 +55,30 @@ sub mergeCounts($$) {
     my $add_count = getCount($entity_id2);
 
     addCount($entity_id1, $add_count);
-    db::do('delete from item_instance where entity_id = ?', undef, $entity_id2);
     entity::delete('item', $entity_id2);
 
     return 1;
 }
 
-sub create($$;$);
 sub create($$;$) {
     my $name = shift;
     my $location = shift;
     my $count = shift // 1;
     
-    if (isStackable $name) {
-        my $entity_id = find($name, $location);
+    die "Cannot create negative amount of items\n" if $count < 0;
 
-        if (defined $entity_id) {
-            addCount($entity_id, $count);
-            return $entity_id;
-        }
-    }
-    
-    entity::create($name, $location, 'item') or die "could not create entity for new item $name\n";
-
-    return 1 if ($count <= 1);
-    return create($name, $location, $count - 1);
+    my $entity_id = find($name, $location) // entity::create($name, $location, 'item');
+    addCount($entity_id, $count);
+    return $entity_id;
 }
 
 sub setLocationByIdAndName($$$) {
     my $location = shift;
     my $id = shift;
     my $name = shift;
+    my $other_id = find($name, $location);
 
-    return 0 unless defined $id;
-
-    if (isStackable $name) {
-        my $entity_id = find($name, $location);
-
-        if (defined $entity_id) {
-            my $temp_location = "p:$$";
-            my $moved = entity::setLocationById($temp_location, $id);
-            return 0 unless $moved;
-            return mergeCounts($entity_id, $id);
-        }
-    }
-
+    return mergeCounts($other_id, $id) if (defined $other_id);
     return entity::setLocationById($location, $id);
 }
 
@@ -119,22 +90,25 @@ sub setLocationByNameAndLocation($$$) {
     return setLocationByIdAndName($location1, $id, $name)
 }
 
-sub splitByNameAndLocationAndCountToLocation($$$$) {
+sub cleanEmptyStacks() {
+    return db::do('delete from entity_instance where entity_id IN (select entity_id from item_stack where count <= 0)');
+}
+
+sub moveByNameAndLocationAndCountToLocation($$$$) {
     my $name = shift;
     my $location1 = shift;
     my $count = shift;
     my $location2 = shift;
-
     my $id = find($name, $location1);
+
     return undef unless defined $id;
 
-    my $removed = 0 != db::do('update item_instance set count = count - ? where entity_id = ? and count >= ?', undef, $count, $id, $count);
+    my $removed = 0 != db::do('update item_stack set count = count - ? where entity_id = ? and count >= ?', undef, $count, $id, $count);
     return undef unless $removed;
 
-    my $deleted = 0 != db::do('delete from item_instance where count = 0 and entity_id = ?', undef, $id);
-    entity::delete('item', $id) if $deleted;
-
-    return create($name, $location2, $count);
+    cleanEmptyStacks();
+    my $new_id = create($name, $location2, $count);
+    return $new_id;
 }
 
 sub deleteAll($) {

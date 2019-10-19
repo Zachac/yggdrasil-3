@@ -21,15 +21,8 @@ sub take($$;$$) {
 
     if (! defined $count) {
         return item::setLocationByNameAndLocation("i:$username", $item_name, $location) ? 1 : 0;
-    } elsif (item::isStackable $item_name) {
-        return item::splitByNameAndLocationAndCountToLocation($item_name, $location, $count, "i:$username") ? $count : 0;
     } else {
-        my $result = 0;
-        for (my $i = 0; $i < $count && $result; $i++) {
-            $result = item::setLocationByNameAndLocation("i:$username", $item_name, $location);
-            $result++;
-        }
-        return $result;
+        return item::moveByNameAndLocationAndCountToLocation($item_name, $location, $count, "i:$username") ? $count : 0;
     }
 }
 
@@ -41,15 +34,8 @@ sub drop($$;$$) {
 
     if (! defined $count) {
         return item::setLocationByNameAndLocation($location, $item_name, "i:$username") ? 1 : 0;
-    } elsif (item::isStackable $item_name) {
-        return item::splitByNameAndLocationAndCountToLocation($item_name, "i:$username", $count, $location) ? $count : 0;
     } else {
-        my $result = 0;
-        for (my $i = 0; $i < $count && $result; $i++) {
-            return $result unless item::setLocationByNameAndLocation($location, $item_name, "i:$username");
-            $result++;
-        }
-        return $result;
+        return item::moveByNameAndLocationAndCountToLocation($item_name, "i:$username", $count, $location) ? $count : 0;
     }
 }
 

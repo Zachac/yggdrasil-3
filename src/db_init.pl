@@ -23,8 +23,9 @@ my $dbh = DBI->connect($dsn, undef, undef, {
 }) or die $DBI::errstr;
 
 
-$dbh->do('CREATE OR REPLACE DATABASE yggdrasil');
-$dbh->do('CREATE OR REPLACE USER abc IDENTIFIED BY "def"');
+$dbh->do('DROP DATABASE yggdrasil');
+$dbh->do('CREATE DATABASE yggdrasil');
+$dbh->do('CREATE USER IF NOT EXISTS abc IDENTIFIED BY "def"');
 $dbh->do('GRANT SELECT, INSERT, UPDATE, DELETE ON yggdrasil.* TO abc');
 
 $dbh->do('use yggdrasil');

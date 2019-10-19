@@ -13,7 +13,7 @@ if (@ents > 0) {
     push @inv, "  You have in your inventory:\n";
     for (@ents) {
         push @inv, "    ", format::withArticle(@$_[0]);
-        push @inv, " x@$_[1]" if (@$_[1] != 1);
+        push @inv, " x@$_[1]" if defined @$_[1] && @$_[1] > 1;
         push @inv, "\n"
     };
 } else {

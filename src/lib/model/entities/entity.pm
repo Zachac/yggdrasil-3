@@ -90,7 +90,9 @@ sub create($$$) {
     my $name = shift;
     my $location = shift;
     my $type = shift;
-    return 0 != db::do('insert ignore into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
+    
+    die if 0 == db::do('insert into entity_instance(entity_name, entity_type, location) values (?, ?, ?)', undef, $name, $type, $location);
+    return db::selectrow_array('select LAST_INSERT_ID()');
 }
 
 sub deleteAll($$) {
