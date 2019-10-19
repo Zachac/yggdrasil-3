@@ -121,6 +121,7 @@ my $username = login();
 
 eval {
     readStdout($username);
+    system env::dir() . '/src/tick_daemon.pl';
     commandPrompt();
 };
 

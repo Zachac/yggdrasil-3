@@ -4,7 +4,7 @@ package file;
 use strict;
 use warnings;
 
-use Fcntl qw(O_NONBLOCK O_WRONLY);
+use Fcntl qw(O_NONBLOCK O_WRONLY :flock);
 use File::Path qw(make_path);
 use File::Basename;
 use File::Spec;
@@ -90,6 +90,13 @@ sub remove {
     die "Not enough arguments!" unless @_ >= 1;
     my $filename = "@_";
     unlink $filename if ( -e $filename );
+}
+
+sub lock($) {
+    my $file_name = shift;
+    open my $fh, ">>", $file_name or return undef;
+    flock $fh, LOCK_EX|LOCK_NB or return undef;
+    return $fh;
 }
 
 1;

@@ -54,6 +54,6 @@ sub selectcol_arrayref($;@) {
     return $conn->selectcol_arrayref(getStatement(shift), @_);
 }
 
-warn "Database connected!\n";
+warn scalar localtime() . " Database connected!\n";
 
 1;

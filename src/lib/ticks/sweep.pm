@@ -12,7 +12,7 @@ use lib::model::user;
 
 sub sweep {
     foreach (user::getOnline()) {
-        commands::runAs($_, "quit") unless user::pidAlive($_);
+        commands::runAs($_, "quit") unless user::getPidAliveByUsername($_);
     }
 }
 

@@ -31,4 +31,20 @@ sub readLineNB {
     return $line;
 }
 
+sub setStdout($) {
+    my $fh = shift;
+    *STDOUT = $fh;
+}
+
+sub setStderr($) {
+    my $fh = shift;
+    *STDERR = $fh;
+}
+
+sub log {
+    my $line = "@_";
+    $line =~ s/\n?$/\n/;
+    print scalar localtime() . " $line";
+}
+
 1;

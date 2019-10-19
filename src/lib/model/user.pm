@@ -62,17 +62,21 @@ sub pid {
     return db::selectrow_array('select pid from user where user_name=?', undef, $username);
 }
 
-sub pidAlive {
-    my $lock_pid = pid shift;
+sub isPidAlive {
+    my $lock_pid = shift;
     return 0 unless defined $lock_pid && $lock_pid >= 0;
     return kill(0, $lock_pid);
+}
+
+sub getPidAliveByUsername {
+    return isPidAlive pid shift;
 }
 
 sub lock {
     my $username = shift;
     my $pid = $$;
 
-    return 0 if pidAlive $username;
+    return 0 if getPidAliveByUsername $username;
     return 0 if 0 == db::do('update user set pid=? where user_name=?', undef, $pid, $username);
     return $pid == pid $username;
 }
