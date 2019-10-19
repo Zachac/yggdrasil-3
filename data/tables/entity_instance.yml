@@ -1,17 +1,17 @@
 entity_instance:
-  - entity_id: 1
+  - entity_id: ~
     entity_name: abc
     entity_type: player
     location: d:0 0
-  - entity_id: 2
+  - entity_id: ~
     entity_name: magic mirror
     entity_type: item
     location: i:abc
-  - entity_id: 3
+  - entity_id: ~
     entity_name: trees
     entity_type: item
     location: d:1 -1
-  - entity_id: 4
+  - entity_id: ~
     entity_name: trees
     entity_type: item
     location: i:abc

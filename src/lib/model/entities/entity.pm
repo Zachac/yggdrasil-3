@@ -23,14 +23,14 @@ sub getId($$) {
 sub existsIn {
     my $entity_name = shift;
     my $location = shift;
-    return defined db::selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
+    return db::selectrow_array('select entity_type, entity_id from entity_instance where entity_name=? and location=?', undef, $entity_name, $location);
 }
 
 sub typeExistsIn($$$) {
     my $entity_name = shift;
     my $location = shift;
     my $type = shift;
-    return defined db::selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
+    return db::selectrow_array('select entity_id from entity_instance where entity_type = ? and entity_name=? and location=?', undef, $type, $entity_name, $location);
 }
 
 sub getAll {

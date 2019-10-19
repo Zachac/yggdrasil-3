@@ -25,7 +25,7 @@ my $dbh = DBI->connect($dsn, undef, undef, {
 
 $dbh->do('CREATE OR REPLACE DATABASE yggdrasil');
 $dbh->do('CREATE OR REPLACE USER abc IDENTIFIED BY "def"');
-$dbh->do('GRANT SELECT, INSERT, UPDATE ON yggdrasil.* TO abc');
+$dbh->do('GRANT SELECT, INSERT, UPDATE, DELETE ON yggdrasil.* TO abc');
 
 $dbh->do('use yggdrasil');
 
