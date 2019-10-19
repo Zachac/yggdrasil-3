@@ -52,7 +52,7 @@ find (sub {
         $line += ($sql =~ tr/\n//);
     }
 
-}, "${\(env::dir())}/data/ddl");
+}, "${\(env::dir())}/data");
 
 $dbh->disconnect() or die $dbh->errstr;
 say "Created database";
