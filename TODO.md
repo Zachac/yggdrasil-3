@@ -3,4 +3,4 @@
 * add status/health to entities
 
 ## reminders
-* refactor ddl_dump.sql
+* refactor perl module structure

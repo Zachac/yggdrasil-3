@@ -1,4 +1,6 @@
 
+-- Entity & derivative DDL statements
+
 CREATE TABLE entity (
     entity_name VARCHAR(80) NOT NULL,
     entity_type VARCHAR(80) NOT NULL,
