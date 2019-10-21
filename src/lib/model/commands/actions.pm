@@ -8,7 +8,7 @@ use lib::model::entities::entity;
 use lib::model::entities::player;
 use lib::model::user::inventory;
 
-use lib::model::meta_scripts;
+use lib::model::commands::meta_scripts;
 
 
 sub setAction($$$;$) {

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use lib::model::user::user;
-use lib::model::commands;
+use lib::model::commands::commands;
 
 my $command = shift;
 my $location;

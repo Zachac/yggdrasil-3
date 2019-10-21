@@ -4,7 +4,7 @@ package meta_scripts;
 use strict;
 use warnings;
 
-use lib::model::commands;
+use lib::model::commands::commands;
 
 sub execute {
     my $script = shift;

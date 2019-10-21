@@ -4,7 +4,7 @@ package skills;
 use strict;
 use warnings;
 
-use lib::model::commands;
+use lib::model::commands::commands;
 use lib::io::format;
 use environment::db;
 

@@ -10,7 +10,7 @@ use lib::model::entities::entity;
 use lib::model::user::skills;
 use lib::model::entities::player;
 
-use lib::model::meta_scripts;
+use lib::model::commands::meta_scripts;
 
 sub isValid {
     "@_" =~ "[a-zA-Z0-9 ]*";

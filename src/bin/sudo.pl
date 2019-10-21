@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::meta_scripts;
+use lib::model::commands::meta_scripts;
 
 my $command = shift;
 

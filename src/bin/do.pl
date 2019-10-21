@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::actions;
+use lib::model::commands::actions;
 
 my $command = shift;
 my $action = shift;

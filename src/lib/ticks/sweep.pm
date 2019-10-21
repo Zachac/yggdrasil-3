@@ -7,7 +7,7 @@ package tick;
 use strict;
 use warnings;
 
-use lib::model::commands;
+use lib::model::commands::commands;
 use lib::model::user::user;
 
 sub sweep {

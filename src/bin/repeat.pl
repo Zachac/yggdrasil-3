@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::commands;
+use lib::model::commands::commands;
 use lib::io::stdio;
 
 use Time::HiRes qw(sleep);

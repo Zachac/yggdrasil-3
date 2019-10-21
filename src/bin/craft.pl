@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use environment::env;
-use lib::model::craft;
+use lib::model::commands::logic::craft;
 use lib::model::user::user;
 
 my $command = shift;
