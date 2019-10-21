@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::inventory;
+use lib::model::user::inventory;
 use lib::io::format;
 
 my @ents = inventory::getAllNamesAndCounts($ENV{'USERNAME'});

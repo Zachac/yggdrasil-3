@@ -5,8 +5,8 @@ use strict;
 use warnings;
 
 use environment::db qw(conn);
-use lib::model::inventory;
-use lib::model::skills;
+use lib::model::user::inventory;
+use lib::model::user::skills;
 
 
 sub exists($) {

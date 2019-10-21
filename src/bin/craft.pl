@@ -5,7 +5,7 @@ use warnings;
 
 use environment::env;
 use lib::model::craft;
-use lib::model::user;
+use lib::model::user::user;
 
 my $command = shift;
 

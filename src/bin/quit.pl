@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-use lib::model::client;
-use lib::model::user;
+use lib::model::user::client;
+use lib::model::user::user;
 
 
 user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} turns to stone");

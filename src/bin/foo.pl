@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use lib::model::entities::resource;
-use lib::model::inventory;
+use lib::model::user::inventory;
 use lib::io::format;
 use lib::io::db;
 use environment::db;

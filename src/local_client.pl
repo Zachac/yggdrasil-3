@@ -8,7 +8,7 @@ use File::Basename;
 use lib dirname(Cwd::realpath($0));
 
 use lib::io::stdio;
-use lib::model::user;
+use lib::model::user::user;
 use lib::model::commands;
 use lib::crypto::hash;
 use environment::env;

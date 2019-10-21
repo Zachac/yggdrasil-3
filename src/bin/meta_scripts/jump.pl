@@ -5,7 +5,7 @@ use warnings;
 
 use lib::model::entities::player;
 use lib::model::commands;
-use lib::model::user;
+use lib::model::user::user;
 use lib::model::map::map;
 
 

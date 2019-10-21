@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::skills;
+use lib::model::user::skills;
 
 skills::requireLevel "punch", 1;
 

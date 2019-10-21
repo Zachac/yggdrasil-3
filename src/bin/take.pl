@@ -6,7 +6,7 @@ use warnings;
 use Scalar::Util qw(looks_like_number);
 use Lingua::EN::Inflexion qw( inflect );
 
-use lib::model::inventory;
+use lib::model::user::inventory;
 use lib::io::format;
 
 my $command = shift;

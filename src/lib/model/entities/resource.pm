@@ -6,8 +6,8 @@ use warnings;
 
 use lib::model::entities::entity;
 use lib::model::entities::player;
-use lib::model::skills;
-use lib::model::inventory;
+use lib::model::user::skills;
+use lib::model::user::inventory;
 
 
 sub gather($$$) {

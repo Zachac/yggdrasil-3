@@ -7,7 +7,7 @@ use warnings;
 use lib::model::map::room;
 use lib::model::map::links;
 use lib::model::entities::entity;
-use lib::model::skills;
+use lib::model::user::skills;
 use lib::model::entities::player;
 
 use lib::model::meta_scripts;

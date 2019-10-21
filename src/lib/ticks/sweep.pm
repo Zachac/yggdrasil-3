@@ -8,7 +8,7 @@ use strict;
 use warnings;
 
 use lib::model::commands;
-use lib::model::user;
+use lib::model::user::user;
 
 sub sweep {
     foreach (user::getOnline()) {

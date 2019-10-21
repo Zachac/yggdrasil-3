@@ -19,7 +19,7 @@ unless (defined $fh and fork) {
     stdio::setStderr $fh;
     stdio::log "Starting up tick daemon!";
 
-    require lib::model::user;
+    require lib::model::user::user;
     require lib::ticks::tick;
 
     my $nextime = time;
