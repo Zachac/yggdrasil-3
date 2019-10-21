@@ -10,8 +10,8 @@ use File::Path qw(make_path);
 use lib::io::file;
 use lib::model::map::room;
 
-use environment::env;
-use environment::db qw(conn);
+use lib::env::env;
+use lib::env::db qw(conn);
 
 sub message {
     my $username = shift;

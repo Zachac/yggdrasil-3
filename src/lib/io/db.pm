@@ -8,8 +8,8 @@ use YAML qw(Dump Load);
 use File::Find;
 use Tie::IxHash;
 
-use environment::env;
-use environment::db;
+use lib::env::env;
+use lib::env::db;
 use lib::io::file;
 use lib::io::format;
 

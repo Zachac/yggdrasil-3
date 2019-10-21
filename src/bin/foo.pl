@@ -8,8 +8,8 @@ use lib::model::entities::resource;
 use lib::model::user::inventory;
 use lib::io::format;
 use lib::io::db;
-use environment::db;
-use environment::env;
+use lib::env::db;
+use lib::env::env;
 
 
 

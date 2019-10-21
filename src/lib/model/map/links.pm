@@ -13,7 +13,7 @@ use Cwd qw(abs_path);
 use lib::io::file;
 use lib::model::map::map;
 use lib::model::map::wall;
-use environment::db;
+use lib::env::db;
 
 
 sub add {

@@ -4,7 +4,7 @@ package craft;
 use strict;
 use warnings;
 
-use environment::db qw(conn);
+use lib::env::db qw(conn);
 use lib::model::user::inventory;
 use lib::model::user::skills;
 

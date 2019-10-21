@@ -6,7 +6,7 @@ use warnings;
 
 use lib::model::commands::commands;
 use lib::io::format;
-use environment::db;
+use lib::env::db;
 
 my $max_level = 10;
 my @failure_table = (0.05, 0.05, 0.1, 0.2, 0.4, 0.6, 0.75, 0.85, 0.9, 0.95, 1);

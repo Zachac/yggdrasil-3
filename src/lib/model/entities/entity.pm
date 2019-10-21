@@ -4,7 +4,7 @@ package entity;
 use strict;
 use warnings;
 
-use environment::db;
+use lib::env::db;
 
 sub description {
     my $entity_name = shift;

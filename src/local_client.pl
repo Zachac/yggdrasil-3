@@ -11,7 +11,7 @@ use lib::io::stdio;
 use lib::model::user::user;
 use lib::model::commands::commands;
 use lib::crypto::hash;
-use environment::env;
+use lib::env::env;
 
 # set the process group to be different from the server.
 # that way, we don't kill the entire server when we shutdown

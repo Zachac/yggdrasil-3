@@ -10,7 +10,7 @@ my $seed = 0;
 srand($seed); # init prng before using library
 require Math::Fractal::Noisemaker;
 
-use environment::db;
+use lib::env::db;
 use lib::model::entities::entity;
 
 my @ascii_table = (' ', '~', '#');

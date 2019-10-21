@@ -12,7 +12,7 @@ use lib::model::map::room;
 use lib::model::user::client;
 use lib::model::entities::player;
 
-use environment::db qw(conn);
+use lib::env::db qw(conn);
 
 
 sub lock;

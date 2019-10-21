@@ -7,7 +7,7 @@ use Cwd;
 
 use lib dirname(Cwd::realpath($0));
 
-use environment::env;
+use lib::env::env;
 use lib::io::file;
 use lib::io::stdio;
 
