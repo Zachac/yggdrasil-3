@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-use lib::model::room;
-use lib::model::links;
+use lib::model::map::room;
+use lib::model::map::links;
 use lib::model::entities::entity;
 use lib::model::entities::player;
 

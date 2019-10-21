@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use lib::model::map;
+use lib::model::map::map;
 use lib::model::entities::player;
 
 my $command = shift;

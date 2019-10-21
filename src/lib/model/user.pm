@@ -8,7 +8,7 @@ use Fcntl qw(:DEFAULT :flock);
 use File::Path qw(make_path);
 
 use lib::io::file;
-use lib::model::room;
+use lib::model::map::room;
 use lib::model::client;
 use lib::model::entities::player;
 

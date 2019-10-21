@@ -6,7 +6,7 @@ use warnings;
 use lib::model::entities::player;
 use lib::model::commands;
 use lib::model::user;
-use lib::model::map;
+use lib::model::map::map;
 
 
 my $command = shift;
