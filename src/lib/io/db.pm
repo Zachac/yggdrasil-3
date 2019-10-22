@@ -49,6 +49,7 @@ sub dump() {
 # loads all files from the data/ folder recursively
 # for each file, use the loadFile function to consume it into the db
 sub load() {
+    local $YAML::Preserve = 1;
     return find(sub {
         return unless $_ =~ /.*\.yml/;
         loadFile("$File::Find::dir/$_");

@@ -1,0 +1,17 @@
+entity_type:
+  - entity_type_id: 1
+    entity_type_name: 'item'
+
+entity_def:
+  - entity_def_id: 1
+    entity_type_id: 1
+    entity_name: 'magic mirror'
+
+entity_instance:
+  - entity_id: 1
+    entity_def_id: 1
+    location: root/spawn
+
+item_instance:
+  - entity_id: 1
+    count: 1
