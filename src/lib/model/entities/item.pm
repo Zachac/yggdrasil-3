@@ -40,13 +40,13 @@ sub findCount($$) {
 
 sub getCount($) {
     my $entity_id = shift;
-    return db::selectrow_array('select count from item_stack where entity_id = ?', undef, $entity_id);
+    return db::selectrow_array('select count from item_instance where entity_id = ?', undef, $entity_id);
 }
 
 sub addCount($$) {
     my $entity_id = shift;
     my $count = shift;
-    db::do('insert into item_stack(entity_id, count) values (?, ?) on duplicate key update count = count + ?', undef, $entity_id, $count, $count);
+    db::do('insert into item_instance(entity_id, count) values (?, ?) on duplicate key update count = count + ?', undef, $entity_id, $count, $count);
 }
 
 sub mergeCounts($$) {
@@ -91,7 +91,7 @@ sub setLocationByNameAndLocation($$$) {
 }
 
 sub cleanEmptyStacks() {
-    return db::do('delete from entity_instance where entity_id IN (select entity_id from item_stack where count <= 0)');
+    return db::do('delete from entity_instance where entity_id IN (select entity_id from item_instance where count <= 0)');
 }
 
 sub moveByNameAndLocationAndCountToLocation($$$$) {
@@ -103,7 +103,7 @@ sub moveByNameAndLocationAndCountToLocation($$$$) {
 
     return undef unless defined $id;
 
-    my $removed = 0 != db::do('update item_stack set count = count - ? where entity_id = ? and count >= ?', undef, $count, $id, $count);
+    my $removed = 0 != db::do('update item_instance set count = count - ? where entity_id = ? and count >= ?', undef, $count, $id, $count);
     return undef unless $removed;
 
     cleanEmptyStacks();
