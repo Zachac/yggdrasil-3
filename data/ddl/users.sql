@@ -10,6 +10,6 @@ CREATE TABLE skills (
 CREATE TABLE user (
     user_name VARCHAR(30) NOT NULL PRIMARY KEY,
     password CHAR(44) NOT NULL,
-    spawn VARCHAR(80) NOT NULL DEFAULT 'd:0 0',
+    spawn VARCHAR(80) NOT NULL,
     pid INTEGER
 );

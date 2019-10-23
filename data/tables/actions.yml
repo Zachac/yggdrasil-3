@@ -1,11 +1,11 @@
 actions:
   - item_name: magic mirror
     action: use
-    script: jump d:0 0
+    script: spawn
     consume: 0
   - item_name: broken item
     action: use
-    script: j d:0 0
+    script: spawnnnn
     consume: 0
   - item_name: fire pit kit
     action: use

@@ -1,6 +1,5 @@
 # TODO
 ## features
-* fix user account creation
 * add post db_init scripts for dynamic entity definition registering
 * add status/health to entities
 

@@ -14,6 +14,7 @@ use lib::model::entities::player;
 
 use lib::env::db qw(conn);
 
+my $default_spawn = 'd:0 0';
 
 sub lock;
 
@@ -90,7 +91,8 @@ sub create {
     my $username = shift;
     my $password = shift;
 
-    return unless eval {db::do("insert into user (user_name, password) values (?, ?);", undef, $username, $password)};
+    player::create($username, $default_spawn);
+    return unless eval {db::do("insert into user (user_name, password, spawn) values (?, ?, ?);", undef, $username, $password, $default_spawn)};
     spawn($username);
     return 1;
 }
