@@ -5,6 +5,9 @@ use strict;
 use warnings;
 
 use lib::model::entities::entity;
+use lib::model::entities::entity_type;
+
+my $type = entity_type::register('player');
 
 
 sub getLocation($) {

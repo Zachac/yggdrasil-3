@@ -5,8 +5,11 @@ use strict;
 use warnings;
 
 use lib::model::entities::entity;
+use lib::model::entities::entity_type;
 use lib::env::db;
 use lib::io::format;
+
+my $type = entity_type::register('item');
 
 
 sub getAll($) {
