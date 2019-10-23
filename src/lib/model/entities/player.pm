@@ -9,7 +9,7 @@ use lib::model::entities::entity;
 
 sub getLocation($) {
     my $name = shift;
-    return entity::getLocation('player', $name);
+    return entity::getLocationByTypeAndName('player', $name);
 }
 
 sub getAll($) {

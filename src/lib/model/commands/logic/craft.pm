@@ -85,7 +85,7 @@ sub craft($$) {
     }
 
     inventory::add($username, $item_name);
-    item::deleteAll($swapLocation);
+    item::deleteByLocation($swapLocation);
     skills::addExp($username, getExp($item_name));
 }
 

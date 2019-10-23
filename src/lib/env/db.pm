@@ -4,6 +4,7 @@ package db;
 use strict;
 use warnings;
 use DBI;
+use Carp;
 
 my $driver   = "MariaDB"; 
 my $database = "yggdrasil";
@@ -16,6 +17,7 @@ our $conn = DBI->connect($dsn, $username, $password, {
     PrintError => 0,
     RaiseError => 1,
     AutoCommit => 1,
+    HandleError => \&confess,
 }) or die $DBI::errstr;
 
 my %prepared_statements = ();

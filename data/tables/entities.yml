@@ -1,15 +1,39 @@
 entity_type:
   - entity_type_id: 1
-    entity_type_name: 'item'
+    entity_type: item
+  - entity_type_id: 2
+    entity_type: resource
+  - entity_type_id: 3
+    entity_type: player
 
 entity_def:
   - entity_def_id: 1
     entity_type_id: 1
-    entity_name: 'magic mirror'
+    entity_name: magic mirror
+  - entity_def_id: 2
+    entity_type_id: 3
+    entity_name: abc
+  - entity_type_id: 1
+    entity_name: bonfire
+  - entity_type_id: 1
+    entity_name: fire pit
+  - entity_type_id: 1
+    entity_name: leaves
+  - entity_type_id: 1
+    entity_name: rocks
+  - entity_type_id: 1
+    entity_name: fire pit kit
+  - entity_type_id: 1
+    entity_name: broken item
+  - entity_type_id: 2
+    entity_name: undergrowth
 
 entity_instance:
   - entity_id: 1
     entity_def_id: 1
+    location: root/spawn
+  - entity_id: 2
+    entity_def_id: 2
     location: root/spawn
 
 item_instance:

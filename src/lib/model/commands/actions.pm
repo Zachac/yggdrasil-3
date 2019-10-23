@@ -40,7 +40,7 @@ sub execute($$$) {
     my $result = meta_scripts::execute($script);
 
     if ($result && $consume) {
-        item::delete($item_id);
+        item::deleteById($item_id);
     }
 
     return $result;

@@ -18,7 +18,7 @@ my $location = player::getLocation $ENV{'USERNAME'};
 my $count = item::findCount($item_name, $location);
 
 $count-- if ($count);
-$count += entity::getEntityIdsAndNameAndLocation($item_name, $location);
+$count += entity::getEntityIdsByNameAndLocation($item_name, $location);
 
 print inflect "You count <#w:$count> <N:$item_name>\n";
 

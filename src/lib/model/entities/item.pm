@@ -55,7 +55,7 @@ sub mergeCounts($$) {
     my $add_count = getCount($entity_id2);
 
     addCount($entity_id1, $add_count);
-    entity::delete('item', $entity_id2);
+    entity::deleteByTypeAndId('item', $entity_id2);
 
     return 1;
 }
@@ -111,14 +111,14 @@ sub moveByNameAndLocationAndCountToLocation($$$$) {
     return $new_id;
 }
 
-sub deleteAll($) {
+sub deleteByLocation($) {
     my $location = shift;
-    return entity::deleteAll($location, 'item');
+    return entity::deleteByLocationAndType($location, 'item');
 }
 
-sub delete($) {
+sub deleteById($) {
     my $id = shift;
-    return entity::delete('item', $id);
+    return entity::deleteByTypeAndId('item', $id);
 }
 
 1;
