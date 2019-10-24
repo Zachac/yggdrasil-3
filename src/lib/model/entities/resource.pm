@@ -6,11 +6,18 @@ use warnings;
 
 use lib::model::entities::entity;
 use lib::model::entities::entity_type;
+use lib::model::entities::entity_def;
 use lib::model::entities::player;
 use lib::model::user::skills;
 use lib::model::user::inventory;
 
 my $type = entity_type::register('resource');
+
+sub register($;$) {
+    my $name = shift;
+    my $description = shift;
+    entity_def::register($name, 'resource', $description);
+}
 
 sub gather($$$) {
     my $name = shift;

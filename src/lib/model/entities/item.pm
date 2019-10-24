@@ -6,11 +6,17 @@ use warnings;
 
 use lib::model::entities::entity;
 use lib::model::entities::entity_type;
+use lib::model::entities::entity_def;
 use lib::env::db;
 use lib::io::format;
 
 my $type = entity_type::register('item');
 
+sub register($;$) {
+    my $name = shift;
+    my $description = shift;
+    entity_def::register($name, 'item', $description);
+}
 
 sub getAll($) {
     my $location = shift;

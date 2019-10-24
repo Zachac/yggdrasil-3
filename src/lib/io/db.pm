@@ -12,6 +12,7 @@ use lib::env::env;
 use lib::env::db;
 use lib::io::file;
 use lib::io::format;
+use lib::io::stdio;
 
 sub dump();
 sub load();
@@ -41,7 +42,7 @@ sub dump() {
         
         if (@mapped_rows) {
             file::print "${\(env::dir())}/data/tables/$t.yml", Dump {$t => \@mapped_rows};
-            print "dumped $t: ${\($#mapped_rows + 1)} rows\n";
+            stdio::log "dumped $t: ${\($#mapped_rows + 1)} rows\n";
         }
     }
 }
@@ -63,7 +64,7 @@ sub loadFile($) {
     
     eval {
         my ($table_count, $row_count) = loadData($data, $file);
-        print "processed $table_count tables with $row_count total rows from $relPath\n";
+        stdio::log "processed $table_count tables with $row_count total rows from $relPath\n";
     };
 
     warn $@ if $@;

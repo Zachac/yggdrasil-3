@@ -13,7 +13,9 @@ use DBI;
 use lib dirname(Cwd::realpath($PROGRAM_NAME));
 use lib::env::env;
 use lib::io::file;
+use lib::io::stdio;
 
+stdio::log "starting db initialization process\n";
 
 my $dsn = "DBI:MariaDB:host=localhost";
 my $dbh = DBI->connect($dsn, undef, undef, { 
@@ -23,7 +25,7 @@ my $dbh = DBI->connect($dsn, undef, undef, {
 }) or die $DBI::errstr;
 
 
-$dbh->do('DROP DATABASE yggdrasil');
+$dbh->do('DROP DATABASE IF EXISTS yggdrasil');
 $dbh->do('CREATE DATABASE yggdrasil');
 $dbh->do('CREATE USER IF NOT EXISTS abc IDENTIFIED BY "def"');
 $dbh->do('GRANT SELECT, INSERT, UPDATE, DELETE ON yggdrasil.* TO abc');
@@ -36,6 +38,7 @@ sub getOffset($);
 # execute each .sql file in data folder
 find (sub {
     if ($_ =~ /.*\.sql/) {
+        stdio::log "executing $_\n";
         execSqlFile $File::Find::dir, $_;
     }
 }, "${\(env::dir())}/data");
@@ -47,6 +50,7 @@ db::load();
 # execute each .pl file in data folder
 find (sub {
     if ($_ =~ /.*\.pl/) {
+        stdio::log "running $_";
         my $result = do "$File::Find::dir/$_";
         unless (defined($result)) {
             print "ERROR in $_\n\t$@";
@@ -81,6 +85,7 @@ sub getOffset($) {
 }
 
 $dbh->disconnect() or die $dbh->errstr;
-say "Finished initializing database";
+
+stdio::log "Finished initializing database";
 
 1;
