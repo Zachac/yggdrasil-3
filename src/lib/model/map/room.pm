@@ -31,4 +31,11 @@ sub description {
     return "You see nothing.";
 }
 
+sub create($$$) {
+    my $location = shift;
+    my $room_name = shift;
+    my $description = shift;
+    return db::do('insert ignore into room(location, room_name, description) values(?,?,?)', undef, $location, $room_name, $description);
+}
+
 1;

@@ -38,8 +38,9 @@ sub getAll {
 }
 
 sub get {
+    my $username = shift;
     my $skill = shift;
-    my ($level, $experience) = db::selectrow_array("select level, experience from skills where user_name = ? and skill_name = ?", undef, $ENV{'USERNAME'}, $skill);
+    my ($level, $experience) = db::selectrow_array("select level, experience from skills where user_name = ? and skill_name = ?", undef, $username, $skill);
     $level = 0 unless defined $level;
     $experience = 0 unless defined $experience;
     return ($level, $experience);
@@ -97,24 +98,26 @@ sub randomFailure($$) {
 }
 
 sub train {
+    my $username = shift;
     my $skill = shift;
 
     die "skill $skill does not exist\n" unless skills::exists $skill;
 
-    my ($level, $experience) = skills::get $skill;
+    my ($level, $experience) = skills::get $username, $skill;
     my $requiredExp = requiredExp $level;
 
     die "max level already reached\n" unless defined $requiredExp;
-    die "total level cap already reached\n" unless totalLevel() < 100;
+    die "total level cap already reached\n" unless totalLevel($username) < 100;
     die "${\(format::number $requiredExp)} experience required to train $skill\n" if $requiredExp > $experience;
     
     $level = $level + 1;
-    db::do('replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $ENV{'USERNAME'}, $skill, $level, $experience - $requiredExp) or die;
+    db::do('replace into skills (user_name, skill_name, level, experience) values (?, ?, ?, ?)', undef, $username, $skill, $level, $experience - $requiredExp) or die;
     return $level;
 }
 
 sub totalLevel {
-    return db::selectrow_array('select IFNULL(sum(level), 0) from skills where user_name = ?', undef, $ENV{'USERNAME'});
+    my $username = shift // $ENV{'USERNAME'};
+    return db::selectrow_array('select IFNULL(sum(level), 0) from skills where user_name = ?', undef, $username);
 }
 
 1;

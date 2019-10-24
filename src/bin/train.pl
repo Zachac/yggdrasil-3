@@ -10,7 +10,7 @@ my $command = shift;
 die "usage: $command skill\n" unless (@ARGV >= 1);
 
 my $skill = "@ARGV";
-my $newLevel = skills::train(lc $skill);
+my $newLevel = skills::train($ENV{'USERNAME'}, lc $skill);
 if ($newLevel != 1) {
     print "Level up, $skill level $newLevel!\n";
 } else {
