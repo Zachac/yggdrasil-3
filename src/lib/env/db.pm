@@ -6,6 +6,8 @@ use warnings;
 use DBI;
 use Carp;
 
+our @CARP_NOT = ('DBD::MariaDB');
+
 my $driver   = "MariaDB"; 
 my $database = "yggdrasil";
 my $dsn = "DBI:$driver:dbname=$database;host=localhost";
@@ -17,7 +19,7 @@ our $conn = DBI->connect($dsn, $username, $password, {
     PrintError => 0,
     RaiseError => 1,
     AutoCommit => 1,
-    HandleError => \&confess,
+    HandleError => sub { croak shift },
 }) or die $DBI::errstr;
 
 my %prepared_statements = ();

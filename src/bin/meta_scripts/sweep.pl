@@ -8,4 +8,4 @@ use lib::ticks::sweep;
 tick::sweep();
 print "Swept!\n";
 
-return 1;
+1;

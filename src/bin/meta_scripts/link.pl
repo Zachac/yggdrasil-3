@@ -22,3 +22,5 @@ if (links::add($location, $ARGV[0], $ARGV[1])) {
     print "Could not create link: $!\n";
     return 0;
 }
+
+1;

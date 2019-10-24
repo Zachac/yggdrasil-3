@@ -22,3 +22,5 @@ if (map::mark(player::getLocation($ENV{'USERNAME'}), $mark)) {
     print "You were unable to mark the map at your location.\n";
     return 0;
 }
+
+1;
