@@ -19,6 +19,15 @@ sub register($;$) {
     entity_def::register($name, 'resource', $description);
 }
 
+sub registerDrop($$$$$) {
+    my $name = shift;
+    my $skill = shift;
+    my $level = shift;
+    my $produces = shift;
+    my $wheight = shift;
+    return db::do('insert into resource(resource_name, skill, level, produces, wheight) values (?,?,?,?,?)', undef, $name, $skill, $level, $produces, $wheight);
+}
+
 sub gather($$$) {
     my $name = shift;
     my $action = shift;

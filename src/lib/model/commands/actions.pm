@@ -39,8 +39,6 @@ sub execute($$$) {
 
     my $result = meta_scripts::execute($script);
 
-    print "'$result' '$consume' '$item_id'\n";
-
     if ($result && $consume) {
         item::deleteById($item_id);
     }

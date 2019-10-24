@@ -15,15 +15,16 @@ use lib::model::entities::resource;
 my $username = 'abc';
 my $password = 'def';
 
+# player
 user::create($username, hash::password($username, $password));
 skills::train($username, 'forage');
 skills::addExp($username, 'forage', 129);
 
-
+# room
 room::create('root/spawn', 'An empty room', 'It looks like a very normal room.');
 player::setLocation($username, 'root/spawn');
 
-
+# item
 item::register('magic mirror', 'a shiny reflective object, maybe you could use this?');
 item::create('magic mirror', 'root/spawn');
 actions::set('magic mirror', 'use', 'spawn');
@@ -43,6 +44,9 @@ item::register('rocks');
 item::register('broken item');
 actions::set('broken item', 'use', 'spawnnn', 1);
 
+# resources
 resource::register('undergrowth', 'a mix of thick brush and fallen leaves covering the forest ground.');
+resource::registerDrop('undergrowth', 'forage', 0, 'leaves', 1);
+resource::registerDrop('undergrowth', 'forage', 0, 'rocks', 1);
 
 1;
