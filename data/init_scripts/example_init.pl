@@ -8,6 +8,7 @@ use lib::model::commands::actions;
 use lib::model::user::skills;
 use lib::model::map::room;
 use lib::model::map::biome;
+use lib::model::crafting::recipe;
 
 use lib::model::entities::item;
 use lib::model::entities::resource;
@@ -51,5 +52,10 @@ resource::registerDrop('undergrowth', 'forage', 0, 'leaves', 1);
 resource::registerDrop('undergrowth', 'forage', 0, 'rocks', 1);
 biome::registerSpawn('Forest', 'undergrowth', 'resource', 0.25);
 
+
+# recipes
+recipe::registerRecipe('fire pit kit', 'forage', 2, 10);
+recipe::registerRecipeRequirement('fire pit kit', 'leaves', 2);
+recipe::registerRecipeRequirement('fire pit kit', 'rocks', 3);
 
 1;

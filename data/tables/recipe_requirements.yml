@@ -1,7 +1,0 @@
-recipe_requirements:
-  - item_name: fire pit kit
-    required_name: leaves
-    count: 2
-  - item_name: fire pit kit
-    required_name: rocks
-    count: 3
