@@ -12,12 +12,7 @@ require Math::Fractal::Noisemaker;
 
 use lib::env::db;
 use lib::model::entities::entity;
-
-my @ascii_table = (' ', '~', '#');
-my @name_table = ('Ocean', 'Shore', 'Forest');
-my @enterable_table = (0, 1, 1);
-
-
+use lib::model::map::biome;
 
 
 sub getCoordinates($;$) {
@@ -49,7 +44,7 @@ sub getBiome($$) {
 sub getBiomeName($) {
     my ($x, $y) = getCoordinates(shift, 1);
     return undef unless defined $x;
-    return $name_table[getBiome($x, $y)];
+    return biome::getNameById(getBiome($x, $y));
 }
 
 sub get(;$$$) {
@@ -72,7 +67,7 @@ sub get(;$$$) {
         push @map, ' ';
 
         for my $y ($miny .. $maxy) {
-            push @map, $ascii_table[getBiome($x, $y)];
+            push @map, biome::getAsciiById(getBiome($x, $y));
             push @map, ' ';
         }
 
@@ -103,15 +98,15 @@ sub getDirections($) {
     my ($x, $y) = getCoordinates(shift, 1);
     return () unless defined $x;
 
-    my $n = $enterable_table[getBiome($x - 1, $y)];
-    my $s = $enterable_table[getBiome($x + 1, $y)];
-    my $e = $enterable_table[getBiome($x, $y + 1)];
-    my $w = $enterable_table[getBiome($x, $y - 1)];
+    my $n = biome::getEnterableById(getBiome($x - 1, $y));
+    my $s = biome::getEnterableById(getBiome($x + 1, $y));
+    my $e = biome::getEnterableById(getBiome($x, $y + 1));
+    my $w = biome::getEnterableById(getBiome($x, $y - 1));
 
-    my $ne = $enterable_table[getBiome($x - 1, $y + 1)];
-    my $nw = $enterable_table[getBiome($x - 1, $y - 1)];
-    my $se = $enterable_table[getBiome($x + 1, $y + 1)];
-    my $sw = $enterable_table[getBiome($x + 1, $y - 1)];
+    my $ne = biome::getEnterableById(getBiome($x - 1, $y + 1));
+    my $nw = biome::getEnterableById(getBiome($x - 1, $y - 1));
+    my $se = biome::getEnterableById(getBiome($x + 1, $y + 1));
+    my $sw = biome::getEnterableById(getBiome($x + 1, $y - 1));
 
     my @directions = ();
 
@@ -149,12 +144,12 @@ sub getDirection($$) {
     else { return undef }
     
     
-    return undef unless $enterable_table[getBiome($x, $y)];
+    return undef unless biome::getEnterableById(getBiome($x, $y));
     
     if (length $direction == 2) {
         # ensure that diagonal direction isn't being used superfulously
-        return undef if $enterable_table[getBiome($oldx, $y)];
-        return undef if $enterable_table[getBiome($x, $oldy)];
+        return undef if biome::getEnterableById(getBiome($oldx, $y));
+        return undef if biome::getEnterableById(getBiome($x, $oldy));
     }
     
     return "d:$x $y";
@@ -164,11 +159,11 @@ sub getDirection($$) {
 sub init($) {
     my $room = shift;
     my ($x, $y) = getCoordinates($room, 1);
+
     return unless defined $x;
     return unless 0 != db::do("insert ignore into map_tiles(x, y) values (?, ?)", undef, $x, $y);
 
-    my $biome_name = $name_table[getBiome($x, $y)];
-    my @spawns = @{db::selectall_arrayref("select entity_name, entity_type, chance from biome_spawns where biome_name = ? order by entity_name, entity_type, chance", undef, $biome_name)};
+    my @spawns = biome::getSpawnsById(getBiome($x, $y));
 
     my $max_value = 2 ** 32 - 1;
     srand $seed;
