@@ -24,6 +24,16 @@ sub getAsciiById($) {
     return $ascii_table[shift];
 }
 
+sub getIdByName($) {
+    my $name = shift;
+    
+    for (my $i = 0; $i <= $#name_table; $i++) {
+        return $i if $name_table[$i] eq $name;
+    }
+
+    return undef;
+}
+
 sub registerSpawn($$$$) {
     my $biome_name = shift;
     my $entity_name = shift;

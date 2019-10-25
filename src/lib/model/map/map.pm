@@ -15,6 +15,10 @@ use lib::model::entities::entity;
 use lib::model::map::biome;
 
 
+my $forest_id = biome::getIdByName 'Forest';
+my $shore_id = biome::getIdByName 'Shore';
+my $ocean_id = biome::getIdByName 'Ocean';
+
 sub getCoordinates($;$) {
     my $room = shift;
     my $strict = shift;
@@ -33,11 +37,11 @@ sub getBiome($$) {
     my $noise = Math::Fractal::Noisemaker::_snoise($y/10, $x/10);
 
     if ($noise > 0.005) {
-        return 2;
+        return $forest_id;
     } elsif ($noise >= 0) {
-        return 1;
+        return $shore_id;
     } else {
-        return 0;
+        return $ocean_id;
     }
 }
 
