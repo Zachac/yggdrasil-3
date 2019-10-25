@@ -7,6 +7,7 @@ use lib::model::user::user;
 use lib::model::commands::actions;
 use lib::model::user::skills;
 use lib::model::map::room;
+use lib::model::map::biome;
 
 use lib::model::entities::item;
 use lib::model::entities::resource;
@@ -48,5 +49,7 @@ actions::set('broken item', 'use', 'spawnnn', 1);
 resource::register('undergrowth', 'a mix of thick brush and fallen leaves covering the forest ground.');
 resource::registerDrop('undergrowth', 'forage', 0, 'leaves', 1);
 resource::registerDrop('undergrowth', 'forage', 0, 'rocks', 1);
+biome::registerSpawn('Forest', 'undergrowth', 'resource', 0.25);
+
 
 1;
