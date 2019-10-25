@@ -7,40 +7,16 @@ use warnings;
 use lib::env::db qw(conn);
 use lib::model::user::inventory;
 use lib::model::user::skills;
+use lib::model::crafting::recipe;
 
 
-sub exists($) {
-    my $item_name = shift;
-    return 0 != db::selectrow_array('select count(1) from recipe where item_name = ?', undef, $item_name);
-}
-
-sub recipe($;@) {
-    my $item_name = shift;
-    my @required_items = @_;
-    
-    unless (@required_items) {
-        @required_items = @{db::selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
-    }
-
-    return map { "@$_[0] x@$_[1]" } @required_items;
-}
-
-sub getLevel($) {
-    my $item_name = shift;
-    return db::selectrow_array('select skill_name, required_level from recipe where item_name = ?', undef, $item_name);
-}
-
-sub getExp($) {
-    my $item_name = shift;
-    return db::selectrow_array('select skill_name, experience from recipe where item_name = ?', undef, $item_name);
-}
 
 sub craft($$) {
     my $username = shift;
     my $item_name = shift;
 
-    die "recipe for $item_name does not exist\n" unless craft::exists($item_name);
-    skills::requireLevel(getLevel($item_name), $username);
+    die "recipe for $item_name does not exist\n" unless recipe::exists($item_name);
+    skills::requireLevel(recipe::getLevelByItemName($item_name), $username);
 
     my @required_items = @{db::selectall_arrayref('select required_name, count from recipe_requirements where item_name = ? order by required_name asc', undef, $item_name)};
 
@@ -56,7 +32,7 @@ sub craft($$) {
             $j++ while ($j < @inv && ($inv[$j][0] ne @$item[0] || $inv[$j][1] <= 0));
             
             unless ($j < @inv) {
-                die "missing (@$item[0]) required: @{[map {\"\n  $_\"} recipe($item_name, @required_items)]}\n";
+                die "missing (@$item[0]) required: @{[map {\"\n  $_\"} recipe::requirements($item_name, @required_items)]}\n";
             }
 
             my $required_count = @$item[1] - $i;
@@ -86,9 +62,7 @@ sub craft($$) {
 
     inventory::add($username, $item_name);
     item::deleteByLocation($swapLocation);
-    skills::addExp($username, getExp($item_name));
+    skills::addExp($username, recipe::getExpByItemName($item_name));
 }
-
-
 
 1;
