@@ -24,39 +24,20 @@ sub craft($$) {
         return defined inventory::add($username, $item_name);
     }
 
-    my @inv = sort {@$a[0] cmp @$b[0]} inventory::getAllNamesAndCounts($username);
-
-    my $j = 0;
-    for my $item (@required_items) {
-        for (my $i = 0; $i < @$item[1]; $i++) {
-            $j++ while ($j < @inv && ($inv[$j][0] ne @$item[0] || $inv[$j][1] <= 0));
-            
-            unless ($j < @inv) {
-                die "missing (@$item[0]) required: @{[map {\"\n  $_\"} recipe::requirements($item_name, @required_items)]}\n";
-            }
-
-            my $required_count = @$item[1] - $i;
-            if ($inv[$j][1] >= $required_count) {
-                $i += $required_count;
-                $inv[$j][1] -= $required_count;
-            } elsif ($j + 1 < @inv) {
-                $inv[$j + 1][1] += $inv[$j][1];
-                $i += $inv[$j][1] - 1;
-                $inv[$j][1] = 0;
-            }
-        }
-    }
-
     my $swapLocation = "p:d:$$";
+    my @inv = sort {@$a[0] cmp @$b[0]} inventory::getAllNamesAndCounts($username);
     my @items = ();
-    for my $item (@required_items) {
-        my $dropped_count = inventory::drop($username, @$item[0], $swapLocation, @$item[1]);
-        
-        push @items, @$item[0];
+    for my $req_item (@required_items) {
+        my $req_item_name = @$req_item[0];
+        my $req_item_count = @$req_item[1];
 
-        unless ($dropped_count == @$item[1]) {
+        my $dropped_count = inventory::drop($username, $req_item_name, $swapLocation, $req_item_count);
+        
+        push @items, $req_item_name;
+        
+        unless ($dropped_count == $req_item_count) {
             inventory::take($username, $_, $swapLocation, "inf") for @items;
-            die "Recipe component removed from inventory during crafting!\n";
+            die "missing ($req_item_name) required: @{[map {\"\n  $_\"} recipe::requirements($item_name, @required_items)]}\n";
         }
     }
 

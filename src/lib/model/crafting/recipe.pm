@@ -17,7 +17,7 @@ sub registerRecipe($$$$) {
     return db::do('insert into recipe(item_name, skill_name, required_level, experience) values (?, ?, ?, ?)', undef, $item_name, $skill_name, $required_level, $experience);
 }
 
-sub registerRecipeRequirement($$$$) {
+sub registerRecipeRequirement($$$) {
     my $item_name = shift;
     my $required_name = shift;
     my $count = shift;
@@ -31,7 +31,11 @@ sub exists($) {
 
 sub requirements($;@) {
     my $item_name = shift;
-    my @required_items = @_ // @{db::selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
+    my @required_items = @_;
+    
+    unless (@required_items) {
+        @required_items = @{db::selectall_arrayref('select required_name, count from recipe_requirements where item_name = ?', undef, $item_name)};
+    }
     return map { "@$_[0] x@$_[1]" } @required_items;
 }
 
