@@ -1,0 +1,7 @@
+entity_type:
+  - entity_type_id: 1
+    entity_type: player
+  - entity_type_id: 2
+    entity_type: item
+  - entity_type_id: 3
+    entity_type: resource

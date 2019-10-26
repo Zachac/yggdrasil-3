@@ -1,0 +1,37 @@
+entity_def:
+  - entity_def_id: 1
+    entity_name: abc
+    entity_type_id: 1
+    description: ~
+  - entity_def_id: 5
+    entity_name: bonfire
+    entity_type_id: 2
+    description: ~
+  - entity_def_id: 8
+    entity_name: broken item
+    entity_type_id: 2
+    description: ~
+  - entity_def_id: 4
+    entity_name: fire pit
+    entity_type_id: 2
+    description: ~
+  - entity_def_id: 3
+    entity_name: fire pit kit
+    entity_type_id: 2
+    description: ~
+  - entity_def_id: 6
+    entity_name: leaves
+    entity_type_id: 2
+    description: ~
+  - entity_def_id: 2
+    entity_name: magic mirror
+    entity_type_id: 2
+    description: 'a shiny reflective object, maybe you could use this?'
+  - entity_def_id: 7
+    entity_name: rocks
+    entity_type_id: 2
+    description: ~
+  - entity_def_id: 9
+    entity_name: undergrowth
+    entity_type_id: 3
+    description: a mix of thick brush and fallen leaves covering the forest ground.

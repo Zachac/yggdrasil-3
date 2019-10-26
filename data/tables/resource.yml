@@ -1,0 +1,11 @@
+resource:
+  - resource_name: undergrowth
+    skill: forage
+    level: 0
+    produces: leaves
+    wheight: 1
+  - resource_name: undergrowth
+    skill: forage
+    level: 0
+    produces: rocks
+    wheight: 1

@@ -1,0 +1,7 @@
+entity_instance:
+  - entity_id: 1
+    entity_def_id: 1
+    location: root/spawn
+  - entity_id: 2
+    entity_def_id: 2
+    location: root/spawn

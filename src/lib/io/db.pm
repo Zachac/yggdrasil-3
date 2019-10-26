@@ -24,12 +24,12 @@ sub loadRow($$;$$);
 # dump all tables and rows into the data/tables folder in YAML format, 
 # deletes existing files as neccessary 
 sub dump() {
-    my @tables = @{db::selectcol_arrayref('select name from sqlite_master where type="table"')};
+    my @tables = @{db::selectcol_arrayref('SELECT table_name FROM information_schema.tables where table_type = "BASE TABLE"')};
 
     local $YAML::UseHeader = 0;
     local $YAML::SortKeys = 0;
     for my $t (@tables) {
-        my @headers = @{db::selectcol_arrayref('select name from pragma_table_info(?)', undef, $t)};
+        my @headers = @{db::selectcol_arrayref('select column_name from information_schema.columns where table_name = ?', undef, $t)};
         my @rows = @{db::selectall_arrayref("select ${\(format::withCommas(@headers))} from $t", undef)};
 
         my @mapped_rows = ();
@@ -50,6 +50,8 @@ sub dump() {
 # loads all files from the data/ folder recursively
 # for each file, use the loadFile function to consume it into the db
 sub load() {
+    db::do('SET FOREIGN_KEY_CHECKS=0');
+
     local $YAML::Preserve = 1;
     return find(sub {
         return unless $_ =~ /.*\.yml/;
