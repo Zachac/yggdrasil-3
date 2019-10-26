@@ -31,7 +31,7 @@ sub create($$) {
     my $name = shift;
     my $location = shift;
     entity_def::register($name, 'player', undef);
-    return entity::create($name, $location, 'player');
+    return entity::createByNameAndTypeAndLocation($name, 'player', $location);
 }
 
 sub isPlayer($) {

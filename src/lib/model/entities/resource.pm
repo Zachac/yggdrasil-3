@@ -35,7 +35,7 @@ sub gather($$$) {
     my $location = player::getLocation($name);
     my $level = skills::getLevel($name, $action);
 
-    die "Could not find resource: $resource\n" unless entity::typeExistsIn($resource, $location, 'resource');
+    die "Could not find resource: $resource\n" unless entity::getIdByNameAndLocationAndType($resource, $location, 'resource');
     my @resourceResults = @{db::selectall_arrayref("select wheight, produces from resource where resource_name = ? and skill = ? and level <= ?", undef, $resource, $action, $level)};
     my $totalWheight = 0;
     $totalWheight += @{$_}[0] for @resourceResults;
@@ -56,7 +56,7 @@ sub gather($$$) {
 sub create($$) {
     my $name = shift;
     my $location = shift;
-    return entity::create($name, $location, 'resource');
+    return entity::createByNameAndTypeAndLocation($name, 'resource', $location);
 }
 
 1;

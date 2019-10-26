@@ -6,12 +6,14 @@ use warnings;
 
 use lib::env::db;
 
-sub safeEq($$) {
-    my $v1 = shift;
-    my $v2 = shift;
-    return ! defined $v2 unless defined $v1;
-    return 0 unless defined $v2;
-    return $v1 eq $v2;
+# utility method
+sub safeEq($$);
+
+sub getDescriptionByName($) {
+    my $entity_name = shift;
+    my $description = db::selectrow_array('select description from entity_def where entity_name=?', undef, $entity_name);
+    return $description if defined $description;
+    return 'You don\'t notice anything interesting.';
 }
 
 sub register($$$) {
@@ -35,6 +37,16 @@ sub register($$$) {
     }
 
     return db::selectrow_array('select entity_def_id from entity_def where entity_name = ?', undef, $type);
+}
+
+
+
+sub safeEq($$) {
+    my $v1 = shift;
+    my $v2 = shift;
+    return ! defined $v2 unless defined $v1;
+    return 0 unless defined $v2;
+    return $v1 eq $v2;
 }
 
 1;

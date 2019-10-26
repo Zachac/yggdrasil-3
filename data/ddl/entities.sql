@@ -24,7 +24,7 @@ CREATE TABLE entity_instance (
     entity_def_id INTEGER NOT NULL,
     location VARCHAR(40),
     INDEX(location),
-    FOREIGN KEY (entity_def_id) 
+    FOREIGN KEY (entity_def_id)
         REFERENCES entity_def(entity_def_id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT

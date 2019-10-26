@@ -18,11 +18,6 @@ sub register($;$) {
     entity_def::register($name, 'item', $description);
 }
 
-sub getAll($) {
-    my $location = shift;
-    return entity::getEntityNamesByTypeAndLocation('item', $location);
-}
-
 sub getNamesAndCountsByLocation($) {
     my $location = shift;
     my @results = entity::getNamesAndEntityIdsByTypeAndLocation('item', $location);
@@ -35,7 +30,7 @@ sub getNamesAndCountsByLocation($) {
 sub find($$) {
     my $name = shift;
     my $location = shift;
-    return entity::typeExistsIn($name, $location, 'item');
+    return entity::getIdByNameAndLocationAndType($name, $location, 'item');
 }
 
 sub findCount($$) {
@@ -76,7 +71,7 @@ sub create($$;$) {
     
     die "Cannot create negative amount of items\n" if $count < 0;
 
-    my $entity_id = find($name, $location) // entity::create($name, $location, 'item');
+    my $entity_id = find($name, $location) // entity::createByNameAndTypeAndLocation($name, 'item', $location);
     addCount($entity_id, $count);
     return $entity_id;
 }

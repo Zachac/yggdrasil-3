@@ -19,7 +19,7 @@ my $room_description = room::description($room);
 my @exits = links::getExits($room);
 @exits = ("none") unless (@exits > 0);
 
-my $ents = entity::getAllEx($room) // [];
+my $ents = entity::getNamesAndTypesAndIdsByLocation($room) // [];
 my @players = map {@$_[0]} grep { player::isPlayer(@$_[1]) } @$ents;
 my @ents = map {@$_[0]} grep { ! player::isPlayer(@$_[1]) } @$ents;
 

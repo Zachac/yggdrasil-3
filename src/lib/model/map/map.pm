@@ -176,7 +176,7 @@ sub init($) {
 
     for (@spawns) {
         if (rand() <= @$_[2]) {
-            entity::create(@$_[0], $room, @$_[1]);
+            entity::createByNameAndTypeAndLocation(@$_[0], @$_[1], $room);
         }
     }
 }
