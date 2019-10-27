@@ -24,13 +24,11 @@ sub execute {
 sub require {
     my $skill = shift;
     my $level = shift;
-    my $name = shift;
-    $name = $ENV{'USERNAME'} unless defined $name;
+    my $name = shift // $ENV{'USERNAME'};
 
     return 1 if (db::selectrow_array("select 1 from skills where user_name = ? and skill_name = ? and level >= ?", undef, $name, $skill, $level));
 
-    print "Level $level $skill required\n";
-    return 0;
+    die "Level $level $skill required\n";
 }
 
 sub getAll {

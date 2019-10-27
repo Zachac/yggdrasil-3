@@ -15,17 +15,20 @@ use lib::env::db qw(conn);
 
 sub message {
     my $username = shift;
-    my $message = "@_";
     my $stdout_path = getStdoutPath($username);
     file::mkfifo($stdout_path);
-    return file::printnb($stdout_path, $message);
+    return file::printnb($stdout_path, @_);
 }
 
-sub getStdout {
+sub getStdoutByUsername($;$) {
     my $stdout_path = getStdoutPath(shift);
+    my $blocking = shift;
+    my $mode = O_RDONLY;
+
+    $mode = $mode | O_NONBLOCK if $blocking;
 
     file::mkfifo($stdout_path);
-    sysopen(my $stdout, $stdout_path, O_RDONLY | O_NONBLOCK) or die "Could not open $stdout_path!";
+    sysopen(my $stdout, $stdout_path, $mode) or die "Could not open $stdout_path!";
     return $stdout;
 }
 

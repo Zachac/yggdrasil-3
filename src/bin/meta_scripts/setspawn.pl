@@ -13,6 +13,6 @@ $location = "@ARGV" if (@ARGV > 0);
 
 die "unable to set spawn!\n" unless (user::setSpawn($ENV{'USERNAME'}, $location));
 
-print "Spawn set!\n";
+user::echo "Spawn set!\n";
 
 1;

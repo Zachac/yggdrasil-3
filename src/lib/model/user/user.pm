@@ -27,6 +27,7 @@ sub exists {
 }
 
 sub echo {
+    return unless defined $ENV{'USERNAME'};
     return client::message($ENV{'USERNAME'}, @_);
 }
 
@@ -52,9 +53,10 @@ sub broadcastOthers($$) {
 
 sub login {
     my $username = shift;
-    my $password = shift;
+    my $password = shift // "";
     my $realPass = db::selectrow_array('select password from user where user_name=?', undef, $username);
     
+    die "User does not exist\n" unless defined $realPass;
     die "Passwords do not match!\n" unless ($realPass eq $password);
     die "User is already logged in!\n" unless lock $username;
 

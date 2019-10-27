@@ -8,6 +8,7 @@ use lib::model::map::room;
 use lib::model::map::links;
 use lib::model::entities::entity;
 use lib::model::user::skills;
+use lib::model::commands::actions;
 use lib::model::entities::player;
 
 use lib::model::commands::meta_scripts;
@@ -23,7 +24,7 @@ sub runCommand {
 
 sub run {
     # add an empty space between user commands
-    print "\n";
+    user::echo "\n";
     
     return runNoNewLine(@_);
 }
@@ -39,7 +40,7 @@ sub runNoNewLine {
     } elsif (my $dest = links::getExit($location, "@_")) {
         meta_scripts::execute("jump $dest");
     } else {
-        print "Command not found!\n";
+        user::echo "Command not found!\n";
     }
 }
 
@@ -50,13 +51,13 @@ sub execute {
 
     unless (defined($result)) {
         if (defined $@ && $@ ne '') {
-            print "$@";
+            user::echo "$@";
 
             if ($@ eq "Interrupted\n") {
                 die;
             }
         } elsif (! commands::exists($file)) {
-            print "File not found $file\n";
+            user::echo "File not found $file\n";
         }
     }
 

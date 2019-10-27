@@ -29,7 +29,7 @@ sub printnb {
 	my $directory = dirname($filename);
 
     sysopen(my $fh, $filename, O_NONBLOCK|O_WRONLY) or return 0;
-    print $fh "@_";
+    print $fh @_;
     close $fh;
     return 1;
 }

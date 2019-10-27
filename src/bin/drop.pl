@@ -16,7 +16,7 @@ my $count;
 $count = shift if (looks_like_number $ARGV[0]);
 
 unless (@ARGV > 0 || (defined $count && $count < 1)) {
-    print "usage: $command [count] item name\n";
+    user::echo "usage: $command [count] item name\n";
     return 1;
 }
 
@@ -27,11 +27,11 @@ if ($count_dropped) {
     if ($count_dropped == 1) {
         my $withArticle = format::withArticle($item_name);
         user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} drops $withArticle");
-        print "You drop $withArticle\n";
+        user::echo "You drop $withArticle\n";
     } else {
         user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} drops <#w:$count_dropped> <N:$item_name>");
-        print inflect "You drop <#w:$count_dropped> <N:$item_name>\n";
+        user::echo inflect "You drop <#w:$count_dropped> <N:$item_name>\n";
     }
 } else {
-    print "You can't seem to find the $item_name in your inventory\n";
+    user::echo "You can't seem to find the $item_name in your inventory\n";
 }

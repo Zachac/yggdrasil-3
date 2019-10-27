@@ -14,5 +14,5 @@ my $item = "@ARGV";
 my $result = actions::execute($ENV{'USERNAME'}, $action, $item);
 
 unless ($result) {
-    print "Unable to $action $item\n";
+    user::echo "Unable to $action $item\n";
 }

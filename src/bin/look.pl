@@ -7,6 +7,7 @@ use lib::model::map::room;
 use lib::model::map::links;
 use lib::model::entities::entity;
 use lib::model::entities::player;
+use lib::model::user::user;
 
 use lib::io::format;
 
@@ -34,4 +35,4 @@ if (@ents > 0) {
     push @look, "    ", format::withArticle($_), "\n" for (@ents);
 }
 
-print @look;
+user::echo @look;

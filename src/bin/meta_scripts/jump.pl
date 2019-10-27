@@ -12,7 +12,7 @@ use lib::model::map::map;
 my $command = shift;
 
 unless (@ARGV > 0) {
-    print "usage: $command location\n";
+    user::echo "usage: $command location\n";
     return 1;
 }
 
@@ -24,7 +24,7 @@ if (player::setLocation($ENV{'USERNAME'}, $location)) {
     user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} enters");
     commands::runCommand("look");
 } else {
-    print "Unable to jump to @ARGV\n";
+    user::echo "Unable to jump to @ARGV\n";
 }
 
 return 1;

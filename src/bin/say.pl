@@ -12,5 +12,5 @@ my $message = "(s) $ENV{'USERNAME'}: @ARGV";
 unless ($message =~ /^\s*$/) {
     user::broadcast($ENV{'USERNAME'}, $message);
 } else {
-    print "usage: $command message\n";
+    user::echo "usage: $command message\n";
 }

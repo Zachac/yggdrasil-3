@@ -7,5 +7,6 @@ use Cwd;
 
 use lib::model::entities::entity;
 use lib::model::entities::player;
+use lib::model::user::user;
 
-print player::getLocation($ENV{'USERNAME'}), "\n";
+user::echo player::getLocation($ENV{'USERNAME'}), "\n";

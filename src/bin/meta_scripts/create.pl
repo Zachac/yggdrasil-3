@@ -6,7 +6,7 @@ use warnings;
 use lib::model::entities::item;
 use lib::model::entities::player;
 use lib::io::format;
-
+use lib::model::user::user;
 
 my $command = shift;
 
@@ -18,6 +18,6 @@ my $an_item_name = format::withArticle($item_name);
 
 die "could not create $item_name\n" unless item::create($item_name, $location);
 
-print "Created $an_item_name!\n";
+user::echo "Created $an_item_name!\n";
 
 1;

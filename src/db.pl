@@ -68,7 +68,7 @@ sub runInitializingScripts() {
             stdio::log "running $_";
             my $result = do "$File::Find::dir/$_";
             unless (defined($result)) {
-                print "ERROR in $_\n\t$@";
+                warn "ERROR in $_\n\t$@";
             }
         }1
     }, "${\(env::dir())}/data");

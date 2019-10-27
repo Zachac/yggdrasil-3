@@ -118,7 +118,7 @@ sub loadRow($$;$$) {
 
     return 0 == $affected_rows if defined $affected_rows;
 
-    print $db::conn->errstr, " at $identifier:$table_name:$row_count\n";
+    warn $db::conn->errstr, " at $identifier:$table_name:$row_count\n";
     return 0;
 }
 

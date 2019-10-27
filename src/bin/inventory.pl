@@ -5,6 +5,7 @@ use warnings;
 
 use lib::model::user::inventory;
 use lib::io::format;
+use lib::model::user::user;
 
 my @ents = inventory::getAllNamesAndCounts($ENV{'USERNAME'});
 my @inv = ();
@@ -20,4 +21,4 @@ if (@ents > 0) {
     push @inv, " Your inventory is empty\n";
 }
 
-print @inv;
+user::echo @inv;

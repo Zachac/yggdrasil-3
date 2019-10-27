@@ -15,7 +15,7 @@ my $item_name = "@ARGV";
 
 if (craft::craft($ENV{'USERNAME'}, $item_name)) {
     user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} creates $item_name");
-    print "You create $item_name\n";
+    user::echo "You create $item_name\n";
 } else {
-    print "Could not create $item_name\n";
+    user::echo "Could not create $item_name\n";
 }

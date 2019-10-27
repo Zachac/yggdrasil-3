@@ -133,7 +133,7 @@ sub readStdout {
     return if ($child_pid);
 
     my $username = shift;
-    my $stdout = client::getStdout($username);
+    my $stdout = client::getStdoutByUsername($username);
 
     my $line;
     while (1) {
@@ -147,7 +147,7 @@ sub readStdout {
 }
 
 sub executeAndDisplayCommand {
-    my $stdout = client::getStdout($username);
+    my $stdout = client::getStdoutByUsername($username, 1);
 
     commands::run @_;
 

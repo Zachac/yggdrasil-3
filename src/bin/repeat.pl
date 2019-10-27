@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use lib::model::commands::commands;
+use lib::model::user::user;
 use lib::io::stdio;
 
 use Time::HiRes qw(sleep);
@@ -14,7 +15,7 @@ my $count = shift;
 
 die "usage: $command count [command]\n" unless looks_like_number $count;
 
-print "press enter to interrupt\n";
+user::echo "press enter to interrupt\n";
 
 while ($count > 0 && ! defined stdio::readLineNB()) {
     $count--;
@@ -26,4 +27,4 @@ while ($count > 0 && ! defined stdio::readLineNB()) {
     sleep 0.4;
 }
 
-print "finished repeat\n";
+user::echo "finished repeat\n";

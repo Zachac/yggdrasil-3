@@ -6,6 +6,7 @@ use warnings;
 
 use lib::model::entities::resource;
 use lib::model::user::inventory;
+use lib::model::user::user;
 use lib::io::format;
 use lib::io::db;
 use lib::env::db;
@@ -15,10 +16,10 @@ use lib::env::env;
 
 
 # my @matches = (1, 2, 3);
-# print inflect("<#i:$#matches> <N:matches> <V:were> found"), "\n";
+# user::echo inflect("<#i:$#matches> <N:matches> <V:were> found"), "\n";
 
-# print resource::create('forest undergrowth', 'root/spawn'), "\n";
-# print rand(), "\n";
+# user::echo resource::create('forest undergrowth', 'root/spawn'), "\n";
+# user::echo rand(), "\n";
 
 
 sub create($) {
@@ -33,7 +34,7 @@ sub create($) {
 # create('broken item');
 # create('trees');
 
-# print @{db::selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
+# user::echo @{db::selectcol_arrayref('select count(1) from user where user_name like "abc"')}, "\n";
 
 db::loadFile(env::dir() . "/data/tables/actions.yml");
 # db::dump();
