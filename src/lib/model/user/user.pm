@@ -26,6 +26,10 @@ sub exists {
     return 0 != db::selectrow_array("select count(1) from user where user_name=?;", undef, "@_");
 }
 
+sub echo {
+    return client::message($ENV{'USERNAME'}, @_);
+}
+
 sub tell {
     return client::message(@_);
 }

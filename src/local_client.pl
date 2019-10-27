@@ -22,22 +22,47 @@ setpgrp();
 # when the user interrupts
 $SIG{'INT'} = sub {delete $SIG{'INT'}; die "Interrupted\n"};
 my $parent_pid = $$;
+END {
+    if ($ENV{'USERNAME'} && $parent_pid == $$) {
+        commands::runCommand("quit");
+    }
+}
 
-sub login;
+sub login(;$$);
 sub getUsername;
 sub createUser;
+sub readStdout;
 
 STDOUT->autoflush;
 open(STDERR, ">&STDOUT");
 
+my $username = login(shift, shift);
 
-sub login {
+print $@, "\n" unless defined eval {
+    # startup tick daemon if it isn't already running
+    system env::dir() . '/src/tick_daemon.pl';
+
+    if (@ARGV) {
+        executeAndDisplayCommand(@ARGV);
+    } else {
+        readStdout($username);
+        commandPrompt();
+    }
+};
+
+
+# subroutine definitions
+
+sub login(;$$) {
     
-    my $username = getUsername();
-    my $password = hash::password($username, stdio::prompt("Please enter the password:"));
+    my $username = $_[0] // getUsername();
+    my $password = $_[1] // stdio::prompt("Please enter the password:");
+    $password = hash::password($username, $password);
 
     until (defined eval {user::login($username, $password)}) {
         print "$@";
+
+        die "Failed login\n" if $_[1];
         $username = getUsername();
         $password = hash::password($username, stdio::prompt("Please enter the password:"));
     }
@@ -110,23 +135,27 @@ sub readStdout {
     my $username = shift;
     my $stdout = client::getStdout($username);
 
+    my $line;
     while (1) {
-        print($_, "\n") while (<$stdout>);
+        while (defined($line = <$stdout>)) {
+            $line =~ s/\n*$//;
+            print($line, "\n");
+        }
     }
 
     exit 0;
 }
 
-my $username = login();
+sub executeAndDisplayCommand {
+    my $stdout = client::getStdout($username);
 
-eval {
-    readStdout($username);
-    system env::dir() . '/src/tick_daemon.pl';
-    commandPrompt();
-};
+    commands::run @_;
 
-END {
-    if ($ENV{'USERNAME'} && $parent_pid == $$) {
-        commands::runCommand("quit");
+    my $line;
+    while (defined($line = stdio::readLineNB $stdout)) {
+        $line =~ s/\n*$//;
+        print($line, "\n");
     }
 }
+
+1;

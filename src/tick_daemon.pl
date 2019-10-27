@@ -32,9 +32,6 @@ unless (defined $fh and fork) {
     }
 
     stdio::log "Shutting down tick daemon!";
-} else {
-    print "unable to obtain lock\n" unless defined $fh;
-    print "here\n";
 }
 
 1;

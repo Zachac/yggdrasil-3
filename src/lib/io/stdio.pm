@@ -24,10 +24,11 @@ sub prompt {
 sub readLineNB {
     # disable the blocking value temporarily and store the 
     # value so we can return it to the original state
-    my $blocking = STDIN->blocking(0);
-    my $line = <STDIN>;
+    my $fh = shift // \*STDIN;
+    my $blocking = $fh->blocking(0);
+    my $line = <$fh>;
     
-    STDIN->blocking($blocking);
+    $fh->blocking($blocking);
     return $line;
 }
 

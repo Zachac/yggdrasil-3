@@ -5,6 +5,7 @@ use warnings;
 
 use lib::model::entities::player;
 use lib::model::entities::item;
+use lib::model::user::user;
 
 
 use Lingua::EN::Inflexion qw( inflect );
@@ -20,5 +21,5 @@ my $count = item::findCount($item_name, $location);
 $count-- if ($count);
 $count += entity::getEntityIdsByNameAndLocation($item_name, $location);
 
-print inflect "You count <#w:$count> <N:$item_name>\n";
+user::echo inflect "You count <#w:$count> <N:$item_name>\n";
 

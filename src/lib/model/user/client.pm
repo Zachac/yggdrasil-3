@@ -4,7 +4,7 @@ package client;
 use strict;
 use warnings;
 
-use Fcntl qw(:DEFAULT :flock);
+use Fcntl qw(:DEFAULT :flock O_NONBLOCK O_WRONLY);
 use File::Path qw(make_path);
 
 use lib::io::file;
@@ -15,7 +15,7 @@ use lib::env::db qw(conn);
 
 sub message {
     my $username = shift;
-    my $message = shift;
+    my $message = "@_";
     my $stdout_path = getStdoutPath($username);
     file::mkfifo($stdout_path);
     return file::printnb($stdout_path, $message);
@@ -25,7 +25,7 @@ sub getStdout {
     my $stdout_path = getStdoutPath(shift);
 
     file::mkfifo($stdout_path);
-    open(my $stdout, "<", $stdout_path) or die "Could not open $stdout_path!";
+    sysopen(my $stdout, $stdout_path, O_RDONLY | O_NONBLOCK) or die "Could not open $stdout_path!";
     return $stdout;
 }
 
