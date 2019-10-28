@@ -44,7 +44,10 @@ sub setLocationById($$) {
 }
 
 sub createByNameAndTypeAndLocation($$$) {
-    db::do('insert into entity_instance(entity_def_id, location) values ((select entity_def_id from entity_def where entity_name = ? and entity_type_id = (select entity_type_id from entity_type where entity_type = ?)), ?)', undef, @_);
+    my $name = shift;
+    my $type = shift;
+    my $location = shift;
+    db::do('insert into entity_instance(entity_def_id, location, health) select entity_def_id, ?, max_health from entity_def where entity_name = ? and entity_type_id = (select entity_type_id from entity_type where entity_type = ?)', undef, $location, $name, $type);
     return db::selectrow_array('select LAST_INSERT_ID()');
 }
 

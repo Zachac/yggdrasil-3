@@ -30,7 +30,7 @@ sub setLocation($$) {
 sub create($$) {
     my $name = shift;
     my $location = shift;
-    entity_def::register($name, 'player', undef);
+    entity_def::register($name, 'player', undef, 100);
     return entity::createByNameAndTypeAndLocation($name, 'player', $location);
 }
 
