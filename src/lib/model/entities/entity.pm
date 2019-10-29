@@ -59,4 +59,12 @@ sub deleteByTypeAndId($$) {
     return db::do('delete e from entity_instance e join entity_def def on def.entity_def_id = e.entity_def_id where def.entity_type_id = (select entity_type_id from entity_type where entity_type = ?) and e.entity_id=?', undef, @_);
 }
 
+sub addHealthById($$) {
+    my $health = shift;
+    my $id = shift;
+    return 0 if 0 == db::do('update entity_instance set health = health + ? where entity_id = ? and health > 0', undef, $health, $id);
+    return 0 if $health > 0;
+    return 0 != db::do('update entity_instance set location = "Purgatory" where entity_id = ? and health <= 0', undef, $id);
+}
+
 1;
