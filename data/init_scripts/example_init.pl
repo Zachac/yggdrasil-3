@@ -24,6 +24,7 @@ skills::addExp($username, 'forage', 129);
 
 # room
 room::create('root/spawn', 'An empty room', 'It looks like a very normal room.');
+room::create('root/death', 'The Abyss', 'The place where all things come to an end.');
 player::setLocation($username, 'root/spawn');
 
 # item

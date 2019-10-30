@@ -66,7 +66,7 @@ sub addHealthById($$) {
 
     return undef if $rows_affected == 0;
     return 0 if $health > 0;
-    return 1 if 0 != db::do('update entity_instance set location = "Purgatory" where entity_id = ? and health <= 0 and location != "Purgatory"', undef, $id);
+    return 1 if 0 != db::do('update entity_instance set location = "root/death" where entity_id = ? and health <= 0 and location != "root/death"', undef, $id);
     return 0;
 }
 
