@@ -25,7 +25,9 @@ sub register($$$;$) {
     return db::selectrow_array('select LAST_INSERT_ID()');
 }
 
-
+sub getTypeIdByName($) {
+    return db::selectrow_array('select entity_type_id from entity_def where entity_name = ?', undef, @_);
+}
 
 sub safeEq($$) {
     my $v1 = shift;

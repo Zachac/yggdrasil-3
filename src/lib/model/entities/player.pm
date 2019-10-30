@@ -21,6 +21,10 @@ sub getAll($) {
     return entity::getEntityNamesByTypeAndLocation('player', $location);
 }
 
+sub getIsPlayerByName($) {
+    return $type == entity_def::getTypeIdByName shift;
+}
+
 sub setLocation($$) {
     my $name = shift;
     my $location = shift;

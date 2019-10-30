@@ -20,16 +20,20 @@ sub attackEntityByNameAndLocationAndAmount($$$) {
     die "Cannot harm immortal object\n" unless defined $killed;
 
     if ($killed) {
-        processDeathById($entity_id);
+        processDeathByIdAndName($entity_id, $name);
     }
 
     return $killed;
 }
 
-sub processDeathById($) {
+sub processDeathByIdAndName($$) {
     my $entity_id = shift;
+    my $name = shift;
 
-
+    if (player::getIsPlayerByName($name)) {
+        commands::runAs($name, "look");
+        user::echo "You died!\n";
+    }
 }
 
 1;

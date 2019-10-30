@@ -12,7 +12,7 @@ skills::requireLevel "punch", 1;
 
 my $command = shift;
 my $target;
-my $damage = 1;
+my $damage = int(rand(6)) + 1;
 my $location = player::getLocation($ENV{'USERNAME'});
 
 if (@ARGV > 0) {
