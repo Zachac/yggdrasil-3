@@ -62,9 +62,12 @@ sub deleteByTypeAndId($$) {
 sub addHealthById($$) {
     my $health = shift;
     my $id = shift;
-    return 0 if 0 == db::do('update entity_instance set health = health + ? where entity_id = ? and health > 0', undef, $health, $id);
+    my $rows_affected = db::do('update entity_instance set health = health + ? where entity_id = ? AND health is not NULL', undef, $health, $id);
+
+    return undef if $rows_affected == 0;
     return 0 if $health > 0;
-    return 0 != db::do('update entity_instance set location = "Purgatory" where entity_id = ? and health <= 0', undef, $id);
+    return 1 if 0 != db::do('update entity_instance set location = "Purgatory" where entity_id = ? and health <= 0 and location != "Purgatory"', undef, $id);
+    return 0;
 }
 
 1;
