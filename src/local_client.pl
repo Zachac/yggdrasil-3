@@ -129,11 +129,11 @@ sub commandPrompt {
 }
 
 sub readStdout {
+    my $username = shift;
+    my $stdout = client::getStdoutByUsername($username, 1);
+
     die unless defined(my $child_pid = fork);
     return if ($child_pid);
-
-    my $username = shift;
-    my $stdout = client::getStdoutByUsername($username);
 
     my $line;
     while (1) {

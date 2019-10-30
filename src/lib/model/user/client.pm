@@ -16,7 +16,6 @@ use lib::env::db qw(conn);
 sub message {
     my $username = shift;
     my $stdout_path = getStdoutPath($username);
-    file::mkfifo($stdout_path);
     return file::printnb($stdout_path, @_);
 }
 
