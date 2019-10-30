@@ -35,6 +35,10 @@ sub getLocationByTypeAndName {
     return db::selectrow_array('select location from entity where entity_type = ? and entity_name = ?', undef, @_);
 }
 
+sub getHealthAndMaxHealthByNameAndLocation($$) {
+    return @{db::selectall_arrayref('select health, max_health from entity where entity_name=? and location=?', undef, @_)};
+}
+
 sub setLocationByNameAndType($$$) {
     return 0 != db::do('update entity set location = ? where entity_name = ? and entity_type = ?', undef, @_);
 }
