@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use lib::model::entities::entity;
+use lib::model::user::inventory;
 
 
 sub attackEntityByNameAndLocationAndAmount($$$) {
@@ -20,19 +21,21 @@ sub attackEntityByNameAndLocationAndAmount($$$) {
     die "Cannot harm immortal object\n" unless defined $killed;
 
     if ($killed) {
-        processDeathByIdAndName($entity_id, $name);
+        processDeathByIdAndNameAndLocation($entity_id, $name, $location);
     }
 
     return $killed;
 }
 
-sub processDeathByIdAndName($$) {
+sub processDeathByIdAndNameAndLocation($$$) {
     my $entity_id = shift;
     my $name = shift;
+    my $location = shift;
 
     if (player::getIsPlayerByName($name)) {
         commands::runAs($name, "look");
         user::echo "You died!\n";
+        inventory::dump($name, $location);
     }
 }
 

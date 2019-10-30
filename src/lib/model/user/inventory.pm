@@ -39,6 +39,12 @@ sub drop($$;$$) {
     }
 }
 
+sub dump($;$) {
+    my $username = shift;
+    my $location = shift // player::getLocation($username);
+    drop($username, @$_[0], $location) for getAllNamesAndCounts($username);
+}
+
 sub add($$) {
     my $username = shift;
     my $item_name = shift;
