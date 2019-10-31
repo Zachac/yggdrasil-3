@@ -47,3 +47,22 @@ SELECT instance.entity_id, typ.entity_type, def.entity_name, instance.health, de
 FROM entity_def def
 JOIN entity_type typ on typ.entity_type_id = def.entity_type_id
 JOIN entity_instance instance on instance.entity_def_id = def.entity_def_id;
+
+CREATE TABLE entity_drop (
+    entity_def_id INTEGER NOT NULL,
+    item_def_id INTEGER NOT NULL,
+    min_count INTEGER NOT NULL,
+    max_count INTEGER NOT NULL,
+    chance FLOAT NOT NULL,
+    PRIMARY KEY (entity_def_id, item_def_id),
+    FOREIGN KEY (entity_def_id)
+        REFERENCES entity_def(entity_def_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (item_def_id)
+        REFERENCES entity_def(entity_def_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT valid_count CHECK (max_count >= min_count),
+    CONSTRAINT valid_chance CHECK (chance between 0 and 1)
+)
