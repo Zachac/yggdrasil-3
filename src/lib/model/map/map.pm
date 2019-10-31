@@ -9,6 +9,7 @@ use warnings;
 my $seed = 0;
 srand($seed); # init prng before using library
 require Math::Fractal::Noisemaker;
+srand time;
 
 use lib::env::db;
 use lib::model::entities::entity;
@@ -179,6 +180,8 @@ sub init($) {
             entity::createByNameAndTypeAndLocation(@$_[0], @$_[1], $room);
         }
     }
+
+    srand time;
 }
 
 sub mark($$) {
