@@ -12,6 +12,7 @@ use lib::model::crafting::recipe;
 
 use lib::model::entities::item;
 use lib::model::entities::resource;
+use lib::model::entities::entity_drop;
 
 
 my $username = 'abc';
@@ -48,11 +49,12 @@ item::register('broken item');
 actions::set('broken item', 'use', 'spawnnn', 1);
 
 # resources
-resource::register('undergrowth', 'a mix of thick brush and fallen leaves covering the forest ground.');
+resource::register('undergrowth', 'a mix of thick brush and fallen leaves covering the forest ground.', 10);
 resource::registerDrop('undergrowth', 'forage', 0, 'leaves', 1);
 resource::registerDrop('undergrowth', 'forage', 0, 'rocks', 1);
 biome::registerSpawn('Forest', 'undergrowth', 'resource', 0.25);
-
+entity_drop::register('undergrowth', 'leaves', 1, 0, 5);
+entity_drop::register('undergrowth', 'rocks', 1, 0, 5);
 
 # recipes
 recipe::registerRecipe('fire pit kit', 'forage', 2, 10);

@@ -13,10 +13,11 @@ use lib::model::user::inventory;
 
 my $type = entity_type::register('resource');
 
-sub register($;$) {
+sub register($;$$) {
     my $name = shift;
     my $description = shift;
-    entity_def::register($name, 'resource', $description);
+    my $max_health = shift;
+    entity_def::register($name, 'resource', $description, $max_health);
 }
 
 sub registerDrop($$$$$) {
