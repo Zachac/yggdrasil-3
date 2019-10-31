@@ -6,4 +6,4 @@ use warnings;
 
 use lib::model::entities::entity_drop;
 
-entity_drop::getItemDefIdAndCountsByEntityName("undergrowth");
+print "@$_[0]: @$_[1]\n" for entity_drop::getItemNameAndCountsByEntityName("undergrowth");

@@ -21,9 +21,9 @@ sub register($$$$;$) {
         ?, ?, ?)', undef, $entity_name, $item_name, $min_count, $max_count, $chance);
 }
 
-sub getItemDefIdAndCountsByEntityName($) {
+sub getItemNameAndCountsByEntityName($) {
     my $entity_name = shift;
-    my $drops = db::selectall_arrayref('select item_def_id, chance, min_count, max_count from entity_drop where entity_def_id = (select entity_def_id from entity_def where entity_name = ?)', undef, $entity_name);
+    my $drops = db::selectall_arrayref('select entity_name, chance, min_count, max_count from entity_drop join entity_def def on def.entity_def_id = item_def_id where entity_drop.entity_def_id = (select entity_def_id from entity_def where entity_name = ?)', undef, $entity_name);
     my $count = scalar(@$drops);
     my @results = ();
 
