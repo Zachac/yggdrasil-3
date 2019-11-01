@@ -11,32 +11,44 @@ use lib::model::user::inventory;
 use lib::model::user::user;
 
 
-sub attackEntityByNameAndLocationAndAmount($$$) {
-    my $name = shift;
+sub attackEntityByNameAndLocationAndAmountAndAttackerName($$$;$) {
+    my $target = shift // $ENV{'TARGET'};
     my $location = shift;
     my $damage = shift;
-    my $entity_id = entity::getIdByNameAndLocation($name, $location);
+    my $attackerName = shift // $ENV{'USERNAME'};
+    
+    die "No target given\n" unless defined $target;
+    die "Cannot determine source of damage\n" unless defined $attackerName;
 
-    die "Cannot attack, unable to find $name\n" unless defined $entity_id;
+    my $entity_id = entity::getIdByNameAndLocation($target, $location);
+    die "Cannot attack, unable to find $target\n" unless defined $entity_id;
 
     my $killed = entity::addHealthById(-$damage, $entity_id);
-
     die "Cannot harm immortal object\n" unless defined $killed;
+    
+    my $isTargetPlayer = player::getIsPlayerByName($target);
+    my $prefixedName = $isTargetPlayer ? $target : "The $target";
+    user::echo "You hit $prefixedName for $damage points of damage\n";
+    user::broadcastOthers($attackerName, "$attackerName hit $prefixedName for $damage points of damage\n", $location);
 
     if ($killed) {
-        processDeathByIdAndNameAndLocation($entity_id, $name, $location);
+        processDeathByIdAndNameAndLocation($entity_id, $target, $location);
+        $ENV{'TARGET'} = undef;
+    } else {
+        $ENV{'TARGET'} = $target;
     }
 
     return $killed;
 }
 
-sub processDeathByIdAndNameAndLocation($$$) {
+sub processDeathByIdAndNameAndLocation($$$;$) {
     my $entity_id = shift;
     my $name = shift;
     my $location = shift;
+    my $isTargetPlayer = shift // player::getIsPlayerByName($name);
     my @death_message = ();
 
-    if (player::getIsPlayerByName($name)) {
+    if ($isTargetPlayer) {
         commands::runAs($name, "look");
         user::echo "You died!\n";
         inventory::dump($name, $location);

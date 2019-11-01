@@ -42,10 +42,10 @@ sub broadcast($$;$) {
     client::message($_, $message) for player::getAll($location);
 }
 
-sub broadcastOthers($$) {
+sub broadcastOthers($$;$) {
     my $username = shift;
     my $message = shift;
-    my $location = player::getLocation($username);
+    my $location = shift // player::getLocation($username);
     for (player::getAll($location)) {
         client::message($_, $message) unless $_ eq $username;
     }

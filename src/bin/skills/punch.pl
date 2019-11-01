@@ -11,26 +11,12 @@ use lib::model::combat::actions;
 skills::requireLevel "punch", 1;
 
 my $command = shift;
-my $target;
 my $damage = int(rand(6)) + 1;
 my $location = player::getLocation($ENV{'USERNAME'});
+my $target = "@ARGV" if @ARGV;
 
-if (@ARGV > 0) {
-    $target = "@ARGV";
-} else {
-    $target = $ENV{'TARGET'};
-}
+die "usage: $command [target]\n" unless defined $target;
 
-die "usage: punch [target]\n" unless defined $target;
-
-my $killed_entity = combat::actions::attackEntityByNameAndLocationAndAmount($target, $location, $damage);
-$ENV{'TARGET'} = $target;
-user::echo "You hit the $target for $damage points of damage\n";
-
-if ($killed_entity) {
-    $ENV{'TARGET'} = undef;
-} else {
-    $ENV{'TARGET'} = $target;
-}
+combat::actions::attackEntityByNameAndLocationAndAmountAndAttackerName($target, $location, $damage);
 
 1;
