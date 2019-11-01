@@ -25,11 +25,12 @@ die "usage: punch [target]\n" unless defined $target;
 
 my $killed_entity = combat::actions::attackEntityByNameAndLocationAndAmount($target, $location, $damage);
 $ENV{'TARGET'} = $target;
+user::echo "You hit the $target for $damage points of damage\n";
 
 if ($killed_entity) {
-    user::echo "You destroy the $target\n";
+    $ENV{'TARGET'} = undef;
 } else {
-    user::echo "You hit the $target for $damage points of damage\n";
+    $ENV{'TARGET'} = $target;
 }
 
 1;

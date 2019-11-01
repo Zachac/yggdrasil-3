@@ -35,10 +35,10 @@ sub tell {
     return client::message(@_);
 }
 
-sub broadcast($$) {
+sub broadcast($$;$) {
     my $username = shift;
     my $message = shift;
-    my $location = player::getLocation($username);
+    my $location = shift // player::getLocation($username);
     client::message($_, $message) for player::getAll($location);
 }
 
