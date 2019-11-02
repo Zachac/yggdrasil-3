@@ -7,7 +7,7 @@ use lib::model::user::client;
 use lib::model::user::user;
 
 
-user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} turns to stone");
+user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} eye's glaze over");
 
 my $pid = user::pid($ENV{'USERNAME'});
 

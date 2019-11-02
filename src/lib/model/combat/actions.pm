@@ -28,8 +28,7 @@ sub attackEntityByNameAndLocationAndAmountAndAttackerName($$$;$) {
     
     my $isTargetPlayer = player::getIsPlayerByName($target);
     my $prefixedName = $isTargetPlayer ? $target : "The $target";
-    user::echo "You hit $prefixedName for $damage points of damage\n";
-    user::broadcastOthers($attackerName, "$attackerName hit $prefixedName for $damage points of damage\n", $location);
+    user::broadcastAction($attackerName, "hit $prefixedName for $damage points of damage\n", $location);
 
     if ($killed) {
         processDeathByIdAndNameAndLocation($entity_id, $target, $location);

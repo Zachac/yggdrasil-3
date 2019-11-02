@@ -26,11 +26,9 @@ my $count_dropped = inventory::drop($ENV{'USERNAME'}, $item_name, undef, $count)
 if ($count_dropped) {
     if ($count_dropped == 1) {
         my $withArticle = format::withArticle($item_name);
-        user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} drops $withArticle");
-        user::echo "You drop $withArticle\n";
+        user::broadcastAction($ENV{'USERNAME'}, " dropped $withArticle");
     } else {
-        user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} drops <#w:$count_dropped> <N:$item_name>");
-        user::echo inflect "You drop <#w:$count_dropped> <N:$item_name>\n";
+        user::broadcastAction($ENV{'USERNAME'}, inflect "dropped <#w:$count_dropped> <N:$item_name>");
     }
 } else {
     user::echo "You can't seem to find the $item_name in your inventory\n";

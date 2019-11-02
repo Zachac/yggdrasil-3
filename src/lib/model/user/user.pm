@@ -51,6 +51,20 @@ sub broadcastOthers($$;$) {
     }
 }
 
+sub broadcastAction($$;$) {
+    my $username = shift;
+    my $message = shift;
+    my $location = shift // player::getLocation($username);
+    my $messageOther = "$username $message";
+    for my $playerName (player::getAll($location)) {
+        if (defined $username && $playerName eq $username) {
+            client::message($playerName, "You $message");
+        } else {
+            client::message($playerName, $message);
+        }
+    }
+}
+
 sub login {
     my $username = shift;
     my $password = shift // "";

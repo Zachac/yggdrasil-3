@@ -26,11 +26,9 @@ my $count_taken = inventory::take($ENV{'USERNAME'}, "$item_name", undef, $count)
 if ($count_taken) {
     if ($count_taken == 1) {
         my $withArticle = format::withArticle($item_name);
-        user::broadcastOthers($ENV{'USERNAME'}, "$ENV{'USERNAME'} takes $withArticle");
-        user::echo "You take $withArticle\n";
+        user::broadcastAction($ENV{'USERNAME'}, "took $withArticle.");
     } else {
-        user::broadcastOthers($ENV{'USERNAME'}, inflect "$ENV{'USERNAME'} takes <#w:$count_taken> <N:$item_name>");
-        user::echo inflect "You take <#w:$count_taken> <N:$item_name>\n";
+        user::broadcastAction($ENV{'USERNAME'}, inflect "took <#w:$count_taken> <N:$item_name>");
     }
 } else {
     user::echo "You can't seem to find the $item_name\n";
