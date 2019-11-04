@@ -12,7 +12,7 @@ use lib::model::user::user;
 
 
 sub attackEntityByNameAndLocationAndAmountAndAttackerName($$$;$) {
-    my $target = shift // $ENV{'TARGET'};
+    my $target = shift;
     my $location = shift;
     my $damage = shift;
     my $attackerName = shift // $ENV{'USERNAME'};
@@ -27,7 +27,7 @@ sub attackEntityByNameAndLocationAndAmountAndAttackerName($$$;$) {
     die "Cannot harm immortal object\n" unless defined $killed;
     
     my $isTargetPlayer = player::getIsPlayerByName($target);
-    my $prefixedName = $isTargetPlayer ? $target : "The $target";
+    my $prefixedName = $isTargetPlayer ? $target : "the $target";
     user::broadcastAction($attackerName, "hit $prefixedName for $damage points of damage\n", $location);
 
     if ($killed) {

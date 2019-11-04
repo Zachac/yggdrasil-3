@@ -23,12 +23,12 @@ sub execute {
 
 sub require {
     my $skill = shift;
-    my $level = shift;
+    my $requiredLevel = shift;
     my $name = shift // $ENV{'USERNAME'};
+    my $realLevel = db::selectrow_array("select level from skills where user_name = ? and skill_name = ?", undef, $name, $skill);
 
-    return 1 if (db::selectrow_array("select 1 from skills where user_name = ? and skill_name = ? and level >= ?", undef, $name, $skill, $level));
-
-    die "Level $level $skill required\n";
+    die "Level $requiredLevel $skill required\n" unless defined $realLevel && $realLevel >= $requiredLevel;
+    return $realLevel;
 }
 
 sub getAll {
