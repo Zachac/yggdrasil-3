@@ -11,7 +11,7 @@ use lib::model::user::inventory;
 use lib::model::user::user;
 
 
-sub attackEntityByNameAndLocationAndAmountAndAttackerName($$$;$) {
+sub damage($$$;$) {
     my $target = shift;
     my $location = shift;
     my $damage = shift;

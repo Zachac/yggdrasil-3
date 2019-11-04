@@ -17,6 +17,6 @@ $damage += int(rand(6)) + 1 for (1 .. $level);
 
 die "usage: $command [target]\n" unless defined $target;
 
-combat::actions::attackEntityByNameAndLocationAndAmountAndAttackerName($target, player::getLocation($ENV{'USERNAME'}), $damage);
+combat::actions::damage($target, player::getLocation($ENV{'USERNAME'}), $damage);
 
 1;
