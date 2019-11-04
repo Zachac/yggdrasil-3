@@ -7,10 +7,9 @@ use warnings;
 use lib::env::db;
 use lib::model::map::map;
 
-my @ascii_table = (' ', '~', '#');
-my @name_table = ('Ocean', 'Shore', 'Forest');
-my @enterable_table = (0, 1, 1);
-
+my @ascii_table = @{db::selectcol_arrayref('select biome_symbol from biome order by biome_id asc')};
+my @name_table = @{db::selectcol_arrayref('select biome_name from biome order by biome_id asc')};
+my @enterable_table = @{db::selectcol_arrayref('select enterable from biome order by biome_id asc')};
 
 sub getNameById($) {
     return $name_table[shift];
