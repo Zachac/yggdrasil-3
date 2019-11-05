@@ -42,7 +42,7 @@ sub registerSpawn($$$$) {
     my $entity_name = shift;
     my $entity_type = shift;
     my $chance = shift;
-    return db::do('insert ignore into biome_spawns(biome_name, entity_name, entity_type, chance) values(?,?,?,?)', undef, $biome_name,  $entity_name, $entity_type, $chance);
+    return 0 != db::do('insert ignore into biome_spawns(biome_name, entity_name, entity_type, chance) values(?,?,?,?)', undef, $biome_name,  $entity_name, $entity_type, $chance);
 }
 
 sub getSpawnsById($) {
