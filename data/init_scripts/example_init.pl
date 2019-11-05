@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+use lib::env::env;
 use lib::crypto::hash;
 use lib::model::user::user;
 use lib::model::commands::actions;
@@ -14,6 +15,9 @@ use lib::model::entities::item;
 use lib::model::entities::resource;
 use lib::model::entities::entity_drop;
 
+use lib::io::db;
+
+db::require(env::dir() . "/data/init_scripts/map.pl");
 
 my $username = 'abc';
 my $password = 'def';

@@ -7,6 +7,7 @@ use warnings;
 use YAML qw(Dump Load);
 use File::Find;
 use Tie::IxHash;
+use File::Basename;
 
 use lib::env::env;
 use lib::env::db;
@@ -120,6 +121,24 @@ sub loadRow($$;$$) {
 
     warn $db::conn->errstr, " at $identifier:$table_name:$row_count\n";
     return 0;
+}
+
+sub require($) {
+    my $script = shift;
+    my $basename = basename $script;
+    my $lock = 0 != db::do('insert ignore into init_scripts(script) values(?)', undef, $script);
+    
+    return undef unless $lock;
+
+    stdio::log "running $basename";
+    my $result = do $script;
+
+    unless (defined($result)) {
+        warn "ERROR in $basename\n\t$@";
+    }
+
+    db::do('update init_scripts set result = ?', undef, $result);
+    return $result;
 }
 
 1;

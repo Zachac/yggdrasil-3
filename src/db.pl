@@ -62,15 +62,13 @@ sub resetDatabase() {
 }
 
 sub runInitializingScripts() {
+    require lib::io::db;
+    
     # execute each .pl file in data folder
     find (sub {
         if ($_ =~ /.*\.pl/) {
-            stdio::log "running $_";
-            my $result = do "$File::Find::dir/$_";
-            unless (defined($result)) {
-                warn "ERROR in $_\n\t$@";
-            }
-        }1
+            db::require("$File::Find::dir/$_");
+        }
     }, "${\(env::dir())}/data");
 }
 

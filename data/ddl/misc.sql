@@ -15,3 +15,8 @@ CREATE TABLE resource (
     wheight INTEGER NOT NULL DEFAULT 1,
     UNIQUE(resource_name, skill, level, produces)
 );
+
+CREATE TABLE init_scripts (
+    script VARCHAR(120) PRIMARY KEY,
+    result BOOLEAN
+);
