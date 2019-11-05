@@ -7,30 +7,34 @@ use warnings;
 use lib::env::db;
 use lib::model::map::map;
 
-my @ascii_table = @{db::selectcol_arrayref('select biome_symbol from biome order by biome_id asc')};
-my @name_table = @{db::selectcol_arrayref('select biome_name from biome order by biome_id asc')};
-my @enterable_table = @{db::selectcol_arrayref('select enterable from biome order by biome_id asc')};
+my @ascii_table = (); @{db::selectcol_arrayref('select biome_symbol from biome order by biome_id asc')};
+my @name_table = (); @{db::selectcol_arrayref('select biome_name from biome order by biome_id asc')};
+my @enterable_table = (); @{db::selectcol_arrayref('select enterable from biome order by biome_id asc')};
 
 sub getNameById($) {
-    return $name_table[shift];
+    my $id = shift;
+    return $name_table[$id] 
+        // ($name_table[$id] = db::selectrow_array('select biome_name from biome where biome_id = ?', undef, $id));
 }
 
 sub getEnterableById($) {
-    return $enterable_table[shift];
+    my $id = shift;
+    return $enterable_table[$id] 
+        // ($enterable_table[$id] = db::selectrow_array('select enterable from biome where biome_id = ?', undef, $id));
 }
 
 sub getAsciiById($) {
-    return $ascii_table[shift];
+    my $id = shift;
+    return $ascii_table[$id] 
+        // ($ascii_table[$id] = db::selectrow_array('select biome_symbol from biome where biome_id = ?', undef, $id));
 }
 
 sub getIdByName($) {
-    my $name = shift;
-    
-    for (my $i = 0; $i <= $#name_table; $i++) {
-        return $i if $name_table[$i] eq $name;
-    }
+    return db::selectrow_array('select biome_id from biome where biome_name = ?', undef, shift);
+}
 
-    return undef;
+sub registerByNameAndSymbolAndEnterable($$$) {
+    return db::do('insert into biome(biome_name, biome_symbol, enterable) values(?,?,?)', undef, @_);
 }
 
 sub registerSpawn($$$$) {

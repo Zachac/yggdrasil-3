@@ -16,9 +16,9 @@ use lib::model::entities::entity;
 use lib::model::map::biome;
 
 
-my $forest_id = biome::getIdByName 'Forest';
-my $shore_id = biome::getIdByName 'Shore';
-my $ocean_id = biome::getIdByName 'Ocean';
+my $forest_id = biome::getIdByName('Forest') // die "Biome not found";
+my $shore_id = biome::getIdByName('Shore') // die "Biome not found";
+my $ocean_id = biome::getIdByName('Ocean') // die "Biome not found";
 
 sub getCoordinates($;$) {
     my $room = shift;
