@@ -46,17 +46,16 @@ sub registerByNameAndSymbolAndEnterable($$$) {
     }
 }
 
-sub registerSpawn($$$$) {
+sub registerSpawn($$$) {
     my $biome_name = shift;
     my $entity_name = shift;
-    my $entity_type = shift;
     my $chance = shift;
-    return 0 != db::do('insert ignore into biome_spawns(biome_name, entity_name, entity_type, chance) values(?,?,?,?)', undef, $biome_name,  $entity_name, $entity_type, $chance);
+    return 0 != db::do('insert into biome_spawns(biome_id, entity_def_id, chance) values((select biome_id from biome where biome_name = ?), (select entity_def_id from entity_def where entity_name = ?), ?)', undef, $biome_name,  $entity_name, $chance);
 }
 
-sub getSpawnsById($) {
-    my $biome_name = getNameById shift;
-    return @{db::selectall_arrayref("select entity_name, entity_type, chance from biome_spawns where biome_name = ? order by entity_name, entity_type, chance", undef, $biome_name)};
+sub getSpawnsEntityDefIdAndChanceByBiomeId($) {
+    my $biome_id = shift;
+    return @{db::selectall_arrayref("select entity_def_id, chance from biome_spawns where biome_id = ? order by entity_def_id, chance desc", undef, $biome_id)};
 }
 
 1;

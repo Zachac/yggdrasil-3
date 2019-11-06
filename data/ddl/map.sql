@@ -38,9 +38,16 @@ CREATE TABLE biome (
 );
 
 CREATE TABLE biome_spawns (
-    biome_name VARCHAR(80) NOT NULL,
-    entity_name VARCHAR(80) NOT NULL,
-    entity_type VARCHAR(80) NOT NULL,
+    biome_id INTEGER NOT NULL,
+    entity_def_id INTEGER NOT NULL,
     chance FLOAT,
-    PRIMARY KEY(biome_name, entity_name, entity_type)
+    PRIMARY KEY(biome_id, entity_def_id),
+    FOREIGN KEY (biome_id)
+        REFERENCES biome(biome_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (entity_def_id)
+        REFERENCES entity_def(entity_def_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );

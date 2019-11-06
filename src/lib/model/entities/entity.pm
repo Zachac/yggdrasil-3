@@ -55,6 +55,12 @@ sub createByNameAndTypeAndLocation($$$) {
     return db::selectrow_array('select LAST_INSERT_ID()');
 }
 
+sub createByEntityDefIdAndLocation($$) {
+    my $entity_def_id = shift;
+    my $location = shift;
+    return 0 != db::do('insert into entity_instance(entity_def_id, location, health) values(?, ?, (select max_health from entity_def where entity_def_id = ?))', undef, $entity_def_id, $location, $entity_def_id);
+}
+
 sub deleteByLocationAndType($$) {
     return db::do('delete e from entity_instance e join entity_def def on def.entity_def_id = e.entity_def_id where e.location=? and def.entity_type_id = (select entity_type_id from entity_type where entity_type = ?)', undef, @_);
 }

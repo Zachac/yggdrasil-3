@@ -169,7 +169,7 @@ sub init($) {
     return unless defined $x;
     return unless 0 != db::do("insert ignore into map_tiles(x, y) values (?, ?)", undef, $x, $y);
 
-    my @spawns = biome::getSpawnsById(getBiome($x, $y));
+    my @spawns = biome::getSpawnsEntityDefIdAndChanceByBiomeId(getBiome($x, $y));
 
     my $max_value = 2 ** 32 - 1;
     srand $seed;
@@ -177,8 +177,8 @@ sub init($) {
     srand rand($max_value) + $y;
 
     for (@spawns) {
-        if (rand() <= @$_[2]) {
-            entity::createByNameAndTypeAndLocation(@$_[0], @$_[1], $room);
+        if (rand() <= @$_[1]) {
+            entity::createByEntityDefIdAndLocation(@$_[0], $room);
         }
     }
 

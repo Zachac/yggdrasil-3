@@ -59,7 +59,7 @@ actions::set('broken item', 'use', 'spawnnn', 1);
 resource::register('undergrowth', 'a mix of thick brush and fallen leaves covering the forest ground.', 10);
 resource::registerDrop('undergrowth', 'forage', 0, 'leaves', 1);
 resource::registerDrop('undergrowth', 'forage', 0, 'rocks', 1);
-biome::registerSpawn('Forest', 'undergrowth', 'resource', 0.25);
+biome::registerSpawn('Forest', 'undergrowth', 0.25);
 entity_drop::register('undergrowth', 'leaves', 1, 0, 5);
 entity_drop::register('undergrowth', 'rocks', 1, 0, 5);
 
