@@ -130,7 +130,7 @@ sub require($) {
     
     return undef unless $lock;
 
-    stdio::log "running $basename";
+    local $0 = $basename;
     my $result = do $script;
 
     unless (defined($result)) {

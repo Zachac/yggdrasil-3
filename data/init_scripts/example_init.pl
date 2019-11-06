@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use English qw(-no_match_vars);
 
 use lib::env::env;
 use lib::crypto::hash;
@@ -18,6 +19,8 @@ use lib::model::entities::entity_drop;
 use lib::io::db;
 
 db::require(env::dir() . "/data/init_scripts/map.pl");
+
+stdio::log("running $PROGRAM_NAME");
 
 my $username = 'abc';
 my $password = 'def';

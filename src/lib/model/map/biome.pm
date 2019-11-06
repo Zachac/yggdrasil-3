@@ -34,7 +34,16 @@ sub getIdByName($) {
 }
 
 sub registerByNameAndSymbolAndEnterable($$$) {
-    return db::do('insert into biome(biome_name, biome_symbol, enterable) values(?,?,?)', undef, @_);
+    my $name = shift;
+    my $symbol = shift;
+    my $enterable = shift;
+    my $created = 0 != db::do('insert ignore into biome(biome_name, biome_symbol, enterable) values(?,?,?)', undef, $name, $symbol, $enterable);
+
+    if ($created) {
+        return db::selectrow_array('select LAST_INSERT_ID()');
+    } else {
+        return getIdByName($name) // die;
+    }
 }
 
 sub registerSpawn($$$$) {
