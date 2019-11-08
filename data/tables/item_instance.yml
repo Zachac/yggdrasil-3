@@ -1,3 +1,13 @@
 item_instance:
   - entity_id: 2
     count: 1
+  - entity_id: 4
+    count: 11
+  - entity_id: 5
+    count: 11
+  - entity_id: 8
+    count: 3
+  - entity_id: 9
+    count: 3
+  - entity_id: 10
+    count: 3

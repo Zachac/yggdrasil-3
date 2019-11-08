@@ -1,4 +1,7 @@
 room:
+  - location: root/death
+    room_name: The Abyss
+    description: The place where all things come to an end.
   - location: root/spawn
     room_name: An empty room
     description: It looks like a very normal room.

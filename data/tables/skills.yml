@@ -1,5 +1,9 @@
 skills:
   - user_name: abc
     skill_name: forage
-    experience: 129
+    experience: 86
+    level: 3
+  - user_name: abc
+    skill_name: punch
+    experience: 0
     level: 1

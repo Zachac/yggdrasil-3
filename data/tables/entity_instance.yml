@@ -1,7 +1,33 @@
 entity_instance:
   - entity_id: 1
     entity_def_id: 1
-    location: root/spawn
+    health: 97
+    location: d:1 -1
   - entity_id: 2
     entity_def_id: 2
-    location: root/spawn
+    health: ~
+    location: i:abc
+  - entity_id: 3
+    entity_def_id: 9
+    health: -5
+    location: root/death
+  - entity_id: 4
+    entity_def_id: 7
+    health: ~
+    location: i:abc
+  - entity_id: 5
+    entity_def_id: 6
+    health: ~
+    location: i:abc
+  - entity_id: 8
+    entity_def_id: 3
+    health: ~
+    location: i:abc
+  - entity_id: 9
+    entity_def_id: 6
+    health: ~
+    location: d:1 -1
+  - entity_id: 10
+    entity_def_id: 7
+    health: ~
+    location: d:1 -1
